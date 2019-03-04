@@ -7,9 +7,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Semaphore;
+
+import com.sun.glass.ui.TouchInputSupport;
+
 import java.io.*;
 
 public class Client implements Runnable {
+	
+	//This is a test comment to see if GIT works
 
 	List<String> hand;
 	List<String> dealerHand;
