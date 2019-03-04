@@ -15,7 +15,7 @@ import java.io.*;
 public class Client implements Runnable {
 	
 	//This is a test comment to see if GIT  works 
-	// harris test2
+	// harris test
 	
 	List<String> hand;
 	List<String> dealerHand;
