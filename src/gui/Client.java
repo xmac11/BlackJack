@@ -221,5 +221,5 @@ public class Client implements Runnable {
 		cards.addAll(Arrays.asList(arr));
 		return cards;
 	}
-
+///testttttttttttttttt
 }
