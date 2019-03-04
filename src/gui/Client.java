@@ -15,7 +15,8 @@ import java.io.*;
 public class Client implements Runnable {
 	
 	//This is a test comment to see if GIT  works 
-
+	// harris test
+	
 	List<String> hand;
 	List<String> dealerHand;
 	Semaphore waitForServer;
@@ -223,5 +224,5 @@ public class Client implements Runnable {
 		cards.addAll(Arrays.asList(arr));
 		return cards;
 	}
-
+///testttttttttttttttt
 }
