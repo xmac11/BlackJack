@@ -9,19 +9,17 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.Semaphore;
 
-import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.util.Duration;
 
 /**
  * Part of the application that handles user input.
  */
-public class Controller implements Initializable {
+public class GameController implements Initializable {
 
 	@FXML
 	private HBox hBoxDealer;
@@ -62,6 +60,7 @@ public class Controller implements Initializable {
 	private List<String> dealerHand;
 	private List<String> hand;
 	private List<List<String>> table;
+	private String IP;
 
 	private Semaphore waitForServer;
 	private Semaphore waitForInput;
@@ -264,6 +263,10 @@ public class Controller implements Initializable {
 			}
 		});
 	}
+	
+	void initData(String IP) {
+	    this.IP = IP;
+	  }
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -276,7 +279,7 @@ public class Controller implements Initializable {
 		waitForInput = new Semaphore(0);
 		chatWait = new Semaphore(0);
 		toSend = "";
-		Runnable runnable = new Client(table, dealerHand, hand, waitForServer, this, waitForInput, chatWait);
+		Runnable runnable = new Client(table, dealerHand, hand, waitForServer, this, waitForInput, chatWait, IP);
 		Thread thread = new Thread(runnable);
 		thread.start();
 		System.out.println("Waiting at lock");

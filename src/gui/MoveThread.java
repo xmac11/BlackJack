@@ -5,11 +5,11 @@ import java.util.concurrent.Semaphore;
 
 public class MoveThread implements Runnable{
 	
-	private Controller controller;
+	private GameController controller;
 	private PrintWriter output;
 	private Semaphore moveWait;
 	
-	public MoveThread(Controller controller, PrintWriter output, Semaphore moveWait) {
+	public MoveThread(GameController controller, PrintWriter output, Semaphore moveWait) {
 		this.controller = controller;
 		this.output = output;
 		this.moveWait = moveWait;

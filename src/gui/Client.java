@@ -20,15 +20,16 @@ public class Client implements Runnable {
 	List<String> dealerHand;
 	Semaphore waitForServer;
 	Semaphore chatWait;
-	Controller controller;
+	GameController controller;
 	Semaphore waitForInput;
 	private int ID;
 	private int noPlayers;
 	private List<List<String>> table;
 	PrintWriter output;
+	private String IP;
 
 	public Client(List<List<String>> table, List<String> dealerHand, List<String> hand, Semaphore waitForServer,
-			Controller controller, Semaphore waitForInput, Semaphore chatWait) {
+			GameController controller, Semaphore waitForInput, Semaphore chatWait, String IP) {
 		this.table = table;
 		this.dealerHand = dealerHand;
 		this.hand = hand;
@@ -37,6 +38,7 @@ public class Client implements Runnable {
 		this.waitForInput = waitForInput;
 		output = null;
 		this.chatWait = chatWait;
+		this.IP = IP;
 	}
 
 	public static int total(List<String> a) {
@@ -69,7 +71,7 @@ public class Client implements Runnable {
 //		String IP = scanner.nextLine();
 //		scanner.close();
 		try (//Socket socket = new Socket(InetAddress.getByName(IP), 9999);
-				Socket socket = new Socket("localhost", 9999);
+				Socket socket = new Socket(IP, 9999);
 				BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));) {
 			output = new PrintWriter(socket.getOutputStream(), true);
 			

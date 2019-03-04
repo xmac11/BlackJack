@@ -9,15 +9,15 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-	private static int WIDTH = 1600;
-	private static int HEIGHT = 900;
+	private static int WIDTH = 800;
+	private static int HEIGHT = 600;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+//		Parent root = FXMLLoader.load(getClass().getResource("GameScreen.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("LoginScreen.fxml"));
 		primaryStage.setTitle("Black Jack-off");
 		Scene scene = new Scene(root, WIDTH, HEIGHT);
-		scene.getStylesheets().addAll(getClass().getResource("style.css").toExternalForm());
 		primaryStage.setScene(scene);
 		primaryStage.getIcons().add(new Image("image/Playing Cards/a_of_spades.png"));
 		primaryStage.show();

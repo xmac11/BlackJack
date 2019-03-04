@@ -5,12 +5,12 @@ import java.util.concurrent.Semaphore;
 
 public class ClientChatThread implements Runnable{
 	
-	private Controller controller;
+	private GameController controller;
 	private PrintWriter output;
 	private Semaphore chatWait;
 	private int ID;
 	
-	public ClientChatThread(Controller controller, PrintWriter output, Semaphore chatWait, int ID) {
+	public ClientChatThread(GameController controller, PrintWriter output, Semaphore chatWait, int ID) {
 		this.controller = controller;
 		this.output = output;
 		this.chatWait = chatWait;
