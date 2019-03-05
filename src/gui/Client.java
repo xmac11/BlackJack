@@ -16,7 +16,7 @@ public class Client implements Runnable {
 	
 	//This is a test comment to see if GIT  works 
 	// harris test3
-	//Nick test
+	//Nick test3
 	
 	List<String> hand;
 	List<String> dealerHand;
