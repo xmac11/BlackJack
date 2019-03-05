@@ -121,14 +121,12 @@ public class Client implements Runnable {
 					System.out.println(in + ", h (hit) p (pass)");
 					System.out.println("Waiting for move");
 					controller.setLabel("Make Move: " + total(table.get(ID)));
-					Runnable r = new MoveThread(controller, output, waitForInput);
+					Runnable r = new ClientMoveThread(controller, output, waitForInput);
 					Thread t = new Thread(r);
 					t.start();
 				}
 				if(in.contains("chatMessage")) {
-					int index = Integer.parseInt(in.substring(11));
-					in = input.readLine();
-					controller.addToChat(index, in.substring(11,12) + " > " + in.substring(12));
+					controller.addToChat(in.substring(11,12) + " > " + in.substring(12));
 				}
 				if (in.contains("playerCard")) {
 					String card = in.substring(10);
@@ -158,6 +156,9 @@ public class Client implements Runnable {
 			boolean dealerTurn = true;
 			while (dealerTurn) { // Sits in loop whilst dealer chooses new cards
 				in = input.readLine();
+				if(in.contains("chatMessage")) {
+					controller.addToChat(in.substring(11,12) + " > " + in.substring(12));
+				}
 				if (in.contains("otherPlayer")) {
 					int otherPlayerID = Integer.parseInt(input.readLine());
 					List<String> cards = extractCards(input.readLine());
@@ -215,6 +216,12 @@ public class Client implements Runnable {
 			} else {
 				controller.setLabel("Dealer Wins!!");
 			}
+			while(true) {
+				in = input.readLine();
+				if(in.contains("chatMessage")) {
+					controller.addToChat(in.substring(11,12) + " > " + in.substring(12));
+				}
+			}
 		} catch (IOException e) {
 			System.out.println("Session not joinable");
 			e.printStackTrace();
@@ -223,10 +230,6 @@ public class Client implements Runnable {
 			return;
 		}
 
-	}
-	
-	public void setupTable() {
-		
 	}
 
 	public List<String> extractCards(String hand) {
@@ -237,5 +240,4 @@ public class Client implements Runnable {
 		cards.addAll(Arrays.asList(arr));
 		return cards;
 	}
-///testttttttttttttttt
 }

@@ -10,7 +10,7 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Semaphore;
 
-public class ServerThread implements Runnable {
+public class ServerPlayerHandler implements Runnable {
 
 	private Socket socket = null;
 	private PrintWriter output;
@@ -20,7 +20,7 @@ public class ServerThread implements Runnable {
 	private Deck deck;
 	private Semaphore deckWait;
 	private Semaphore initialCardWait;
-	private Semaphore chatWait;
+	private Semaphore serverChatWait;
 	CyclicBarrier playersWait;
 	CyclicBarrier playersTurnWait;
 	CyclicBarrier dealersTurn;
@@ -29,11 +29,10 @@ public class ServerThread implements Runnable {
 	private boolean active;
 	private int barriers;
 	private List<String> chatLog;
-	private int chatIndex;
 
-	public ServerThread(Socket socket, int ID, Deck deck, Semaphore deckWait, CyclicBarrier playersWait,
-			CyclicBarrier playersTurnWait, int noPlayers, CyclicBarrier dealersTurn, CyclicBarrier gameOver,
-			Semaphore initialCardWait, List<List<String>> table, List<String> chatLog, Semaphore chatWait) {
+	public ServerPlayerHandler(Socket socket, int ID, Deck deck, Semaphore deckWait, CyclicBarrier playersWait,
+			CyclicBarrier playersTurnWait, int noPlayers, CyclicBarrier dealersTurn, Semaphore initialCardWait,
+			List<List<String>> table, List<String> chatLog, Semaphore serverChatWait) {
 		this.socket = socket;
 		this.ID = ID;
 		this.deck = deck;
@@ -43,13 +42,11 @@ public class ServerThread implements Runnable {
 		this.noPlayers = noPlayers;
 		active = true;
 		this.dealersTurn = dealersTurn;
-		this.gameOver = gameOver;
 		this.initialCardWait = initialCardWait;
 		this.table = table;
 		barriers = 0;
 		this.chatLog = chatLog;
-		chatIndex = 0;
-		this.chatWait = chatWait;
+		this.serverChatWait = serverChatWait;
 	}
 
 	@Override
@@ -66,11 +63,8 @@ public class ServerThread implements Runnable {
 				+ " player(s) in the current session, have fun";
 		output.println(hello); // Sends greeting to client
 		System.out.println(hello);
-		System.out.println("Number of players in game " + noPlayers); 	// Prints the number of players in the game to the
+		System.out.println("Number of players in game " + noPlayers); // Prints the number of players in the game to the
 																		// server thread
-		Runnable r = new ServerChatThread(output, chatWait, chatLog, chatIndex);
-		Thread thread = new Thread(r);
-		thread.start();
 
 		/*
 		 * Each connected client will have a thread running in this class, therefore any
@@ -86,21 +80,29 @@ public class ServerThread implements Runnable {
 		output.println(table.get(0).get(1)); // Sends the dealers hand to the client
 		String card1 = deck.drawCard();
 		String card2 = deck.drawCard();
-		output.println(card1);	
-		output.println(card2); 	// Draws the clients hand
+		output.println(card1);
+		output.println(card2); // Draws the clients hand
 		table.get(ID).add(card1);
 		table.get(ID).add(card2);
 		initialCardWait.release();
-		
-		try {
-			deckWait.acquire(); 	// Only allows 1 thread through at a time
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		output.println("Make move");	// Asks the client to make move, this message is picked up in the client class
-										// (within the while loop), the client class then asks the client for a move.
+
+		Runnable r = new ServerMoveThread(output, deckWait);
+		Thread thread = new Thread(r);
+		thread.start();
+
+		Runnable chatRunnable = new ServerChatThread(output, serverChatWait, chatLog);
+		Thread chatThread = new Thread(chatRunnable);
+		chatThread.start();
+
+//		try {
+//			deckWait.acquire(); 	// Only allows 1 thread through at a time
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+//		output.println("Make move");	// Asks the client to make move, this message is picked up in the client class
+		// (within the while loop), the client class then asks the client for a move.
 		String in = "";
-		
+
 		while (active) { // While the player is still active (until they break or pass)
 			try {
 				in = input.readLine(); // Reads the message from the client
@@ -110,13 +112,12 @@ public class ServerThread implements Runnable {
 				return;
 			}
 			System.out.println("This is in: " + in);
-			if(in.contains("chatMessage")) {
+			if (in.contains("chatMessage")) {
 				System.out.println("Sending chat message");
 				chatLog.add(in);
-				for(int i= 0; i<noPlayers;i++) {
-					chatWait.release();
+				for (int i = 0; i < noPlayers; i++) {
+					serverChatWait.release();
 				}
-				chatIndex++;
 			}
 			if (in.equals("h")) {
 				String card = deck.drawCard();
@@ -138,7 +139,8 @@ public class ServerThread implements Runnable {
 //		}
 		output.println("Player " + ID + " finished");
 		System.out.println("Player " + ID + " finished");
-		deckWait.release(); // Releases the deck to allow another thread in
+		deckWait.release(); // Releases the deck to allow another thread
+
 		try {
 			playersTurnWait.await(); // Wait her until all players have finished their move. This is NOT the same
 										// barrier that the main thread is currently waiting on. Main thread is waiting
@@ -194,16 +196,25 @@ public class ServerThread implements Runnable {
 //			}
 		}
 		output.println("dealerDone"); // Tells the client the dealer is finished
-		try {
-			gameOver.await();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (BrokenBarrierException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		while (true) {
+			try {
+				in = input.readLine();
+			} catch (IOException e) {
+				System.out.println("Connection closed...");
+				break;
+			}
+			if (in.contains("chatMessage")) {
+				System.out.println("Sending chat message");
+				chatLog.add(in);
+				for (int i = 0; i < noPlayers; i++) {
+					serverChatWait.release();
+				}
+			}
+			if (socket.isClosed()) {
+				System.out.println("Closed socket");
+				break;
+			}
 		}
-		barriers++;
 	}
 
 	public void triggerBarrier() {
@@ -214,13 +225,8 @@ public class ServerThread implements Runnable {
 				deckWait.release();
 				playersTurnWait.await();
 				playersWait.await();
-				System.out.println("0");
 			case 1:
 				dealersTurn.await();
-				System.out.println("1");
-			case 2:
-				gameOver.await();
-				System.out.println("2");
 			}
 		} catch (Exception e) {
 
