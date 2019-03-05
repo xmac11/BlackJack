@@ -3,13 +3,13 @@ package gui;
 import java.io.PrintWriter;
 import java.util.concurrent.Semaphore;
 
-public class MoveThread implements Runnable{
+public class ClientMoveThread implements Runnable{
 	
 	private GameController controller;
 	private PrintWriter output;
 	private Semaphore moveWait;
 	
-	public MoveThread(GameController controller, PrintWriter output, Semaphore moveWait) {
+	public ClientMoveThread(GameController controller, PrintWriter output, Semaphore moveWait) {
 		this.controller = controller;
 		this.output = output;
 		this.moveWait = moveWait;
@@ -17,7 +17,7 @@ public class MoveThread implements Runnable{
 
 	@Override
 	public void run() {
-		System.out.println("Chat thread started");
+		System.out.println("Move thread started");
 			try {
 				moveWait.acquire();
 			} catch (InterruptedException e) {

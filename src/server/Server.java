@@ -19,12 +19,11 @@ public class Server implements Runnable {
 	CyclicBarrier playersWait;
 	CyclicBarrier playersTurnWait;
 	CyclicBarrier dealersTurn;
-	CyclicBarrier gameOver;
 	private int secondsToWait;
 	private List<List<String>> table;
 	Boolean join;
 	private List<String> chatLog;
-	private Semaphore chatWait;
+	private Semaphore serverChatWait;
 
 	public Server() {
 		table = new ArrayList<>();
@@ -73,19 +72,18 @@ public class Server implements Runnable {
 		System.out.println("Dealers cards: " + table.get(0)); //Prints the dealers hand to the server console (for debugging)
 		playersWait = new CyclicBarrier(joined.size() + 1); //Sets the barrier to be used to wait for all players + main server thread, makes threads wait until it is the dealers turn.
 		dealersTurn = new CyclicBarrier(joined.size() + 1); //Same as above barrier, this barrier is potentially redundant, I just haven't got round to removing it yet
-		gameOver = new CyclicBarrier(joined.size() + 1); //^^^
 		playersTurnWait = new CyclicBarrier(joined.size()); //Sets the barrier to wait for all players to finish their turn 
 		deckWait = new Semaphore(1); //Creates a semaphore to allow 1 thread to access a critical section, this is used to control access to the deck
 		initialCardWait = new Semaphore(1);
 		chatLog = new ArrayList<>();
-		chatWait = new Semaphore(0);
+		serverChatWait = new Semaphore(0);
 		if (joined.size() > 0) { //Ensures there are players in the session
 			System.out.println("Game Starting...");
 			for (int i = 0; i < joined.size(); i++) {
-				ServerThread serverThread = null;
+				ServerPlayerHandler serverThread = null;
 				table.add(new ArrayList<>());
-				serverThread = new ServerThread(joined.get(i), i + 1, deck, deckWait, playersWait, playersTurnWait,
-						joined.size(), dealersTurn, gameOver, initialCardWait, table, chatLog, chatWait); //Creates a thread for a client, sends all relevant variables
+				serverThread = new ServerPlayerHandler(joined.get(i), i + 1, deck, deckWait, playersWait, playersTurnWait,
+						joined.size(), dealersTurn, initialCardWait, table, chatLog, serverChatWait); //Creates a thread for a client, sends all relevant variables
 				System.out.println("Player " + i + " added"); //For debugging
 				new Thread(serverThread).start(); //Sends thread
 			}
@@ -106,13 +104,6 @@ public class Server implements Runnable {
 			}
 		} else {
 			System.out.println("No players joined, session ending");
-		}
-		try {
-			gameOver.await(); //Waits here until the game is over
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (BrokenBarrierException e) {
-			e.printStackTrace();
 		}
 		System.out.println("Game over");
 	}

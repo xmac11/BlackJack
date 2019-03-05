@@ -55,7 +55,7 @@ public class GameController implements Initializable {
 	private Label chat;
 
 	@FXML
-	private TextArea chatBox;
+	private ListView<String> chatView;
 
 	private List<String> dealerHand;
 	private List<String> hand;
@@ -87,11 +87,11 @@ public class GameController implements Initializable {
 		chatWait.release();
 	}
 
-	public void addToChat(int index, String message) {
+	public void addToChat(String message) {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				chatBox.insertText(0, message);
+				chatView.getItems().add(message);
 			}
 		});
 	}
