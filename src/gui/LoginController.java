@@ -27,11 +27,12 @@ public class LoginController {
 			GameController gameController = loader.<GameController>getController();
 			gameController.initData(ipField.getText());
 			window.setScene(gameScene);
-//			Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
-			window.setHeight(900);
-			window.setWidth(1600);
-			window.setScene(gameScene);
-			window.show();
+			Stage thisStage = (Stage)((Node)event.getSource()).getScene().getWindow();
+//			thisStage.close();
+			thisStage.setHeight(900);
+			thisStage.setWidth(1600);
+			thisStage.setScene(gameScene);
+			thisStage.show();
 		}
 	}
 
