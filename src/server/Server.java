@@ -13,6 +13,7 @@ import java.util.concurrent.Semaphore;
 
 public class Server implements Runnable {
 
+
 	Semaphore deckWait;
 	Semaphore initialCardWait;
 	Semaphore waitForPlayerOne;
