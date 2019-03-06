@@ -140,7 +140,7 @@ public class ServerPlayerHandler implements Runnable {
 		output.println("Player " + ID + " finished");
 		System.out.println("Player " + ID + " finished");
 		deckWait.release(); // Releases the deck to allow another thread
-
+		
 		try {
 			playersTurnWait.await(); // Wait her until all players have finished their move. This is NOT the same
 										// barrier that the main thread is currently waiting on. Main thread is waiting
