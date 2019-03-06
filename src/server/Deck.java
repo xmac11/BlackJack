@@ -13,7 +13,7 @@ public class Deck {
 	List<String> cards;
 
 	public Deck() {
-		String[] rank =  { "A", "2", "3", "4", "5", "6", "7", "8", "9", "K", "J", "Q" };
+		String[] rank =  { "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K" };
 		String[] suit =  { "Hearts", "Spades", "Diamonds", "Clubs"};
 		cards = new ArrayList<>();
 		for(int i = 0; i<suit.length; i++) {
@@ -25,8 +25,9 @@ public class Deck {
 	}
 	
 	public String drawCard() {
-		if(cards.size() > 0)
-		return cards.remove(0);
+		int size = cards.size();
+		if(size > 0)
+		return cards.remove(size - 1); // remove from the end of the ArrayList (more efficient operation)
 		else
 			return "Deck is Empty";
 	}
@@ -35,7 +36,7 @@ public class Deck {
 		return cards;
 	}
 	
-	public static int total(List<String> hand) {
+	public int total(List<String> hand) {
 		int sum = 0;
 		int value = 0;
 		for (int i = 0; i < hand.size(); i++) {
