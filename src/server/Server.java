@@ -75,6 +75,7 @@ public class Server implements Runnable {
 					newPlayer.setNewPlayer(false);
 				}
 			}
+			gameStart.setGameStart(true);
 			for (int i = 0; i < joined.size(); i++) {
 				joined.get(i).getOutput().println("Game in progress");
 				joined.get(i).getOutput().println(gameQueue.size());
