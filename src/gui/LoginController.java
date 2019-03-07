@@ -24,7 +24,9 @@ public class LoginController {
 		if (!ipField.getText().equals("") && !userField.getText().equals("")) {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("LobbyScreen.fxml"));
 			Scene lobbyScene = new Scene(loader.load());
+
 			Stage window = new Stage();
+
 			LobbyController lobbyController = loader.<LobbyController>getController();
 			lobbyController.initData(ipField.getText(), userField.getText());
 			window.setScene(lobbyScene);

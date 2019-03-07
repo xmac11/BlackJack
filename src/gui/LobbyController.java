@@ -34,7 +34,7 @@ public class LobbyController implements Initializable {
 
 	@FXML
 	private ListView<String> chatView;
-	
+
 	@FXML
 	private ListView<String> onlineView;
 
@@ -84,7 +84,7 @@ public class LobbyController implements Initializable {
 	public String getUsername() {
 		return username;
 	}
-	
+
 	public void queueJoined() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -95,7 +95,7 @@ public class LobbyController implements Initializable {
 			}
 		});
 	}
-	
+
 	public void addQueue(List<String> queue) {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -107,7 +107,7 @@ public class LobbyController implements Initializable {
 			}
 		});
 	}
-	
+
 	public void addOnline(List<String> online){
 		Platform.runLater(new Runnable() {
 			@Override
@@ -131,7 +131,7 @@ public class LobbyController implements Initializable {
 			}
 		});
 	}
-	
+
 	public void joinUnavailable() {
 		Platform.runLater(new Runnable() {
 			@Override

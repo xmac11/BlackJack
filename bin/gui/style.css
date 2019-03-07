@@ -40,3 +40,9 @@
     -fx-padding: 15 30 15 30;
 }
 
+.chatBox {
+    -fx-background-color:#333333;
+    -fx-min-height:400px;
+    -fx-min-width:200px;
+}
+
