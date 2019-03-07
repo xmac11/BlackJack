@@ -7,12 +7,13 @@ import java.util.concurrent.Semaphore;
 public class ServerChatThread implements Runnable {
 	private PrintWriter output;
 	Semaphore chatSend;
-	List<String> message;
+	List<String> messages;
+	private boolean playerLeft = false;
 
-	public ServerChatThread(PrintWriter output, Semaphore chatSend, List<String> message) {
+	public ServerChatThread(PrintWriter output, Semaphore chatSend, List<String> messages) {
 		this.output = output;
 		this.chatSend = chatSend;
-		this.message = message;
+		this.messages = messages;
 	}
 
 	@Override
@@ -26,17 +27,23 @@ public class ServerChatThread implements Runnable {
 		while (true) {
 			try {
 				chatSend.acquire();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			output.println(message.get(index));
-			try {
+				output.println(messages.get(index));
 				Thread.sleep(500);
+				synchronized (threadName) {
+					if(playerLeft) {
+						threadName = Thread.currentThread().getName();
+						playerLeft = false;
+					}
+				}
+				if (threadName.equals(Thread.currentThread().getName())) {
+					index++;
+				}
 			} catch (InterruptedException e) {
+				if(threadName.equals(Thread.currentThread().getName())) {
+					playerLeft = true;
+				}
 				e.printStackTrace();
-			}
-			if (threadName.equals(Thread.currentThread().getName())) {
-				index++;
+				return;
 			}
 
 		}

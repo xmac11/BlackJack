@@ -15,23 +15,23 @@ public class LoginController {
 
 	@FXML
 	private TextField ipField;
+	
+	@FXML
+	private TextField userField;
 
 	public void joinPressed(ActionEvent event) throws IOException {
 
-		if (!ipField.getText().equals("")) {
-//			Parent gameViewParent = FXMLLoader.load(getClass().getResource("GameScreen.FXML"));
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("GameScreen.FXML"));
-			Scene gameScene = new Scene(loader.load());
-			gameScene.getStylesheets().addAll(getClass().getResource("style.css").toExternalForm());
+		if (!ipField.getText().equals("") && !userField.getText().equals("")) {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("LobbyScreen.fxml"));
+			Scene lobbyScene = new Scene(loader.load());
 			Stage window = new Stage();
-			GameController gameController = loader.<GameController>getController();
-			gameController.initData(ipField.getText());
-			window.setScene(gameScene);
+			LobbyController lobbyController = loader.<LobbyController>getController();
+			lobbyController.initData(ipField.getText(), userField.getText());
+			window.setScene(lobbyScene);
 			Stage thisStage = (Stage)((Node)event.getSource()).getScene().getWindow();
-//			thisStage.close();
-			thisStage.setHeight(900);
-			thisStage.setWidth(1600);
-			thisStage.setScene(gameScene);
+			thisStage.setHeight(600);
+			thisStage.setWidth(800);
+			thisStage.setScene(lobbyScene);
 			thisStage.show();
 		}
 	}
