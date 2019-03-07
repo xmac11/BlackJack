@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.PrintWriter;
 import java.net.URL;
 
 import javafx.scene.control.*;
@@ -15,6 +16,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 
 /**
  * Part of the application that handles user input.
@@ -57,17 +59,9 @@ public class GameController implements Initializable {
 	@FXML
 	private ListView<String> chatView;
 
-	private List<String> dealerHand;
-	private List<String> hand;
-	private List<List<String>> table;
-	private String IP;
 
-	private Semaphore waitForServer;
-	private Semaphore waitForInput;
-	private Semaphore chatWait;
-	private String toSend;
-	private String chatMessage = "";
 	private int ID;
+	private PrintWriter output;
 	private int noPlayers;
 
 	/**
@@ -77,14 +71,30 @@ public class GameController implements Initializable {
 	 */
 	public void onHitButtonClicked() {
 		System.out.println("Player is dealt a new card from the deck.");
-		toSend = "h";
-		waitForInput.release();
+		output.println("h");
+	}
+	
+	public void endChat() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				chatView.setDisable(true);
+				textField.setDisable(true);
+			}
+		});
+	}
+
+	public void leaveGame() {
+		System.exit(0);
 	}
 
 	public void sendChat() {
-		chatMessage = textField.getText();
+		if (textField.getText().matches("[a-zA-Z0-9]*")) {
+			output.println("gameChatMessage" + String.valueOf(ID) + textField.getText());
+		}else {
+			addToChat("Error - Only letters and numbers allowed in chat");
+		}
 		textField.setText("");
-		chatWait.release();
 	}
 
 	public void addToChat(String message) {
@@ -95,25 +105,16 @@ public class GameController implements Initializable {
 			}
 		});
 	}
-
-	public String getChat() {
-		return chatMessage;
-	}
-
-	public void setChatMessage(String message) {
-		this.chatMessage = message;
+	
+	public void playerLeft() {
+		output.println("playerLeft");
 	}
 
 	public void onStandButtonClicked() {
 		disableHit();
 		disableStand();
 		System.out.println("Player stands. Next player's turn...");
-		toSend = "p";
-		waitForInput.release();
-	}
-
-	public String getToSend() {
-		return toSend;
+		output.println("p");
 	}
 
 	public void setID(int ID) {
@@ -129,6 +130,7 @@ public class GameController implements Initializable {
 			@Override
 			public void run() {
 				label.setText(text);
+				label.setVisible(true);
 			}
 		});
 	}
@@ -183,12 +185,20 @@ public class GameController implements Initializable {
 		cardImage.setFitWidth(100);
 		Image image = null;
 		if (card.contains("facedown")) {
-			image = new javafx.scene.image.Image("/image/Playing Cards/" + card);
+			image = getImage(card);
 		} else {
-			image = new javafx.scene.image.Image("/image/Playing Cards/" + cardToFile(card));
+			image = getImage(card);
 		}
 		cardImage.setImage(image);
 		hand.getChildren().add(cardImage);
+	}
+
+	public Image getImage(String card) {
+		if (card.contains("facedown")) {
+			return new javafx.scene.image.Image("/image/Playing Cards/" + card);
+		} else {
+			return new javafx.scene.image.Image("/image/Playing Cards/" + cardToFile(card));
+		}
 	}
 
 	public void addCardToPlayerHand(String card) {
@@ -263,51 +273,47 @@ public class GameController implements Initializable {
 			}
 		});
 	}
-	
-	void initData(String IP) {
-	    this.IP = IP;
-	  }
+
+	public void setTable(List<List<String>> table) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				if (noPlayers > 1) {
+					player2Label.setVisible(true);
+					addCardToHand("facedown.jpg", hBoxPlayer2);
+					addCardToHand("facedown.jpg", hBoxPlayer2);
+				}
+				if (noPlayers > 2) {
+					player3Label.setVisible(true);
+					addCardToHand("facedown.jpg", hBoxPlayer3);
+					addCardToHand("facedown.jpg", hBoxPlayer3);
+				}
+				if (table.size() > 0) {
+					addCardToHand("facedown.jpg", hBoxDealer);
+					addCardToHand("facedown.jpg", hBoxDealer);
+					addCardToHand(table.get(ID).get(0), hBoxPlayer);
+					addCardToHand(table.get(ID).get(1), hBoxPlayer);
+				} else {
+					setLabel("Error! Unable to join session.");
+				}
+
+			}
+		});
+	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		hitButton.setDisable(true);
 		standButton.setDisable(true);
-		waitForServer = new Semaphore(0);
-		dealerHand = new ArrayList<>();
-		hand = new ArrayList<>();
-		table = new ArrayList<>();
-		waitForInput = new Semaphore(0);
-		chatWait = new Semaphore(0);
-		toSend = "";
-		Runnable runnable = new Client(table, dealerHand, hand, waitForServer, this, waitForInput, chatWait, IP);
-		Thread thread = new Thread(runnable);
-		thread.start();
-		System.out.println("Waiting at lock");
-		try {
-			waitForServer.acquire();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		System.out.println("release lock");
-		if (noPlayers > 1) {
-			player2Label.setVisible(true);
-			addCardToHand("facedown.jpg", hBoxPlayer2);
-			addCardToHand("facedown.jpg", hBoxPlayer2);
-		}
-		if (noPlayers > 2) {
-			player3Label.setVisible(true);
-			addCardToHand("facedown.jpg", hBoxPlayer3);
-			addCardToHand("facedown.jpg", hBoxPlayer3);
-		}
-		if (table.size() > 0) {
-			addCardToHand("facedown.jpg", hBoxDealer);
-			addCardToHand("facedown.jpg", hBoxDealer);
-			addCardToHand(table.get(ID).get(0), hBoxPlayer);
-			addCardToHand(table.get(ID).get(1), hBoxPlayer);
-		} else {
-			setLabel("Error! Unable to join session.");
-		}
+		label.setVisible(false);
+	}
 
+	public PrintWriter getOutput() {
+		return output;
+	}
+
+	public void setOutput(PrintWriter output) {
+		this.output = output;
 	}
 
 }

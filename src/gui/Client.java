@@ -13,46 +13,50 @@ import com.sun.glass.ui.TouchInputSupport;
 import java.io.*;
 
 public class Client implements Runnable {
-	
 
-	// This is a test comment to see if GIT  works 
+	// This is a test comment to see if GIT works
 	// harris test
 
-	//This is a test comment to see if GIT  works
-	//Nick test
-	//Eclipse test
-    //Hello World
-	
+	// This is a test comment to see if GIT works
+	// Nick test
+	// Eclipse test
+	// Hello World
 
-	//Lobby branch test
+	// Lobby branch test
 
-	//Test to LobbyBranch
+	// Test to LobbyBranch
 
-
-	
-	List<String> hand;
-	List<String> dealerHand;
 	Semaphore waitForServer;
 	Semaphore chatWait;
-	GameController controller;
+	GameController gameController;
+	LobbyController lobbyController;
 	Semaphore waitForInput;
 	private int ID;
 	private int noPlayers;
 	private List<List<String>> table;
-	PrintWriter output;
+	private PrintWriter output;
+	private Socket socket;
+	private List<String> onlinePlayers;
+	private String username;
 	private String IP;
+	private List<String> inQueue;
+	private boolean playerLeft;
 
-	public Client(List<List<String>> table, List<String> dealerHand, List<String> hand, Semaphore waitForServer,
-			GameController controller, Semaphore waitForInput, Semaphore chatWait, String IP) {
+	public Client(List<List<String>> table, Semaphore waitForServer, Semaphore waitForInput, Semaphore chatWait,
+			String IP, LobbyController lobbyController) {
 		this.table = table;
-		this.dealerHand = dealerHand;
-		this.hand = hand;
 		this.waitForServer = waitForServer;
-		this.controller = controller;
 		this.waitForInput = waitForInput;
 		output = null;
 		this.chatWait = chatWait;
 		this.IP = IP;
+		this.lobbyController = lobbyController;
+		gameController = null;
+
+	}
+
+	public void setGameController(GameController gameController) {
+		this.gameController = gameController;
 	}
 
 	public static int total(List<String> a) {
@@ -76,151 +80,238 @@ public class Client implements Runnable {
 		}
 		return sum;
 	}
-	
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
 	@Override
 	public void run() {
-		// change the IP address to your server's ip address
-//		System.out.println("Enter IP");
-//		Scanner scanner = new Scanner(System.in);
-//		String IP = scanner.nextLine();
-//		scanner.close();
-		try (//Socket socket = new Socket(InetAddress.getByName(IP), 9999);
-				Socket socket = new Socket(IP, 9999);
+		try (Socket socket = new Socket(IP, 9999);
 				BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));) {
 			output = new PrintWriter(socket.getOutputStream(), true);
-			
-			String in = "";
-			String hello = input.readLine();
-			System.out.println(hello); // The first message received is the greeting message so just print this
-			ID = Integer.parseInt(hello.substring(15, 16));
-			controller.setID(ID);
-			Runnable runnable = new ClientChatThread(controller, output, chatWait, ID);
-			Thread thread = new Thread(runnable);
-			thread.start();
-			noPlayers = Integer.parseInt(hello.substring(26, 27));
-			controller.setNoPlayers(noPlayers);
-			System.out.println(noPlayers);
-			table.add(new ArrayList<>());
-			table.get(0).add(input.readLine());
-			table.get(0).add(input.readLine()); // Next messages are the dealers first hands
-			System.out.println(table.get(0) + " this is dealer");
-			for (int i = 0; i < noPlayers; i++) {
-				table.add(new ArrayList<>());
-			}
-			table.get(ID).add(input.readLine());
-			table.get(ID).add(input.readLine());
-			controller.setLabel("Your hand: " + total(table.get(ID)));
-			System.out.println("Your Hand: " + hand + " total: " + total(table.get(ID))); // Prints the players hand
-			waitForServer.release();
-			while (true) { // Loops this until it reaches a 'break;'
-				in = input.readLine();
-				System.out.println("Client in: " + in);
-				if (in.equals("Make move")) { // Reads the message received and responds accordingly
-					controller.enableHit();
-					controller.enableStand();
-					System.out.println(in + ", h (hit) p (pass)");
-					System.out.println("Waiting for move");
-					controller.setLabel("Make Move: " + total(table.get(ID)));
-					Runnable r = new ClientMoveThread(controller, output, waitForInput);
-					Thread t = new Thread(r);
-					t.start();
-				}
-				if(in.contains("chatMessage")) {
-					controller.addToChat(in.substring(11,12) + " > " + in.substring(12));
-				}
-				if (in.contains("playerCard")) {
-					String card = in.substring(10);
-					table.get(ID).add(card);
-					controller.addCardToPlayerHand(card);
-					if (total(table.get(ID)) > 21) {
-						System.out.println("Break");
-						controller.setLabel("Break: " + total(table.get(ID)));
-						System.out.println("Your hand: " + hand + " total: " + total(table.get(ID)));
-						output.println("p");
+			onlinePlayers = new ArrayList<>();
+			inQueue = new ArrayList<>();
+			System.out.println(username + " has joined");
+			setUsername(lobbyController.getUsername());
+			output.println(username);
+			while (true) {
+				playerLeft = false;
+				String in = "";
+				lobbyController.setOutput(output);
+				while (true) { // Loops this until it reaches a 'break;'
+					in = input.readLine();
+					System.out.println("Client in: " + in);
+					if (in.equals("Game Starting")) { // Reads the message received and responds accordingly
 						break;
+					}
+					if (in.equals("queueJoined")) {
+						lobbyController.queueJoined();
+					}
+					if (in.equals("Clear queue")) {
+						lobbyController.clearQueue();
+					}
+					if (in.equals("Game in progress")) {
+						lobbyController.gameInProgress(input.readLine());
+					}
+					if (in.equals("newPlayer")) {
+						in = input.readLine();
+						onlinePlayers.clear();
+						while (!in.equals("playersUpdated")) {
+							onlinePlayers.add(in.substring(9));
+							in = input.readLine();
+						}
+						lobbyController.addOnline(onlinePlayers);
+					}
+					if (in.equals("playerQueue")) {
+						in = input.readLine();
+						inQueue.clear();
+						while (!in.equals("queueUpdated")) {
+							inQueue.add(in.substring(11));
+							in = input.readLine();
+						}
+						lobbyController.addQueue(inQueue);
+					}
+				}
+				lobbyController.gameBegin();
+				String hello = input.readLine();
+				System.out.println(hello); // The first message received is the greeting message so just print this
+				ID = Integer.parseInt(hello.substring(15, 16));
+				try {
+					waitForServer.acquire();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				gameController.setOutput(output);
+				gameController.setID(ID);
+				noPlayers = Integer.parseInt(hello.substring(26, 27));
+				gameController.setNoPlayers(noPlayers);
+				System.out.println(noPlayers);
+				table.add(new ArrayList<>());
+				table.get(0).add(input.readLine());
+				table.get(0).add(input.readLine()); // Next messages are the dealers first hands
+				System.out.println(table.get(0) + " this is dealer");
+				for (int i = 0; i < noPlayers; i++) {
+					table.add(new ArrayList<>());
+				}
+				table.get(ID).add(input.readLine());
+				table.get(ID).add(input.readLine());
+				gameController.setLabel("Your hand: " + total(table.get(ID)));
+				System.out.println("Your Hand: " + table.get(ID) + " total: " + total(table.get(ID))); // Prints the
+																										// players hand
+				gameController.setTable(table);
+				while (true) { // Loops this until it reaches a 'break;'
+					in = input.readLine();
+					System.out.println("Client in: " + in);
+					if (in.contains("resend")) {
+						output.println(in.substring(6));
 					} else {
-						output.println("move");
-						System.out.println("Your hand: " + hand + " total: " + total(table.get(ID)));
-					}
-				}
-				if (in.contains("finished")) { // Server tells the client its turn is over
-					System.out.println("Your hand: " + hand + " total: " + total(table.get(ID)));
-					System.out.println(in + " turn... waiting for other players");
-					controller.setLabel("Waiting for others");
-					break;
-				}
-			}
-			controller.disableHit();
-			controller.disableStand();
-			controller.setLabel("Your hand: " + total(table.get(ID)));
-			boolean dealerTurn = true;
-			while (dealerTurn) { // Sits in loop whilst dealer chooses new cards
-				in = input.readLine();
-				if(in.contains("chatMessage")) {
-					controller.addToChat(in.substring(11,12) + " > " + in.substring(12));
-				}
-				if (in.contains("otherPlayer")) {
-					int otherPlayerID = Integer.parseInt(input.readLine());
-					List<String> cards = extractCards(input.readLine());
-					for (int j = 0; j < cards.size(); j++) {
-						table.get(otherPlayerID).add(cards.get(j));
-					}
-					System.out.println("This is table >>>");
-					for (int i = 0; i < table.size(); i++) {
-						System.out.println(table.get(i));
-					}
-					System.out.println("<<< This is table");
-				}
-				if (in.contains("tableSent")) {
-					int playerCount = 2;
-					for (int i = 1; i < table.size(); i++) {
-						if (i != ID) {
-							controller.removeFacedown(playerCount);
-							for (int j = 0; j < table.get(i).size(); j++) {
-								controller.addCardToOpposingPlayerHand(playerCount, table.get(i).get(j));
+						if (in.equals("Make move")) { // Reads the message received and responds accordingly
+							gameController.enableHit();
+							gameController.enableStand();
+							System.out.println(in + ", h (hit) p (pass)");
+							System.out.println("Waiting for move");
+							gameController.setLabel("Make Move: " + total(table.get(ID)));
+						}
+						if (in.contains("gameChatMessage")) {
+							gameController.addToChat(in.substring(15, 16) + " > " + in.substring(16));
+						}
+						if (in.equals("playerQueue")) {
+							in = input.readLine();
+							inQueue.clear();
+							while (!in.equals("queueUpdated")) {
+								inQueue.add(in.substring(11));
+								in = input.readLine();
 							}
-							playerCount++;
+							lobbyController.addQueue(inQueue);
+						}
+						if (in.equals("playerLeft")) {
+							playerLeft = true;
+							break;
+						}
+						if (in.contains("playerCard")) {
+							String card = in.substring(10);
+							table.get(ID).add(card);
+							gameController.addCardToPlayerHand(card);
+							if (total(table.get(ID)) > 21) {
+								System.out.println("Break");
+								gameController.setLabel("Break: " + total(table.get(ID)));
+								System.out.println("Your hand: " + table.get(ID) + " total: " + total(table.get(ID)));
+								output.println("p");
+								break;
+							} else {
+								output.println("move");
+								System.out.println("Your hand: " + table.get(ID) + " total: " + total(table.get(ID)));
+							}
+						}
+						if (in.contains("finished")) { // Server tells the client its turn is over
+							System.out.println("Your hand: " + table.get(ID) + " total: " + total(table.get(ID)));
+							System.out.println(in + " turn... waiting for other players");
+							gameController.setLabel("Waiting for others");
+							break;
+						}
+						if (in.equals("newPlayer")) {
+							in = input.readLine();
+							onlinePlayers.clear();
+							while (!in.equals("playersUpdated")) {
+								onlinePlayers.add(in.substring(9));
+								in = input.readLine();
+							}
+							lobbyController.addOnline(onlinePlayers);
 						}
 					}
 				}
-				if (in.contains("playersFinished")) { // Server tells client what to display
-					System.out.println("All players finished");
+				if (!playerLeft) {
+					gameController.disableHit();
+					gameController.disableStand();
+					gameController.setLabel("Your hand: " + total(table.get(ID)));
+					boolean dealerTurn = true;
+					while (dealerTurn) { // Sits in loop whilst dealer chooses new cards
+						in = input.readLine();
+						if (in.contains("resend")) {
+							output.println(in.substring(6));
+						} else {
+							if (in.contains("gameChatMessage")) {
+								gameController.addToChat(in.substring(15, 16) + " > " + in.substring(16));
+							}
+							if (in.equals("breakFromLoop")) {
+								output.println("reader");
+							}
+							if (in.equals("newPlayer")) {
+								in = input.readLine();
+								onlinePlayers.clear();
+								while (!in.equals("playersUpdated")) {
+									onlinePlayers.add(in);
+									in = input.readLine();
+								}
+								lobbyController.addOnline(onlinePlayers);
+							}
+							if (in.contains("otherPlayer")) {
+								int otherPlayerID = Integer.parseInt(input.readLine());
+								List<String> cards = extractCards(input.readLine());
+								for (int j = 0; j < cards.size(); j++) {
+									table.get(otherPlayerID).add(cards.get(j));
+								}
+								System.out.println("This is table >>>");
+								for (int i = 0; i < table.size(); i++) {
+									System.out.println(table.get(i));
+								}
+								System.out.println("<<< This is table");
+							}
+							if (in.contains("tableSent")) {
+								int playerCount = 2;
+								for (int i = 1; i < table.size(); i++) {
+									if (i != ID) {
+										gameController.removeFacedown(playerCount);
+										for (int j = 0; j < table.get(i).size(); j++) {
+											gameController.addCardToOpposingPlayerHand(playerCount,
+													table.get(i).get(j));
+										}
+										playerCount++;
+									}
+								}
+							}
+							if (in.contains("playersFinished")) { // Server tells client what to display
+								System.out.println("All players finished");
+							}
+							if (in.contains("showDealerHand")) {
+								System.out.println("Dealers cards: " + table.get(0) + "total: " + total(table.get(0)));
+								System.out.println("Dealer taking cards....");
+							}
+							if (in.contains("dealerCard"))
+								table.get(0).add(in.substring(10));
+							if (in.contains("dealerDone"))
+								dealerTurn = false; // Dealers turn is finished, break from loop
+							if (in.equals("Clear queue")) {
+								lobbyController.clearQueue();
+							}
+						}
+					}
+					System.out.println(table.get(0));
+					gameController.removeDealerFacedown();
+					for (int i = 0; i < table.get(0).size(); i++) {
+						gameController.addCardToDealerHand(table.get(0).get(i));
+					}
+					/*
+					 * The following calculates the result of the game using the total scores of the
+					 * clients hand and dealers hand
+					 */
+					System.out.println("Dealers cards: " + table.get(0) + " total: " + total(table.get(0)));
+					if (total(table.get(ID)) > 21) {
+						gameController.setLabel("Bust!! You lose!");
+					} else if (total(table.get(0)) > 21) {
+						gameController.setLabel("Dealer bust! You Win!");
+					} else if (total(table.get(ID)) == total(table.get(0))) {
+						gameController.setLabel("Draw!");
+					} else if (total(table.get(ID)) > total(table.get(0))) {
+						gameController.setLabel("You win!!");
+					} else {
+						gameController.setLabel("Dealer Wins!!");
+					}
 				}
-				if (in.contains("showDealerHand")) {
-					System.out.println("Dealers cards: " + dealerHand + "total: " + total(table.get(0)));
-					System.out.println("Dealer taking cards....");
-				}
-				if (in.contains("dealerCard"))
-					table.get(0).add(in.substring(10));
-				if (in.contains("dealerDone"))
-					dealerTurn = false; // Dealers turn is finished, break from loop
-			}
-			System.out.println(table.get(0));
-			controller.removeDealerFacedown();
-			for (int i = 0; i < table.get(0).size(); i++) {
-				controller.addCardToDealerHand(table.get(0).get(i));
-			}
-			/*
-			 * The following calculates the result of the game using the total scores of the
-			 * clients hand and dealers hand
-			 */
-			System.out.println("Dealers cards: " + table.get(0) + " total: " + total(table.get(0)));
-			if (total(table.get(ID)) > 21) {
-				controller.setLabel("Bust!! You lose!");
-			} else if (total(table.get(0)) > 21) {
-				controller.setLabel("Dealer bust! You Win!");
-			} else if (total(table.get(ID)) == total(table.get(0))) {
-				controller.setLabel("Draw!");
-			} else if (total(table.get(ID)) > total(table.get(0))) {
-				controller.setLabel("You win!!");
-			} else {
-				controller.setLabel("Dealer Wins!!");
-			}
-			while(true) {
-				in = input.readLine();
-				if(in.contains("chatMessage")) {
-					controller.addToChat(in.substring(11,12) + " > " + in.substring(12));
-				}
+				table.clear();
+				inQueue.clear();
+				gameController.endChat();
 			}
 		} catch (IOException e) {
 			System.out.println("Session not joinable");
@@ -229,7 +320,6 @@ public class Client implements Runnable {
 			waitForServer.release();
 			return;
 		}
-
 	}
 
 	public List<String> extractCards(String hand) {

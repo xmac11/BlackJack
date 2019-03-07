@@ -47,7 +47,8 @@
 					</font>
 				</Label>
 				<TextField fx:id="textField" onAction="#sendChat" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-            <ListView fx:id="chatView" maxHeight="140.0" prefHeight="69.0" prefWidth="530.0" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+				<ListView fx:id="chatView" maxHeight="140.0" prefHeight="69.0" prefWidth="530.0" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+				<Button fx:id="leaveButton" mnemonicParsing="false" onAction="#leaveGame" prefHeight="85.0" prefWidth="155.0" text="Leave" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
 			</children>
 		</GridPane>
 	</children>
