@@ -146,7 +146,7 @@ public class Server implements Runnable {
 																					// ServerThread have reached the
 																					// barrier the main thread
 																					// continues...
-				while (Deck.total(table.get(0)) < 17) {
+				while (deck.total(table.get(0)) < 17) {
 					table.get(0).add(deck.drawCard()); // Logic to make the dealer pick their cards, since the
 														// dealersHand variable passed to the threads is a reference
 														// to this variable, all threads will see the changes.
