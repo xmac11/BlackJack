@@ -99,6 +99,7 @@ public class Client implements Runnable {
 				playerLeft = false;
 				String in = "";
 				lobbyController.setOutput(output);
+				System.out.println("Client back in lobby");
 				while (true) { // Loops this until it reaches a 'break;'
 					in = input.readLine();
 					System.out.println("Client in: " + in);
@@ -122,6 +123,11 @@ public class Client implements Runnable {
 							in = input.readLine();
 						}
 						lobbyController.addOnline(onlinePlayers);
+					}
+					if(in.contains("activeGame")) {
+						if(Boolean.parseBoolean(in.substring(10))) {
+							lobbyController.joinUnavailable();
+						}
 					}
 					if (in.equals("playerQueue")) {
 						in = input.readLine();

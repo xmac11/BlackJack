@@ -131,6 +131,15 @@ public class LobbyController implements Initializable {
 			}
 		});
 	}
+	
+	public void joinUnavailable() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				joinButton.setDisable(true);
+			}
+		});
+	}
 
 	public void clearQueue() {
 		Platform.runLater(new Runnable() {
@@ -145,6 +154,7 @@ public class LobbyController implements Initializable {
 	}
 
 	public void joinQueue() {
+		System.out.println("join queue pressed");
 		output.println("joinQueue");
 	}
 
