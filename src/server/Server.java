@@ -39,7 +39,7 @@ public class Server implements Runnable {
 		gameQueue = new ArrayList<>();
 	}
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) {
 		Server server = new Server();
 		Thread gameSession = new Thread(server);
 		gameSession.start(); // Sends off a thread that represents a game session
@@ -113,7 +113,7 @@ public class Server implements Runnable {
 					table.add(new ArrayList<>());
 					serverThread = new ServerPlayerHandler(gameQueue.get(i), i + 1, deck, deckWait, playersWait,
 							playersTurnWait, gameQueue.size(), dealersTurn, table, chatLog, serverChatWait,
-							finishedPlayers);
+							finishedPlayers, gameQueue);
 					System.out.println("Player " + (i + 1) + " added"); // For debugging
 					new Thread(serverThread).start(); // Sends thread
 				}
