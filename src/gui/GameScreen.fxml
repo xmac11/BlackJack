@@ -16,7 +16,7 @@
 
 <StackPane id="pane" minHeight="800.0" minWidth="1300.0" prefHeight="900.0" prefWidth="1590.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GameController">
 	<children>
-		<GridPane>
+		<GridPane StackPane.alignment="CENTER">
 			<columnConstraints>
 				<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
 				<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -50,17 +50,19 @@
 					</font>
 				</Label>
 				<Button fx:id="leaveButton" mnemonicParsing="false" onAction="#leaveGame" prefHeight="85.0" prefWidth="155.0" text="Leave" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-            <VBox id="chatBox" prefHeight="200.0" prefWidth="100.0" style="-fx-border-color:#83bdc0; -fx-border-width: 10; -fx-background-color: #c6cfd4;" GridPane.rowIndex="1">
+            <VBox id="chatBox" prefHeight="400.0" maxHeight="400" maxWidth="400" prefWidth="400.0" style="-fx-border-color:#83bdc0; -fx-border-width: 10; -fx-background-color: #c6cfd4;" GridPane.rowIndex="1">
                <children>
-                  <ListView prefHeight="252.0" prefWidth="530.0" style="-fx-background-color: #d7d7d7" />
-                  <HBox prefHeight="59.0" prefWidth="530.0" style="-fx-padding: 1, 10, 12, 12; -fx-background-color: white;">
+                  <ListView fx:id="chatView" prefHeight="252.0" prefWidth="530.0" style="-fx-background-color: #d7d7d7" maxWidth="530" maxHeight="252" />
+                  <HBox prefHeight="59.0" prefWidth="530.0" maxWidth="530" maxHeight="59" style="-fx-padding: 1, 10, 12, 12; -fx-background-color: #5b5b5b;">
                      <children>
-                        <TextField prefHeight="54.0" prefWidth="458.0" />
-                        <ImageView fitHeight="54.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../image/sendButtonSmallest.png" />
-                           </image>
-                        </ImageView>
+                        <TextField fx:id="textField" prefHeight="54.0" prefWidth="458.0" maxHeight="54" maxWidth="458" onAction="#sendChat"  />
+                        <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="55.0" minWidth="55" minHeight="41" maxHeight="41" maxWidth="55" onMouseClicked="#chatButtonPressed">
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../image/sendButtonSmallest.png" />
+                                 </image></ImageView>
+                           </graphic></Button>
                      </children></HBox>
                </children></VBox>
 			</children>

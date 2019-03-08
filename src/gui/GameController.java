@@ -316,4 +316,14 @@ public class GameController implements Initializable {
 		this.output = output;
 	}
 
+
+	/**
+	 * Chat Box Actions:
+	 */
+
+	public void chatButtonPressed(){
+		sendChat();
+
+	}
+
 }
