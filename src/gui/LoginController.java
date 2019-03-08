@@ -6,7 +6,6 @@ import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -29,7 +28,7 @@ public class LoginController {
 			lobbyController.initData(ipField.getText(), userField.getText());
 			window.setScene(lobbyScene);
 			Stage thisStage = (Stage)((Node)event.getSource()).getScene().getWindow();
-			thisStage.setHeight(600);
+			thisStage.setHeight(800);
 			thisStage.setWidth(800);
 			thisStage.setScene(lobbyScene);
 			thisStage.show();

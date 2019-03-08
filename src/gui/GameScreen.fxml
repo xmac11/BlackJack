@@ -4,19 +4,22 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <StackPane id="pane" minHeight="800.0" minWidth="1300.0"
 	prefHeight="900.0" prefWidth="1590.0"
-	xmlns="http://javafx.com/javafx/8.0.171"
+	xmlns="http://javafx.com/javafx/8.0.172-ea"
 	xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GameController">
 	<children>
-		<GridPane minHeight="800.0" minWidth="1300.0">
+		<GridPane StackPane.alignment="CENTER">
 			<columnConstraints>
 				<ColumnConstraints hgrow="SOMETIMES"
 					minWidth="10.0" prefWidth="100.0" />
@@ -39,10 +42,10 @@
 					onAction="#onStandButtonClicked" prefHeight="90.0"
 					prefWidth="200.0" text="STAND" GridPane.columnIndex="2"
 					GridPane.halignment="CENTER" />
-				<Button fx:id="hitButton" minHeight="10.0" minWidth="80.0"
-					mnemonicParsing="false" onAction="#onHitButtonClicked"
-					prefHeight="90.0" prefWidth="200.0" text="HIT"
-					textAlignment="CENTER" GridPane.halignment="CENTER" />
+				<Button fx:id="hitButton" minHeight="-Infinity"
+					minWidth="80.0" mnemonicParsing="false"
+					onAction="#onHitButtonClicked" prefHeight="90.0" prefWidth="200.0"
+					text="HIT" textAlignment="CENTER" GridPane.halignment="CENTER" />
 				<HBox fx:id="hBoxDealer" alignment="BOTTOM_CENTER"
 					prefHeight="3.0" prefWidth="109.0" spacing="10.0"
 					GridPane.columnIndex="1" />
@@ -76,16 +79,41 @@
 						<Font size="50.0" />
 					</font>
 				</Label>
-				<TextField fx:id="textField" onAction="#sendChat"
-					GridPane.halignment="LEFT" GridPane.rowIndex="1"
-					GridPane.valignment="CENTER" />
-				<ListView fx:id="chatView" maxHeight="140.0"
-					prefHeight="69.0" prefWidth="530.0" GridPane.halignment="LEFT"
-					GridPane.rowIndex="1" GridPane.valignment="TOP" />
 				<Button fx:id="leaveButton" mnemonicParsing="false"
 					onAction="#leaveGame" prefHeight="85.0" prefWidth="155.0"
 					text="Leave" visible="false" GridPane.columnIndex="1"
 					GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+				<VBox id="chatBox" prefHeight="400.0" maxHeight="400"
+					maxWidth="400" prefWidth="400.0"
+					style="-fx-border-color:#83bdc0; -fx-border-width: 10; -fx-background-color: #c6cfd4;"
+					GridPane.rowIndex="1">
+					<children>
+						<ListView fx:id="chatView" prefHeight="252.0"
+							prefWidth="530.0" style="-fx-background-color: #d7d7d7"
+							maxWidth="530" maxHeight="252" />
+						<HBox prefHeight="59.0" prefWidth="530.0" maxWidth="530"
+							maxHeight="59"
+							style="-fx-padding: 1, 10, 12, 12; -fx-background-color: #5b5b5b;">
+							<children>
+								<TextField fx:id="textField" prefHeight="54.0"
+									prefWidth="458.0" maxHeight="54" maxWidth="458"
+									onAction="#sendChat" />
+								<Button mnemonicParsing="false" prefHeight="41.0"
+									prefWidth="55.0" minWidth="55" minHeight="41" maxHeight="41"
+									maxWidth="55" onMouseClicked="#chatButtonPressed">
+									<graphic>
+										<ImageView fitHeight="30.0" fitWidth="37.0"
+											pickOnBounds="true" preserveRatio="true">
+											<image>
+												<Image url="@../image/sendButtonSmallest.png" />
+											</image>
+										</ImageView>
+									</graphic>
+								</Button>
+							</children>
+						</HBox>
+					</children>
+				</VBox>
 			</children>
 		</GridPane>
 	</children>

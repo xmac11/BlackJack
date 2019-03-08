@@ -6,15 +6,25 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LobbyController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0"
+	xmlns="http://javafx.com/javafx/8.0.171"
+	xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LobbyController">
 	<children>
 		<Label layoutX="14.0" layoutY="14.0" text="Online" />
-		<ListView fx:id="chatView" layoutX="14.0" layoutY="322.0" prefHeight="240.0" prefWidth="770.0" />
-		<ListView fx:id="onlineView" layoutX="14.0" layoutY="31.0" prefHeight="257.0" prefWidth="200.0" />
-		<TextField fx:id="chatField" layoutX="14.0" layoutY="562.0" onAction="#sendChat" prefHeight="25.0" prefWidth="770.0" />
+		<ListView fx:id="chatView" layoutX="14.0" layoutY="322.0"
+			prefHeight="240.0" prefWidth="770.0" />
+		<ListView fx:id="onlineView" layoutX="14.0" layoutY="31.0"
+			prefHeight="257.0" prefWidth="200.0" />
+		<TextField fx:id="chatField" layoutX="14.0" layoutY="562.0"
+			onAction="#sendChat" prefHeight="25.0" prefWidth="770.0" />
 		<Label layoutX="14.0" layoutY="300.0" text="Chat" />
-		<Button fx:id="joinButton" layoutX="663.0" layoutY="14.0" mnemonicParsing="false" onAction="#joinQueue" prefHeight="64.0" prefWidth="121.0" text="Join Game Queue" />
-		<Button fx:id="playButton" layoutX="329.0" layoutY="121.0" mnemonicParsing="false" onAction="#startGame" prefHeight="77.0" prefWidth="140.0" text="Play" />
-		<ListView fx:id="queueView" layoutX="663.0" layoutY="78.0" prefHeight="77.0" prefWidth="121.0" />
+		<Button fx:id="joinButton" layoutX="663.0" layoutY="14.0"
+			mnemonicParsing="false" onAction="#joinQueue" prefHeight="64.0"
+			prefWidth="121.0" text="Join Game Queue" />
+		<Button fx:id="playButton" layoutX="329.0" layoutY="121.0"
+			mnemonicParsing="false" onAction="#startGame" prefHeight="77.0"
+			prefWidth="140.0" text="Play" />
+		<ListView fx:id="queueView" layoutX="663.0" layoutY="78.0"
+			prefHeight="77.0" prefWidth="121.0" />
 	</children>
 </AnchorPane>

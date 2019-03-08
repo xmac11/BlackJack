@@ -322,5 +322,11 @@ public class GameController implements Initializable {
 	public void setOutput(PrintWriter output) {
 		this.output = output;
 	}
+	
+	public void chatButtonPressed(){
+		sendChat();
+
+	}
+
 
 }

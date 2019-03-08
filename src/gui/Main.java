@@ -17,6 +17,10 @@ public class Main extends Application {
 		Parent root = FXMLLoader.load(getClass().getResource("LoginScreen.fxml"));
 		primaryStage.setTitle("Black Jack-off");
 		Scene scene = new Scene(root, WIDTH, HEIGHT);
+		primaryStage.setResizable(true);
+//		primaryStage.setMinHeight(400);
+//		primaryStage.setMaxHeight(300);
+
 		primaryStage.setScene(scene);
 		primaryStage.getIcons().add(new Image("image/Playing Cards/a_of_spades.png"));
 		primaryStage.show();

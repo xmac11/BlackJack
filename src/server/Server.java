@@ -39,7 +39,7 @@ public class Server implements Runnable {
 		gameQueue = new ArrayList<>();
 	}
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) {
 		Server server = new Server();
 		Thread gameSession = new Thread(server);
 		gameSession.start(); // Sends off a thread that represents a game session
