@@ -19,36 +19,36 @@ public class Deck {
 		}
 		Collections.shuffle(cards);
 	}
-	
+
 	public String drawCard() {
 		int size = cards.size();
 		if(size > 0)
-		return cards.remove(size - 1); // remove from the end of the ArrayList (more efficient operation)
+			return cards.remove(size - 1); // remove from the end of the ArrayList (more efficient operation)
 		else
 			return "Deck is Empty";
 	}
-	
+
 	public List<String> getDeck(){
 		return cards;
 	}
-	
+
 	public int total(List<String> hand) {
 		int sum = 0;
-		int value = 0;
+		int value;
 		for (int i = 0; i < hand.size(); i++) {
-			char card = hand.get(i).toCharArray()[0];
-			if (Character.isLetter(card)) {
-				if (card == 'A')
-					value = 11;
-				else
+			String cardValue = hand.get(i).replaceAll(" .*", ""); // remove everything after the space			
+			try {
+				value = Integer.parseInt(cardValue);
+			}
+			catch(NumberFormatException e) {
+				if(cardValue.equals("A")) 
+					value = 11;							
+				else 
 					value = 10;
-			} else {
-				value = Character.getNumericValue(card);
 			}
 			sum += value;
 		}
-		if (sum > 21 && (hand.contains("A Hearts") || hand.contains("A Diamonds") || hand.contains("A Clubs")
-				|| hand.contains("A Spades"))) {
+		if (sum > 21 && hand.stream().anyMatch(x -> x.startsWith("A"))) { // if busted, but hand contains an Ace
 			sum -= 10;
 		}
 		return sum;
