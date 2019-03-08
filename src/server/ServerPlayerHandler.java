@@ -86,7 +86,6 @@ public class ServerPlayerHandler implements Runnable {
 		while (active) { // While the player is still active (until they break or pass)
 			try {
 				in = socketConnection.getInput().readLine(); // Reads the message from the client
-
 				System.out.println("This is in: " + in);
 				if (in.contains("gameChatMessage")) {
 					String toSend = socketConnection.getInput().readLine().substring(15) + " > "
@@ -131,20 +130,25 @@ public class ServerPlayerHandler implements Runnable {
 			try {
 				System.out.println("Finished players " + finishedPlayers.getFinishedPlayers());
 				in = socketConnection.getInput().readLine();
+				if (in.equals("playerLeft")) {
+					socketConnection.getOutput().println("playerLeft");
+					triggerBarrier();
+					return;
+				}
+				if (in.equals("breakFromLoop")) {
+					break;
+				}
+				if (in.contains("gameChatMessage")) {
+					String toSend = socketConnection.getInput().readLine().substring(15) + " > "
+							+ socketConnection.getInput().readLine().substring(15);
+					System.out.println("Sending chat message");
+					for (int i = 0; i < gameQueue.size(); i++) {
+						gameQueue.get(i).getOutput().println("gameChatMessage" + toSend);
+					}
+				}
 			} catch (IOException e) {
 				System.out.println("Connection closed...");
 				break;
-			}
-			if (in.equals("playerLeft")) {
-				socketConnection.getOutput().println("playerLeft");
-				triggerBarrier();
-				return;
-			}
-			if (in.contains("chatMessage")) {
-				System.out.println("Sending chat message");
-				for (int i = 0; i < gameQueue.size(); i++) {
-					gameQueue.get(i).getOutput().println(in);
-				}
 			}
 		}
 
