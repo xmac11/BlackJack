@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class Authentication {
 
-    public static boolean logjn(String username, String password){
+    public static boolean login(String username, String password){
         boolean login = false;
         String url = "jdbc:postgresql://mod-msc-sw1.cs.bham.ac.uk/";
         String user = "group21";
@@ -51,6 +51,14 @@ public class Authentication {
         } catch (SQLException e) {
             System.out.println("Username already exists");
         }
+
+    }
+
+    public static void main(String[] args){
+        newAccount("nxk825","password");
+        System.out.println(login("nxk825","password"));
+        newAccount("nxk825","password");
+        System.out.println(login("nxk825","password1"));
 
     }
 
