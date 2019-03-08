@@ -213,7 +213,6 @@ public class LobbyController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		try {
 			waitForServer = new Semaphore(0);
 			waitForInput = new Semaphore(0);
 			chatWait = new Semaphore(0);
@@ -221,9 +220,6 @@ public class LobbyController implements Initializable {
 			playButton.setVisible(false);
 			Thread thread = new Thread(client);
 			thread.start();
-		} catch (Exception e) {
-			System.out.println("error");
-		}
 	}
 
 }

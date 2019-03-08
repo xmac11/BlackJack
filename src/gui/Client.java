@@ -52,7 +52,7 @@ public class Client implements Runnable {
 		gameController = null;
 		this.pocketBlackJack = false;
 	}
-
+	
 	public void setGameController(GameController gameController) {
 		this.gameController = gameController;
 	}
