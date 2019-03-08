@@ -296,7 +296,7 @@ public class GameController implements Initializable {
 					addCardToHand("facedown.jpg", hBoxPlayer3);
 				}
 				if (table.size() > 0) {
-					addCardToHand("facedown.jpg", hBoxDealer);
+					addCardToHand(table.get(0).get(0), hBoxDealer);
 					addCardToHand("facedown.jpg", hBoxDealer);
 					addCardToHand(table.get(ID).get(0), hBoxPlayer);
 					addCardToHand(table.get(ID).get(1), hBoxPlayer);
