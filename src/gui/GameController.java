@@ -60,6 +60,7 @@ public class GameController implements Initializable {
 	private ListView<String> chatView;
 
 
+	private String username;
 	private int ID;
 	private PrintWriter output;
 	private int noPlayers;
@@ -88,9 +89,15 @@ public class GameController implements Initializable {
 		System.exit(0);
 	}
 
+	public void setID(int ID) {
+		this.ID = ID;
+	}
+	
 	public void sendChat() {
-		if (textField.getText().matches("[a-zA-Z0-9]*")) {
-			output.println("gameChatMessage" + String.valueOf(ID) + textField.getText());
+		if (textField.getText().matches("[a-zA-Z\\s\'\"]+")) {
+			output.println("gameChatMessage");
+			output.println("gameChatMessage" + username);
+			output.println("gameChatMessage" + textField.getText());
 		}else {
 			addToChat("Error - Only letters and numbers allowed in chat");
 		}
@@ -117,8 +124,8 @@ public class GameController implements Initializable {
 		output.println("p");
 	}
 
-	public void setID(int ID) {
-		this.ID = ID;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public void setNoPlayers(int noPlayers) {
@@ -289,7 +296,7 @@ public class GameController implements Initializable {
 					addCardToHand("facedown.jpg", hBoxPlayer3);
 				}
 				if (table.size() > 0) {
-					addCardToHand("facedown.jpg", hBoxDealer);
+					addCardToHand(table.get(0).get(0), hBoxDealer);
 					addCardToHand("facedown.jpg", hBoxDealer);
 					addCardToHand(table.get(ID).get(0), hBoxPlayer);
 					addCardToHand(table.get(ID).get(1), hBoxPlayer);
@@ -315,15 +322,11 @@ public class GameController implements Initializable {
 	public void setOutput(PrintWriter output) {
 		this.output = output;
 	}
-
-
-	/**
-	 * Chat Box Actions:
-	 */
-
+	
 	public void chatButtonPressed(){
 		sendChat();
 
 	}
+
 
 }

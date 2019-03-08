@@ -29,10 +29,12 @@ public class ServerPlayerHandler implements Runnable {
 	private int barriers;
 	private List<String> chatLog;
 	private FinishedPlayers finishedPlayers;
+	private List<SocketConnection> gameQueue;
 
 	public ServerPlayerHandler(SocketConnection socketConnection, int ID, Deck deck, Semaphore deckWait,
 			CyclicBarrier playersWait, CyclicBarrier playersTurnWait, int noPlayers, CyclicBarrier dealersTurn,
-			List<List<String>> table, List<String> chatLog, Semaphore serverChatWait, FinishedPlayers finishedPlayers) {
+			List<List<String>> table, List<String> chatLog, Semaphore serverChatWait, FinishedPlayers finishedPlayers,
+			List<SocketConnection> gameQueue) {
 		this.socketConnection = socketConnection;
 		this.ID = ID;
 		this.deck = deck;
@@ -47,6 +49,7 @@ public class ServerPlayerHandler implements Runnable {
 		this.chatLog = chatLog;
 		this.serverChatWait = serverChatWait;
 		this.finishedPlayers = finishedPlayers;
+		this.gameQueue = gameQueue;
 	}
 
 	@Override
@@ -78,73 +81,72 @@ public class ServerPlayerHandler implements Runnable {
 		Thread thread = new Thread(r);
 		thread.start();
 
-		Runnable chatRunnable = new ServerChatThread(socketConnection.getOutput(), serverChatWait, chatLog);
-		Thread chatThread = new Thread(chatRunnable);
-		chatThread.start();
 		String in = "";
 
 		while (active) { // While the player is still active (until they break or pass)
 			try {
 				in = socketConnection.getInput().readLine(); // Reads the message from the client
+				System.out.println("This is in: " + in);
+				if (in.contains("gameChatMessage")) {
+					String toSend = socketConnection.getInput().readLine().substring(15) + " > "
+							+ socketConnection.getInput().readLine().substring(15);
+					System.out.println("Sending chat message");
+					for (int i = 0; i < gameQueue.size(); i++) {
+						gameQueue.get(i).getOutput().println("gameChatMessage" + toSend);
+					}
+				}
+				if (in.equals("playerLeft")) {
+					socketConnection.getOutput().println("playerLeft");
+					triggerBarrier();
+					return;
+				}
+				if (in.equals("h")) {
+					String card = deck.drawCard();
+					table.get(ID).add(card);
+					socketConnection.getOutput().println("playerCard" + card); // If the client asked for a card then
+																				// send a new card from the deck
+				}
+				if (in.equals("p")) { // If the client passed then set active to false to break from loop
+					active = false;
+				}
+				if (in.equals("move")) { // Client requests the Make move message
+					socketConnection.getOutput().println("Make move");
+				}
 			} catch (IOException e) {
 				System.out.println("Player disconnected");
 				triggerBarrier();
-				chatThread.interrupt();
 				socketConnection.setInLobby(true);
 				socketConnection.getSessionWait().release();
 				return;
 			}
-			System.out.println("This is in: " + in);
-			if (in.contains("gameChatMessage")) {
-				System.out.println("Sending chat message");
-				chatLog.add(in);
-				for (int i = 0; i < noPlayers; i++) {
-					serverChatWait.release();
-				}
-			}
-			if(in.equals("playerLeft")) {
-				socketConnection.getOutput().println("playerLeft");
-				triggerBarrier();
-				return;
-			}
-			if (in.equals("h")) {
-				String card = deck.drawCard();
-				table.get(ID).add(card);
-				socketConnection.getOutput().println("playerCard" + card); // If the client asked for a card then
-																			// send a new card from the deck
-			}
-			if (in.equals("p")) { // If the client passed then set active to false to break from loop
-				active = false;
-			}
-			if (in.equals("move")) { // Client requests the Make move message
-				socketConnection.getOutput().println("Make move");
-			}
 		}
 		socketConnection.getOutput().println("Player " + ID + " finished");
 		System.out.println("Player " + ID + " finished");
-		// Releases the deck to allow another thread
-
 		finishedPlayers.playerFinished();
 		deckWait.release();
 		while (finishedPlayers.getFinishedPlayers() < noPlayers) {
 			try {
 				System.out.println("Finished players " + finishedPlayers.getFinishedPlayers());
 				in = socketConnection.getInput().readLine();
+				if (in.equals("playerLeft")) {
+					socketConnection.getOutput().println("playerLeft");
+					triggerBarrier();
+					return;
+				}
+				if (in.equals("breakFromLoop")) {
+					break;
+				}
+				if (in.contains("gameChatMessage")) {
+					String toSend = socketConnection.getInput().readLine().substring(15) + " > "
+							+ socketConnection.getInput().readLine().substring(15);
+					System.out.println("Sending chat message");
+					for (int i = 0; i < gameQueue.size(); i++) {
+						gameQueue.get(i).getOutput().println("gameChatMessage" + toSend);
+					}
+				}
 			} catch (IOException e) {
 				System.out.println("Connection closed...");
 				break;
-			}
-			if(in.equals("playerLeft")) {
-				socketConnection.getOutput().println("playerLeft");
-				triggerBarrier();
-				return;
-			}
-			if (in.contains("chatMessage")) {
-				System.out.println("Sending chat message");
-				chatLog.add(in);
-				for (int i = 0; i < noPlayers; i++) {
-					serverChatWait.release();
-				}
 			}
 		}
 
@@ -190,7 +192,6 @@ public class ServerPlayerHandler implements Runnable {
 		}
 		socketConnection.getOutput().println("dealerDone"); // Tells the client the dealer is finished
 		System.out.println("Dealer done");
-		chatThread.interrupt();
 		socketConnection.setInLobby(true);
 		socketConnection.getSessionWait().release();
 		System.out.println("player released");
@@ -201,12 +202,15 @@ public class ServerPlayerHandler implements Runnable {
 			System.out.println("entered trigger");
 			switch (barriers) {
 			case 0:
+				System.out.println("releasing");
 				deckWait.release();
 				finishedPlayers.playerFinished();
 				playersWait.await();
 			case 1:
 				dealersTurn.await();
 			}
+			socketConnection.setInLobby(true);
+			socketConnection.getSessionWait().release();
 		} catch (Exception e) {
 
 		}
