@@ -103,6 +103,7 @@ public class Client implements Runnable {
 					in = input.readLine();
 					System.out.println("Client in: " + in);
 					if (in.equals("Game Starting")) { // Reads the message received and responds accordingly
+						System.out.println("break from lobby");
 						output.println("breakFromLobby");
 						break;
 					}
@@ -142,6 +143,7 @@ public class Client implements Runnable {
 						lobbyController.addToChat(in.substring(16));
 					}
 				}
+				
 				lobbyController.gameBegin();
 				String hello = input.readLine();
 				System.out.println(hello); // The first message received is the greeting message so just print this
@@ -172,18 +174,21 @@ public class Client implements Runnable {
 				gameController.setTable(table);
 				if(total(table.get(ID)) == 21) {
 					System.out.println("Black Jack!");
-					gameController.setLabel("Black Jack!" + total(table.get(ID)));
+					gameController.setLabel("Black Jack!");
 					System.out.println("Your hand: " + table.get(ID) + " total: " + total(table.get(ID)));					
 					pocketBlackJack = true;
 				}
 				while (true) { // Loops this until it reaches a 'break;'
-					if(pocketBlackJack) break;						
 					in = input.readLine();
 					System.out.println("Client in: " + in);
 					if (in.contains("resend")) {
 						output.println(in.substring(6));
 					} else {
 						if (in.equals("Make move")) { // Reads the message received and responds accordingly
+							if(pocketBlackJack) {
+								output.println("p");
+								break;						
+							}
 							gameController.enableHit();
 							gameController.enableStand();
 							System.out.println(in + ", h (hit) p (pass)");
@@ -260,7 +265,7 @@ public class Client implements Runnable {
 								gameController.addToChat(in.substring(15, 16) + " > " + in.substring(16));
 							}
 							if (in.equals("breakFromLoop")) {
-								output.println("reader");
+								output.println("break");
 							}
 							if (in.equals("newPlayer")) {
 								in = input.readLine();

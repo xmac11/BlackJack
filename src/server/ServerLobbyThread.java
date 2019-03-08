@@ -40,11 +40,10 @@ public class ServerLobbyThread implements Runnable {
 					in = socketConnection.getInput().readLine();
 
 					System.out.println("lobby thread in: " + in);
-//				if (in.contains("gameChatMessage")) {
-//					for (int i = 0; i < gameQueue.size(); i++) {
-//						gameQueue.get(i).getOutput().println(in);
+//					if(!socketConnection.isInLobby()) {
+//						socketConnection.getOutput().println("resend"+in);
+//						break;
 //					}
-//				}
 					if (in.contains("lobbyChatMessage")) {
 						String toSend = socketConnection.getInput().readLine().substring(16) + " > "
 								+ socketConnection.getInput().readLine().substring(16);
@@ -55,6 +54,9 @@ public class ServerLobbyThread implements Runnable {
 					}
 					if (in.equals("gameStart")) {
 						gameStart.setGameStart(true);
+						break;
+					}
+					if (in.equals("breakFromLobby")) {
 						break;
 					}
 					if (in.equals("playerLeft")) {
