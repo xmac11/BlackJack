@@ -33,6 +33,7 @@ public class LoginController {
 			thisStage.setWidth(800);
 			thisStage.setScene(lobbyScene);
 			thisStage.show();
+			thisStage.setOnCloseRequest(e -> lobbyController.thisPlayerLeft());
 		}
 	}
 

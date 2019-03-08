@@ -38,6 +38,54 @@ public class ServerLobbyThread implements Runnable {
 			while (socketConnection.isInLobby()) {
 				try {
 					in = socketConnection.getInput().readLine();
+
+					System.out.println("lobby thread in: " + in);
+//				if (in.contains("gameChatMessage")) {
+//					for (int i = 0; i < gameQueue.size(); i++) {
+//						gameQueue.get(i).getOutput().println(in);
+//					}
+//				}
+					if (in.contains("lobbyChatMessage")) {
+						String toSend = socketConnection.getInput().readLine().substring(16) + " > "
+								+ socketConnection.getInput().readLine().substring(16);
+						System.out.println("Sending chat message");
+						for (int i = 0; i < joined.size(); i++) {
+							joined.get(i).getOutput().println("lobbyChatMessage" + toSend);
+						}
+					}
+					if (in.equals("gameStart")) {
+						gameStart.setGameStart(true);
+						break;
+					}
+					if (in.equals("playerLeft")) {
+						newPlayer.setNewPlayer(true);
+					}
+					if (in.equals("thisPlayerLeft")) {
+						joined.remove(socketConnection);
+						gameQueue.remove(socketConnection);
+						newPlayer.setNewPlayer(true);
+					}
+					if (in.equals("joinQueue")) {
+						synchronized (gameQueue) {
+							if (gameQueue.size() < 3) {
+								gameQueue.add(socketConnection);
+								System.out.println(gameQueue);
+								socketConnection.getOutput().println("queueJoined");
+								for (int i = 0; i < joined.size(); i++) {
+									joined.get(i).getOutput().println("playerQueue");
+									for (int j = 0; j < gameQueue.size(); j++) {
+										joined.get(i).getOutput()
+												.println("playerQueue" + gameQueue.get(j).getUsername());
+									}
+									joined.get(i).getOutput().println("queueUpdated");
+								}
+							}
+							if (gameQueue.size() == 3) {
+								gameStart.setGameStart(true);
+								break;
+							}
+						}
+					}
 				} catch (IOException e) {
 					System.out.println("lobby thread error");
 					gameQueue.remove(socketConnection);
@@ -45,46 +93,9 @@ public class ServerLobbyThread implements Runnable {
 					newPlayer.setNewPlayer(true);
 					return;
 				}
-				if (!socketConnection.isInLobby()) {
-					socketConnection.getOutput().println("resend" + in);
-					break;
-				}
-				System.out.println("lobby thread in: " + in);
-				if (in.contains("gameChatMessage")) {
-					for (int i = 0; i < gameQueue.size(); i++) {
-						gameQueue.get(i).getOutput().println(in);
-					}
-				}
-				if (in.equals("gameStart")) {
-					gameStart.setGameStart(true);
-					break;
-				}
-				if(in.equals("playerLeft")) {
-					newPlayer.setNewPlayer(true);
-				}
-				if (in.equals("joinQueue")) {
-					synchronized (gameQueue) {
-						if (gameQueue.size() < 3) {
-							gameQueue.add(socketConnection);
-							System.out.println(gameQueue);
-							socketConnection.getOutput().println("queueJoined");
-							for (int i = 0; i < joined.size(); i++) {
-								joined.get(i).getOutput().println("playerQueue");
-								for (int j = 0; j < gameQueue.size(); j++) {
-									joined.get(i).getOutput().println("playerQueue" + gameQueue.get(j).getUsername());
-								}
-								joined.get(i).getOutput().println("queueUpdated");
-							}
-						}
-						if (gameQueue.size() == 3) {
-							gameStart.setGameStart(true);
-							break;
-						}
-					}
-				}
 			}
-
-			try	{
+			System.out.println("broken from lobby: " + socketConnection.getUsername());
+			try {
 				socketConnection.getSessionWait().acquire();
 			} catch (InterruptedException e) {
 				e.printStackTrace();

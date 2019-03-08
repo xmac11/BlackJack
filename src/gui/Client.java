@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Semaphore;
 
-import com.sun.glass.ui.TouchInputSupport;
 
 import java.io.*;
 
@@ -69,6 +68,8 @@ public class Client implements Runnable {
 					value = 11;
 				else
 					value = 10;
+				if(card=='1')
+					value = 10;
 			} else {
 				value = Character.getNumericValue(card);
 			}
@@ -104,6 +105,7 @@ public class Client implements Runnable {
 					in = input.readLine();
 					System.out.println("Client in: " + in);
 					if (in.equals("Game Starting")) { // Reads the message received and responds accordingly
+						output.println("breakFromLobby");
 						break;
 					}
 					if (in.equals("queueJoined")) {
@@ -138,6 +140,9 @@ public class Client implements Runnable {
 						}
 						lobbyController.addQueue(inQueue);
 					}
+					if (in.contains("lobbyChatMessage")) {
+						lobbyController.addToChat(in.substring(16));
+					}
 				}
 				lobbyController.gameBegin();
 				String hello = input.readLine();
@@ -149,6 +154,7 @@ public class Client implements Runnable {
 					e.printStackTrace();
 				}
 				gameController.setOutput(output);
+				gameController.setUsername(username);
 				gameController.setID(ID);
 				noPlayers = Integer.parseInt(hello.substring(26, 27));
 				gameController.setNoPlayers(noPlayers);
@@ -180,7 +186,7 @@ public class Client implements Runnable {
 							gameController.setLabel("Make Move: " + total(table.get(ID)));
 						}
 						if (in.contains("gameChatMessage")) {
-							gameController.addToChat(in.substring(15, 16) + " > " + in.substring(16));
+							gameController.addToChat(in.substring(15));
 						}
 						if (in.equals("playerQueue")) {
 							in = input.readLine();

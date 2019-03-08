@@ -19,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class LobbyController implements Initializable {
@@ -34,9 +35,12 @@ public class LobbyController implements Initializable {
 
 	@FXML
 	private ListView<String> chatView;
-	
+
 	@FXML
 	private ListView<String> onlineView;
+
+	@FXML
+	private TextField chatField;
 
 	private String IP;
 	private Socket socket;
@@ -84,7 +88,7 @@ public class LobbyController implements Initializable {
 	public String getUsername() {
 		return username;
 	}
-	
+
 	public void queueJoined() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -95,25 +99,25 @@ public class LobbyController implements Initializable {
 			}
 		});
 	}
-	
+
 	public void addQueue(List<String> queue) {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
 				queueView.getItems().clear();
-				for(int i = 0;i<queue.size();i++) {
+				for (int i = 0; i < queue.size(); i++) {
 					queueView.getItems().add(queue.get(i));
 				}
 			}
 		});
 	}
-	
-	public void addOnline(List<String> online){
+
+	public void addOnline(List<String> online) {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
 				onlineView.getItems().clear();
-				for(int i = 0;i<online.size();i++) {
+				for (int i = 0; i < online.size(); i++) {
 					onlineView.getItems().add(online.get(i));
 				}
 			}
@@ -131,7 +135,7 @@ public class LobbyController implements Initializable {
 			}
 		});
 	}
-	
+
 	public void joinUnavailable() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -149,6 +153,32 @@ public class LobbyController implements Initializable {
 				joinButton.setDisable(false);
 				playButton.setVisible(false);
 				chatView.getItems().add("Game finished");
+			}
+		});
+	}
+
+	public void thisPlayerLeft() {
+		System.out.println("leaving");
+		output.println("thisPlayerLeft");
+		System.exit(0);
+	}
+
+	public void sendChat() {
+		if (chatField.getText().matches("[a-zA-Z\\s\'\"]+")) {
+			output.println("lobbyChatMessage");
+			output.println("lobbyChatMessage" + username);
+			output.println("lobbyChatMessage" + chatField.getText());
+		} else {
+			addToChat("Error - Only letters and numbers allowed in chat");
+		}
+		chatField.setText("");
+	}
+
+	public void addToChat(String message) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				chatView.getItems().add(message);
 			}
 		});
 	}
