@@ -122,8 +122,6 @@ public class ServerPlayerHandler implements Runnable {
 		}
 		socketConnection.getOutput().println("Player " + ID + " finished");
 		System.out.println("Player " + ID + " finished");
-		// Releases the deck to allow another thread
-
 		finishedPlayers.playerFinished();
 		deckWait.release();
 		while (finishedPlayers.getFinishedPlayers() < noPlayers) {

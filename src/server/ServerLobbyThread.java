@@ -40,10 +40,6 @@ public class ServerLobbyThread implements Runnable {
 					in = socketConnection.getInput().readLine();
 
 					System.out.println("lobby thread in: " + in);
-//					if(!socketConnection.isInLobby()) {
-//						socketConnection.getOutput().println("resend"+in);
-//						break;
-//					}
 					if (in.contains("lobbyChatMessage")) {
 						String toSend = socketConnection.getInput().readLine().substring(16) + " > "
 								+ socketConnection.getInput().readLine().substring(16);

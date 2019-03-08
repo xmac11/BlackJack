@@ -214,7 +214,6 @@ public class LobbyController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		try {
-//			socket = new Socket(IP, 9999);
 			waitForServer = new Semaphore(0);
 			waitForInput = new Semaphore(0);
 			chatWait = new Semaphore(0);
