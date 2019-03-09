@@ -21,6 +21,8 @@ public class Main extends Application {
 //		primaryStage.setMinHeight(400);
 //		primaryStage.setMaxHeight(300);
 
+
+
 		primaryStage.setScene(scene);
 		primaryStage.getIcons().add(new Image("image/Playing Cards/a_of_spades.png"));
 		primaryStage.show();
