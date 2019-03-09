@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -14,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane stylesheets="style.css" id="pane" minHeight="800.0" minWidth="1300.0" prefHeight="900.0" prefWidth="1590.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GameController">
+<StackPane id="pane" minHeight="800.0" minWidth="1300.0" prefHeight="900.0" prefWidth="1590.0" stylesheets="style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GameController">
 	<children>
 		<GridPane StackPane.alignment="CENTER">
 			<columnConstraints>
@@ -32,7 +37,7 @@
 				<Button fx:id="hitButton" minHeight="-Infinity" minWidth="80.0" mnemonicParsing="false" onAction="#onHitButtonClicked" prefHeight="90.0" prefWidth="200.0" text="HIT" textAlignment="CENTER" GridPane.halignment="CENTER" />
 				<HBox fx:id="hBoxDealer" alignment="BOTTOM_CENTER" prefHeight="3.0" prefWidth="109.0" spacing="10.0" GridPane.columnIndex="1" />
 				<HBox fx:id="hBoxPlayer" alignment="CENTER" prefHeight="312.0" prefWidth="530.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-				<Label styleClass="gameLabel" fx:id="player2Label" text="Player 2" visible="false" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+				<Label fx:id="player2Label" styleClass="gameLabel" text="Player 2" visible="false" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
 					<font>
 						<Font size="25.0" />
 					</font>
@@ -44,19 +49,19 @@
 						<Font size="25.0" />
 					</font>
 				</Label>
-				<Label styleClass="gameLabel" fx:id="label" alignment="BOTTOM_CENTER" contentDisplay="CENTER" text="Label" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+				<Label fx:id="label" alignment="BOTTOM_CENTER" contentDisplay="CENTER" styleClass="gameLabel" text="Label" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
 					<font>
 						<Font size="50.0" />
 					</font>
 				</Label>
 				<Button fx:id="leaveButton" mnemonicParsing="false" onAction="#leaveGame" prefHeight="85.0" prefWidth="155.0" text="Leave" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-            <VBox id="chatBox" prefHeight="400.0" maxHeight="400" maxWidth="400" prefWidth="400.0" style="-fx-border-color:#83bdc0; -fx-border-width: 10; -fx-background-color: #c6cfd4;" GridPane.rowIndex="1">
+            <VBox id="chatBox" maxHeight="400" maxWidth="400" prefHeight="400.0" prefWidth="400.0" style="-fx-border-color:#83bdc0; -fx-border-width: 10; -fx-background-color: #c6cfd4;" GridPane.rowIndex="1">
                <children>
-                  <ListView fx:id="chatView" prefHeight="252.0" prefWidth="530.0" style="-fx-background-color: #d7d7d7" maxWidth="530" maxHeight="252" />
-                  <HBox prefHeight="59.0" prefWidth="530.0" maxWidth="530" maxHeight="59" style="-fx-padding: 1, 10, 12, 12; -fx-background-color: #5b5b5b;">
+                  <ListView fx:id="chatView" maxHeight="252" maxWidth="530" prefHeight="252.0" prefWidth="530.0" style="-fx-background-color: #d7d7d7" />
+                  <HBox maxHeight="59" maxWidth="530" prefHeight="59.0" prefWidth="530.0" style="-fx-padding: 1, 10, 12, 12; -fx-background-color: #5b5b5b;">
                      <children>
-                        <TextField fx:id="textField" prefHeight="54.0" prefWidth="458.0" maxHeight="54" maxWidth="458" onAction="#sendChat"  />
-                        <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="55.0" minWidth="55" minHeight="41" maxHeight="41" maxWidth="55" onMouseClicked="#chatButtonPressed">
+                        <TextField fx:id="textField" maxHeight="54" maxWidth="458" onAction="#sendChat" prefHeight="54.0" prefWidth="458.0" />
+                        <Button maxHeight="41" maxWidth="55" minHeight="41" minWidth="55" mnemonicParsing="false" onMouseClicked="#chatButtonPressed" prefHeight="41.0" prefWidth="55.0">
                            <graphic>
                               <ImageView fitHeight="30.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -65,6 +70,11 @@
                            </graphic></Button>
                      </children></HBox>
                </children></VBox>
+            <Label fx:id="labelDealer" alignment="CENTER" text="Label" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="TOP">
+               <font>
+                  <Font size="50.0" />
+               </font>
+            </Label>
 			</children>
 		</GridPane>
 	</children>

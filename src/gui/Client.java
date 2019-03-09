@@ -150,7 +150,7 @@ public class Client implements Runnable {
 				}
 				table.get(ID).add(input.readLine());
 				table.get(ID).add(input.readLine()); // Player's first hands
-				gameController.setLabel("Your hand: " + Deck.total(table.get(ID)));
+				gameController.setLabel("Your hand: " + Deck.total(table.get(ID)) + "\nWait for your turn");
 				System.out.println("Your Hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID))); // Prints
 																											// the
 				// players hand
@@ -282,13 +282,22 @@ public class Client implements Runnable {
 						}
 						if (in.contains("playersFinished")) { // Server tells client what to display
 							System.out.println("All players finished");
+							gameController.removeDealerFacedown();
+							gameController.addCardToDealerHand(table.get(0).get(1));	
+							gameController.setDealerLabel("Dealer: " + Deck.total(table.get(0)));
 						}
 						if (in.contains("showDealerHand")) {
 							System.out.println("Dealers cards: " + table.get(0) + "total: " + Deck.total(table.get(0)));
 							System.out.println("Dealer taking cards....");
 						}
-						if (in.contains("dealerCard"))
-							table.get(0).add(in.replaceFirst("dealerCard", ""));
+						if (in.contains("dealerCard")) {									
+							// sleep thread for 2s in order to simulate the dealer picking cards one by one
+							try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}	
+							String dealerCard = in.replaceFirst("dealerCard", "");
+							table.get(0).add(dealerCard);
+							gameController.addCardToDealerHand(dealerCard);
+							gameController.setDealerLabel("Dealer: " + Deck.total(table.get(0)));
+						}
 						if (in.contains("dealerDone"))
 							dealerTurn = false; // Dealers turn is finished, break from loop
 						if (in.equals("Clear queue")) {
@@ -297,10 +306,10 @@ public class Client implements Runnable {
 					}
 					if (!playerLeft) {
 						System.out.println(table.get(0));
-						gameController.removeDealerFacedown();
+						/*gameController.removeDealerFacedown();
 						for (int i = 0; i < table.get(0).size(); i++) {
 							gameController.addCardToDealerHand(table.get(0).get(i));
-						}
+						}*/
 						declareWinner();
 					}
 				}

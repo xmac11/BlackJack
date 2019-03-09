@@ -37,6 +37,9 @@ public class GameController implements Initializable {
 
 	@FXML
 	private Label label;
+	
+	@FXML
+	private Label labelDealer;
 
 	@FXML
 	private Label player2Label;
@@ -139,6 +142,16 @@ public class GameController implements Initializable {
 			public void run() {
 				label.setText(text);
 				label.setVisible(true);
+			}
+		});
+	}
+	
+	public void setDealerLabel(String text) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				labelDealer.setText(text);
+				labelDealer.setVisible(true);
 			}
 		});
 	}
@@ -260,9 +273,8 @@ public class GameController implements Initializable {
 	public void removeDealerFacedown() {
 		Platform.runLater(new Runnable() {
 			@Override
-			public void run() {
-				hBoxDealer.getChildren().remove(0);
-				hBoxDealer.getChildren().remove(0);
+			public void run() {				
+				hBoxDealer.getChildren().remove(1);
 			}
 		});
 	}
@@ -318,7 +330,8 @@ public class GameController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		hitButton.setDisable(true);
 		standButton.setDisable(true);
-		label.setVisible(false);
+		//label.setVisible(false);
+		labelDealer.setVisible(false);
         chatView.setCellFactory(param -> new ListCell<String>(){
             @Override
             protected void updateItem(String item, boolean empty) {
