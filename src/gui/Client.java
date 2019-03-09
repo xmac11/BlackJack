@@ -8,6 +8,8 @@ import java.util.concurrent.Semaphore;
 
 import javax.security.auth.kerberos.KerberosKey;
 
+import com.sun.glass.ui.TouchInputSupport;
+
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -16,6 +18,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import server.Deck;
+import shareable.FinishedPlayers;
 
 import java.io.*;
 
@@ -194,7 +197,7 @@ public class Client implements Runnable {
 						}
 						lobbyController.addQueue(inQueue);
 					}
-					if (in.equals("playerLeft")) {
+					if (in.equals("playerLeftGame")) {
 						playerLeft = true;
 						break;
 					}
@@ -206,7 +209,8 @@ public class Client implements Runnable {
 							System.out.println("Break");
 							gameController.setLabel("Busted: " + Deck.total(table.get(ID)));
 							System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
-							output.println("p");
+							//output.println("p");
+							output.println("busted");
 							break;
 						} else if (Deck.total(table.get(ID)) == 21) {
 							System.out.println("Black Jack!");
@@ -240,7 +244,7 @@ public class Client implements Runnable {
 					gameController.disableStand();
 					// gameController.setLabel("Your hand: " + total(table.get(ID)));
 					boolean dealerTurn = true;
-					while (dealerTurn) { // Sits in loop whilst dealer chooses new cards
+					while (dealerTurn) { // Sits in loop whilst dealer chooses new cards					
 						in = input.readLine();
 						if (in.contains("gameChatMessage")) {
 							gameController.addToChat(in.replaceFirst("gameChatMessage", ""));
@@ -269,7 +273,7 @@ public class Client implements Runnable {
 							}
 							System.out.println("<<< This is table");
 						}
-						if (in.equals("playerLeft")) {
+						if (in.equals("playerLeftGame")) {
 							playerLeft = true;
 							break;
 						}
@@ -289,9 +293,13 @@ public class Client implements Runnable {
 						}
 						if (in.contains("playersFinished")) { // Server tells client what to display
 							System.out.println("All players finished");
-							gameController.removeDealerFacedown();
-							gameController.addCardToDealerHand(table.get(0).get(1));	
-							gameController.setDealerLabel("Dealer: " + Deck.total(table.get(0)));
+							in = input.readLine();
+							if(!in.equals("skipDealer")) {
+								gameController.removeDealerFacedown();
+								gameController.addCardToDealerHand(table.get(0).get(1));	
+								gameController.setDealerLabel("Dealer: " + Deck.total(table.get(0)));
+							}
+							
 						}
 						if (in.contains("showDealerHand")) {
 							System.out.println("Dealers cards: " + table.get(0) + "total: " + Deck.total(table.get(0)));
@@ -361,7 +369,7 @@ public class Client implements Runnable {
 	}
 	
 	public void closeGame(Stage window) {
-		boolean confirmation = ConfirmClose.displayConfirmBox("Warning", "Are you sure you want to exit?");
+		boolean confirmation = GameController.displayConfirmBox("Warning", "Are you sure you want to exit?");
 		if(confirmation) {
 			window.close();
 			gameController.playerLeft();
@@ -369,39 +377,39 @@ public class Client implements Runnable {
 	}
 }
 
-class ConfirmClose{
-	
-	static boolean confirm;
-
-	public static boolean displayConfirmBox(String title, String message) {
-		Stage stage = new Stage();
-		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.setTitle(title);
-		stage.setWidth(300);
-		stage.setHeight(150);
-		Label label = new Label(message);
-
-		// yes button
-		Button yesButton = new Button("Yes");
-		yesButton.setOnAction(e -> {
-			confirm = true;
-			stage.close();
-		});
-
-		// no button
-		Button noButton = new Button("No");
-		noButton.setOnAction(e -> {
-			confirm = false;
-			stage.close();
-		});
-		
-		HBox hBox = new HBox(10);
-		hBox.getChildren().addAll(label, yesButton, noButton);
-		hBox.setAlignment(Pos.CENTER);
-		Scene scene = new Scene(hBox, 250, 300);
-		stage.setScene(scene);
-		stage.showAndWait();
-		
-		return confirm;
-	}
-}
+//class ConfirmClose{
+//	
+//	static boolean confirm;
+//
+//	public static boolean displayConfirmBox(String title, String message) {
+//		Stage stage = new Stage();
+//		stage.initModality(Modality.APPLICATION_MODAL);
+//		stage.setTitle(title);
+//		stage.setWidth(300);
+//		stage.setHeight(150);
+//		Label label = new Label(message);
+//
+//		// yes button
+//		Button yesButton = new Button("Yes");
+//		yesButton.setOnAction(e -> {
+//			confirm = true;
+//			stage.close();
+//		});
+//
+//		// no button
+//		Button noButton = new Button("No");
+//		noButton.setOnAction(e -> {
+//			confirm = false;
+//			stage.close();
+//		});
+//		
+//		HBox hBox = new HBox(10);
+//		hBox.getChildren().addAll(label, yesButton, noButton);
+//		hBox.setAlignment(Pos.CENTER);
+//		Scene scene = new Scene(hBox, 250, 300);
+//		stage.setScene(scene);
+//		stage.showAndWait();
+//		
+//		return confirm;
+//	}
+//}
