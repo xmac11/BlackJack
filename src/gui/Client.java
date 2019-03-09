@@ -152,7 +152,7 @@ public class Client implements Runnable {
 				System.out.println("Your Hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID))); // Prints the
 																										// players hand
 				gameController.setTable(table);
-				if (Deck.total(table.get(ID)) == 21) {
+				if (Deck.total(table.get(ID)) == 21 && table.get(ID).size() == 2) {
 					System.out.println("Black Jack!");
 					gameController.setLabel("Black Jack!");
 					System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
