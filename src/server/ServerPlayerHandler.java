@@ -85,8 +85,8 @@ public class ServerPlayerHandler implements Runnable {
 						gameQueue.get(i).getOutput().println("gameChatMessage" + toSend);
 					}
 				}
-				if (in.equals("playerLeft")) {
-					socketConnection.getOutput().println("playerLeft");
+				if (in.equals("playerLeftGame")) {
+					socketConnection.getOutput().println("playerLeftGame");
 					socketConnection.setInLobby(true);
 					socketConnection.getSessionWait().release();
 					triggerBarrier(thread);
@@ -124,8 +124,8 @@ public class ServerPlayerHandler implements Runnable {
 			try {
 				System.out.println("Finished players " + finishedPlayers.getFinishedPlayers());
 				in = socketConnection.getInput().readLine();
-				if (in.equals("playerLeft")) {
-					socketConnection.getOutput().println("playerLeft");
+				if (in.equals("playerLeftGame")) {
+					socketConnection.getOutput().println("playerLeftGame");
 					socketConnection.setInLobby(true);
 					socketConnection.getSessionWait().release();
 					triggerBarrier(thread);
