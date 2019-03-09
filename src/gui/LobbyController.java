@@ -161,11 +161,12 @@ public class LobbyController implements Initializable {
 	}
 
 	public void sendChat() {
-		if (chatField.getText().matches("[a-zA-Z0-9\\s\'\"]+")) {
-			output.println("lobbyChatMessage");
-			output.println("lobbyChatMessage" + username);
-			output.println("lobbyChatMessage" + chatField.getText());
-		} else {
+		String incomingText = chatField.getText();
+		if (incomingText.matches("[a-zA-Z\\s\'\"]+") && incomingText.trim().length() > 0) {
+			output.println("gameChatMessage");
+			output.println("gameChatMessage" + username);
+			output.println("gameChatMessage" + incomingText);
+		}else {
 			addToChat("Error - Only letters and numbers allowed in chat");
 		}
 		chatField.setText("");
@@ -211,12 +212,12 @@ public class LobbyController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-			waitForController = new Semaphore(0);
-			table = new ArrayList<>();
-			client = new Client(table, waitForController, IP, this);
-			playButton.setVisible(false);
-			Thread thread = new Thread(client);
-			thread.start();
+		waitForController = new Semaphore(0);
+		table = new ArrayList<>();
+		client = new Client(table, waitForController, IP, this);
+		playButton.setVisible(false);
+		Thread thread = new Thread(client);
+		thread.start();
 	}
 
 }
