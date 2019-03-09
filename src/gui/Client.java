@@ -16,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import server.Deck;
+import shareable.FinishedPlayers;
 
 import java.io.*;
 
@@ -206,7 +207,8 @@ public class Client implements Runnable {
 							System.out.println("Break");
 							gameController.setLabel("Busted: " + Deck.total(table.get(ID)));
 							System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
-							output.println("p");
+							//output.println("p");
+							output.println("busted");
 							break;
 						} else if (Deck.total(table.get(ID)) == 21) {
 							System.out.println("Black Jack!");
@@ -240,7 +242,7 @@ public class Client implements Runnable {
 					gameController.disableStand();
 					// gameController.setLabel("Your hand: " + total(table.get(ID)));
 					boolean dealerTurn = true;
-					while (dealerTurn) { // Sits in loop whilst dealer chooses new cards
+					while (dealerTurn) { // Sits in loop whilst dealer chooses new cards					
 						in = input.readLine();
 						if (in.contains("gameChatMessage")) {
 							gameController.addToChat(in.replaceFirst("gameChatMessage", ""));
@@ -289,9 +291,13 @@ public class Client implements Runnable {
 						}
 						if (in.contains("playersFinished")) { // Server tells client what to display
 							System.out.println("All players finished");
-							gameController.removeDealerFacedown();
-							gameController.addCardToDealerHand(table.get(0).get(1));	
-							gameController.setDealerLabel("Dealer: " + Deck.total(table.get(0)));
+							in = input.readLine();
+							if(!in.equals("skipDealer")) {
+								gameController.removeDealerFacedown();
+								gameController.addCardToDealerHand(table.get(0).get(1));	
+								gameController.setDealerLabel("Dealer: " + Deck.total(table.get(0)));
+							}
+							
 						}
 						if (in.contains("showDealerHand")) {
 							System.out.println("Dealers cards: " + table.get(0) + "total: " + Deck.total(table.get(0)));
