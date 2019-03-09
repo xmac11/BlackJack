@@ -161,7 +161,7 @@ public class LobbyController implements Initializable {
 	}
 
 	public void sendChat() {
-		if (chatField.getText().matches("[a-zA-Z\\s\'\"]+")) {
+		if (chatField.getText().matches("[a-zA-Z0-9\\s\'\"]+")) {
 			output.println("lobbyChatMessage");
 			output.println("lobbyChatMessage" + username);
 			output.println("lobbyChatMessage" + chatField.getText());
