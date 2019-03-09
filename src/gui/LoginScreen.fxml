@@ -54,7 +54,7 @@
 								<Insets bottom="200.0" />
 							</GridPane.margin>
 						</Label>
-						<TextField fx:id="userField" alignment="CENTER" centerShape="true" maxHeight="27.0" maxWidth="167.0" minHeight="27.0" minWidth="167.0" pickOnBounds="false" prefHeight="27.0" prefWidth="167.0" promptText="username" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+						<TextField fx:id="userField" onAction="#moveToIP" alignment="CENTER" centerShape="true" maxHeight="27.0" maxWidth="167.0" minHeight="27.0" minWidth="167.0" pickOnBounds="false" prefHeight="27.0" prefWidth="167.0" promptText="username" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
 							<GridPane.margin>
 								<Insets bottom="150.0" top="10.0" />
 							</GridPane.margin>
@@ -64,7 +64,7 @@
 								<Insets top="140.0" />
 							</GridPane.margin>
 						</Button>
-						<TextField fx:id="ipField" alignment="CENTER" centerShape="true" maxHeight="27.0" maxWidth="167.0" minHeight="27.0" minWidth="167.0" prefHeight="27.0" prefWidth="167.0" scaleShape="false" text="localhost" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+						<TextField fx:id="ipField" onAction="#startIfFieldsFulfilled" alignment="CENTER" centerShape="true" maxHeight="27.0" maxWidth="167.0" minHeight="27.0" minWidth="167.0" prefHeight="27.0" prefWidth="167.0" scaleShape="false" text="localhost" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
 							<GridPane.margin>
 								<Insets top="20.0" />
 							</GridPane.margin>
