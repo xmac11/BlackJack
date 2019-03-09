@@ -39,6 +39,7 @@ public class Client implements Runnable {
 	private List<String> inQueue;
 	private boolean playerLeft;
 	private boolean pocketBlackJack;
+	private boolean joined = false;
 
 	public Client(List<List<String>> table, Semaphore waitForController, String IP, LobbyController lobbyController) {
 		this.table = table;
@@ -65,6 +66,7 @@ public class Client implements Runnable {
 			output = new PrintWriter(socket.getOutputStream(), true);
 			onlinePlayers = new ArrayList<>();
 			inQueue = new ArrayList<>();
+			joined = true;
 			try {
 				waitForController.acquire();
 			} catch (InterruptedException e) {
@@ -149,8 +151,9 @@ public class Client implements Runnable {
 				table.get(ID).add(input.readLine());
 				table.get(ID).add(input.readLine()); // Player's first hands
 				gameController.setLabel("Your hand: " + Deck.total(table.get(ID)));
-				System.out.println("Your Hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID))); // Prints the
-																										// players hand
+				System.out.println("Your Hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID))); // Prints
+																											// the
+				// players hand
 				gameController.setTable(table);
 				if (Deck.total(table.get(ID)) == 21 && table.get(ID).size() == 2) {
 					System.out.println("Black Jack!");
@@ -264,14 +267,16 @@ public class Client implements Runnable {
 							break;
 						}
 						if (in.contains("tableSent")) {
-							int playerCount = 2;	//If cards have been sent then there is at least a player in player 2 slot
+							int playerCount = 2; // If cards have been sent then there is at least a player in player 2
+													// slot
 							for (int i = 1; i < table.size(); i++) {
 								if (i != ID) {
 									gameController.removeFacedown(playerCount);
 									for (int j = 0; j < table.get(i).size(); j++) {
 										gameController.addCardToOpposingPlayerHand(playerCount, table.get(i).get(j));
 									}
-									playerCount++; //Moves to player 3 slot, will break from outer for loop if only 2 players
+									playerCount++; // Moves to player 3 slot, will break from outer for loop if only 2
+													// players
 								}
 							}
 						}
@@ -306,6 +311,7 @@ public class Client implements Runnable {
 		} catch (IOException e) {
 			System.out.println("Session not joinable");
 			e.printStackTrace();
+			lobbyController.connectionLost();
 			output.close();
 			return;
 		}

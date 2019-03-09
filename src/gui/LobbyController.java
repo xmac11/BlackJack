@@ -16,10 +16,12 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class LobbyController implements Initializable {
@@ -43,6 +45,7 @@ public class LobbyController implements Initializable {
 	private TextField chatField;
 
 	private String IP;
+	private Stage thisStage;
 	private Client client;
 	private Semaphore waitForController;
 	private List<List<String>> table;
@@ -69,6 +72,7 @@ public class LobbyController implements Initializable {
 				joinButton.setDisable(true);
 				gameScene.getStylesheets().addAll(getClass().getResource("style.css").toExternalForm());
 				Stage window = new Stage();
+				
 				GameController gameController = loader.<GameController>getController();
 				client.setGameController(gameController);
 				waitForController.release();
@@ -78,6 +82,30 @@ public class LobbyController implements Initializable {
 				window.setScene(gameScene);
 				window.show();
 				window.setOnCloseRequest(e -> gameController.playerLeft());
+			}
+		});
+	}
+	
+	public void connectionLost() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginScreen.fxml"));
+				Scene loginScene = null;
+				try {
+					loginScene = new Scene(loader.load());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				LoginController loginController = loader.<LoginController>getController();
+				loginController.serverDown();
+				thisStage.setResizable(true);
+				thisStage.setScene(loginScene);
+				thisStage.show();
+				thisStage.setMinWidth(600);
+				thisStage.setMinHeight(500);
+				thisStage.setOnCloseRequest(e -> System.exit(0));
 			}
 		});
 	}
@@ -196,9 +224,10 @@ public class LobbyController implements Initializable {
 
 	}
 
-	public void initData(String IP, String username) {
+	public void initData(String IP, String username, Stage stage) {
 		this.IP = IP;
 		this.username = username;
+		thisStage = stage;
 		waitForController.release();
 	}
 
@@ -218,6 +247,14 @@ public class LobbyController implements Initializable {
 		playButton.setVisible(false);
 		Thread thread = new Thread(client);
 		thread.start();
+	}
+
+	public Stage getThisStage() {
+		return thisStage;
+	}
+
+	public void setThisStage(Stage thisStage) {
+		this.thisStage = thisStage;
 	}
 
 }

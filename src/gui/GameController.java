@@ -94,7 +94,6 @@ public class GameController implements Initializable {
 	}
 	
 	public void sendChat() {
-
 		String incomingText = textField.getText();
 		if (incomingText.matches("[a-zA-Z\\s\'\"]+") && incomingText.trim().length() > 0) {
 			output.println("gameChatMessage");

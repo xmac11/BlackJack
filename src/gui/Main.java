@@ -18,11 +18,6 @@ public class Main extends Application {
 		primaryStage.setTitle("Club21");
 		Scene scene = new Scene(root, WIDTH, HEIGHT);
 		primaryStage.setResizable(true);
-//		primaryStage.setMinHeight(400);
-//		primaryStage.setMaxHeight(300);
-
-
-
 		primaryStage.setScene(scene);
 		primaryStage.getIcons().add(new Image("image/Playing Cards/a_of_spades.png"));
 		primaryStage.show();
