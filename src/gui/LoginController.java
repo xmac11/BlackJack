@@ -44,4 +44,15 @@ public class LoginController {
 		}
 	}
 
+	public void moveToIP(ActionEvent actionEvent) {
+		if (userField.getText().length()>1){
+			userField.setOnAction(e->ipField.requestFocus());
+
+		}
+
+	}
+
+	public void startIfFieldsFulfilled(ActionEvent actionEvent) throws IOException {
+		joinPressed(actionEvent);
+	}
 }
