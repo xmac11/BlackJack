@@ -94,10 +94,12 @@ public class GameController implements Initializable {
 	}
 	
 	public void sendChat() {
-		if (textField.getText().matches("[a-zA-Z\\s\'\"]+")) {
+
+		String incomingText = textField.getText();
+		if (incomingText.matches("[a-zA-Z\\s\'\"]+") && incomingText.trim().length() > 0) {
 			output.println("gameChatMessage");
 			output.println("gameChatMessage" + username);
-			output.println("gameChatMessage" + textField.getText());
+			output.println("gameChatMessage" + incomingText);
 		}else {
 			addToChat("Error - Only letters and numbers allowed in chat");
 		}
@@ -308,11 +310,38 @@ public class GameController implements Initializable {
 		});
 	}
 
+	/**
+	 * Code inspired by : https://stackoverflow.com/questions/53493111/javafx-wrapping-text-in-listview
+	 * @param location
+	 * @param resources
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		hitButton.setDisable(true);
 		standButton.setDisable(true);
 		label.setVisible(false);
+        chatView.setCellFactory(param -> new ListCell<String>(){
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item==null) {
+                    setGraphic(null);
+                    setText(null);
+
+
+                }else{
+                    // set the width's
+                    setMinWidth(param.getWidth());
+                    setMaxWidth(param.getWidth());
+                    setPrefWidth(param.getWidth());
+                    // allow wrapping
+                    setWrapText(true);
+                    setText(item.toString());
+
+
+                }
+            }
+        });
 	}
 
 	public PrintWriter getOutput() {
