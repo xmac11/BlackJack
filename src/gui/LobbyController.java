@@ -82,7 +82,7 @@ public class LobbyController implements Initializable {
 				window.setScene(gameScene);
 				window.show();
 				window.setOnCloseRequest(e -> {
-					//gameController.playerLeft();
+//					gameController.playerLeft();
 					e.consume();
 					client.closeGame(window);
 				});

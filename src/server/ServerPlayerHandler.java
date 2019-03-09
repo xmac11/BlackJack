@@ -87,7 +87,9 @@ public class ServerPlayerHandler implements Runnable {
 				}
 				if (in.equals("playerLeft")) {
 					socketConnection.getOutput().println("playerLeft");
-					triggerBarrier();
+					socketConnection.setInLobby(true);
+					socketConnection.getSessionWait().release();
+					triggerBarrier(thread);
 					return;
 				}
 				if (in.equals("h")) {
@@ -104,9 +106,9 @@ public class ServerPlayerHandler implements Runnable {
 				}
 			} catch (IOException e) {
 				System.out.println("Player disconnected");
-				triggerBarrier();
 				socketConnection.setInLobby(true);
 				socketConnection.getSessionWait().release();
+				triggerBarrier(thread);
 				return;
 			}
 		}
@@ -120,7 +122,9 @@ public class ServerPlayerHandler implements Runnable {
 				in = socketConnection.getInput().readLine();
 				if (in.equals("playerLeft")) {
 					socketConnection.getOutput().println("playerLeft");
-					triggerBarrier();
+					socketConnection.setInLobby(true);
+					socketConnection.getSessionWait().release();
+					triggerBarrier(thread);
 					return;
 				}
 				if (in.equals("breakFromLoop")) {
@@ -161,7 +165,7 @@ public class ServerPlayerHandler implements Runnable {
 			dealersTurn.await(); // Player threads get stopped here, main server thread continues in server
 									// class.
 		} catch (InterruptedException | BrokenBarrierException e) {
-			triggerBarrier();
+			triggerBarrier(thread);
 			e.printStackTrace();
 		}
 		barriers++;
@@ -180,19 +184,18 @@ public class ServerPlayerHandler implements Runnable {
 		System.out.println("player released");
 	}
 
-	public void triggerBarrier() {
+	public void triggerBarrier(Thread thread) {
 		try {
 			System.out.println("entered trigger");
 			switch (barriers) {
 			case 0:
 				System.out.println("releasing");
-				deckWait.release();
+				if (!thread.isAlive())
+					deckWait.release();
 				finishedPlayers.playerFinished();
 			case 1:
 				dealersTurn.await();
 			}
-			socketConnection.setInLobby(true);
-			socketConnection.getSessionWait().release();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error when releasing barriers");

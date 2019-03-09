@@ -35,6 +35,7 @@ public class ServerLobbyThread implements Runnable {
 		socketConnection.getOutput().println("queueUpdated");
 		socketConnection.getOutput().println("activeGame" + gameStart.isGameStart());
 		while (true) {
+			System.out.println(socketConnection.getUsername() + " back in lobby");
 			while (socketConnection.isInLobby()) {
 				try {
 					in = socketConnection.getInput().readLine();

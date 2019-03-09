@@ -137,7 +137,7 @@ public class Server implements Runnable {
 				System.out.println("No players joined, session ending");
 			}
 			for (int i = 0; i < joined.size(); i++) {
-				System.out.println("sending to joined");
+				System.out.println("sending clear queue to joined");
 				joined.get(i).getOutput().println("Clear queue");
 			}
 			gameStart.setGameStart(false);
