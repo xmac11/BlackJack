@@ -92,6 +92,13 @@ public class ServerPlayerHandler implements Runnable {
 					triggerBarrier(thread);
 					return;
 				}
+				if (in.equals("thisPlayerLeft")) {
+					socketConnection.getOutput().println("playerLeftGame");
+					socketConnection.setInLobby(true);
+					socketConnection.getSessionWait().release();
+					triggerBarrier(thread);
+					return;
+				}
 				if (in.equals("h")) {
 					String card = deck.drawCard();
 					table.get(ID).add(card);
@@ -125,6 +132,13 @@ public class ServerPlayerHandler implements Runnable {
 				System.out.println("Finished players " + finishedPlayers.getFinishedPlayers());
 				in = socketConnection.getInput().readLine();
 				if (in.equals("playerLeftGame")) {
+					socketConnection.getOutput().println("playerLeftGame");
+					socketConnection.setInLobby(true);
+					socketConnection.getSessionWait().release();
+					triggerBarrier(thread);
+					return;
+				}
+				if (in.equals("thisPlayerLeft")) {
 					socketConnection.getOutput().println("playerLeftGame");
 					socketConnection.setInLobby(true);
 					socketConnection.getSessionWait().release();
