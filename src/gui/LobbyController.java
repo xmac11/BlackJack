@@ -43,12 +43,9 @@ public class LobbyController implements Initializable {
 	private TextField chatField;
 
 	private String IP;
-	private Socket socket;
 	private Client client;
-	private Semaphore waitForServer = new Semaphore(0);
-	private List<List<String>> table = new ArrayList<>();
-	private Semaphore chatWait;
-	private Semaphore waitForInput;
+	private Semaphore waitForController;
+	private List<List<String>> table;
 	private PrintWriter output;
 	private String username;
 
@@ -74,7 +71,7 @@ public class LobbyController implements Initializable {
 				Stage window = new Stage();
 				GameController gameController = loader.<GameController>getController();
 				client.setGameController(gameController);
-				waitForServer.release();
+				waitForController.release();
 				window.setScene(gameScene);
 				window.setHeight(900);
 				window.setWidth(1600);
@@ -201,6 +198,7 @@ public class LobbyController implements Initializable {
 	public void initData(String IP, String username) {
 		this.IP = IP;
 		this.username = username;
+		waitForController.release();
 	}
 
 	public PrintWriter getOutput() {
@@ -213,10 +211,9 @@ public class LobbyController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-			waitForServer = new Semaphore(0);
-			waitForInput = new Semaphore(0);
-			chatWait = new Semaphore(0);
-			client = new Client(table, waitForServer, waitForInput, chatWait, IP, this);
+			waitForController = new Semaphore(0);
+			table = new ArrayList<>();
+			client = new Client(table, waitForController, IP, this);
 			playButton.setVisible(false);
 			Thread thread = new Thread(client);
 			thread.start();
