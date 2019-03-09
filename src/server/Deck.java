@@ -32,7 +32,7 @@ public class Deck {
 		return cards;
 	}
 
-	public int total(List<String> hand) {
+	public static int total(List<String> hand) {
 		int sum = 0;
 		int value;
 		for (int i = 0; i < hand.size(); i++) {

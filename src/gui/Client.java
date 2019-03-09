@@ -8,6 +8,8 @@ import java.util.concurrent.Semaphore;
 
 import javax.security.auth.kerberos.KerberosKey;
 
+import server.Deck;
+
 import java.io.*;
 
 public class Client implements Runnable {
@@ -50,27 +52,6 @@ public class Client implements Runnable {
 
 	public void setGameController(GameController gameController) {
 		this.gameController = gameController;
-	}
-
-	public int total(List<String> a) {
-		int sum = 0;
-		int value;
-		for (int i = 0; i < a.size(); i++) {
-			String cardValue = a.get(i).replaceAll(" .*", ""); // remove everything after the space
-			try {
-				value = Integer.parseInt(cardValue);
-			} catch (NumberFormatException e) {
-				if (cardValue.equals("A"))
-					value = 11;
-				else
-					value = 10;
-			}
-			sum += value;
-		}
-		if (sum > 21 && a.stream().anyMatch(x -> x.startsWith("A"))) { // if busted, but hand contains an Ace
-			sum -= 10;
-		}
-		return sum;
 	}
 
 	public void setUsername(String username) {
@@ -167,14 +148,14 @@ public class Client implements Runnable {
 				}
 				table.get(ID).add(input.readLine());
 				table.get(ID).add(input.readLine()); // Player's first hands
-				gameController.setLabel("Your hand: " + total(table.get(ID)));
-				System.out.println("Your Hand: " + table.get(ID) + " total: " + total(table.get(ID))); // Prints the
+				gameController.setLabel("Your hand: " + Deck.total(table.get(ID)));
+				System.out.println("Your Hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID))); // Prints the
 																										// players hand
 				gameController.setTable(table);
-				if (total(table.get(ID)) == 21) {
+				if (Deck.total(table.get(ID)) == 21) {
 					System.out.println("Black Jack!");
 					gameController.setLabel("Black Jack!");
-					System.out.println("Your hand: " + table.get(ID) + " total: " + total(table.get(ID)));
+					System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
 					pocketBlackJack = true;
 				}
 				while (true) { // Loops this until it reaches a 'break;'
@@ -189,7 +170,7 @@ public class Client implements Runnable {
 						gameController.enableStand();
 						System.out.println(in + ", h (hit) p (pass)");
 						System.out.println("Waiting for move");
-						gameController.setLabel("Make Move: " + total(table.get(ID)));
+						gameController.setLabel("Make Move: " + Deck.total(table.get(ID)));
 					}
 					if (in.contains("gameChatMessage")) {
 						gameController.addToChat(in.replaceFirst("gameChatMessage", ""));
@@ -211,27 +192,27 @@ public class Client implements Runnable {
 						String card = in.replaceFirst("playerCard", "");
 						table.get(ID).add(card);
 						gameController.addCardToPlayerHand(card);
-						if (total(table.get(ID)) > 21) {
+						if (Deck.total(table.get(ID)) > 21) {
 							System.out.println("Break");
-							gameController.setLabel("Busted: " + total(table.get(ID)));
-							System.out.println("Your hand: " + table.get(ID) + " total: " + total(table.get(ID)));
+							gameController.setLabel("Busted: " + Deck.total(table.get(ID)));
+							System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
 							output.println("p");
 							break;
-						} else if (total(table.get(ID)) == 21) {
+						} else if (Deck.total(table.get(ID)) == 21) {
 							System.out.println("Black Jack!");
 							gameController.setLabel("Black Jack!" /* + total(table.get(ID)) */);
-							System.out.println("Your hand: " + table.get(ID) + " total: " + total(table.get(ID)));
+							System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
 							output.println("p");
 							break;
 						} else {
 							output.println("move");
-							System.out.println("Your hand: " + table.get(ID) + " total: " + total(table.get(ID)));
+							System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
 						}
 					}
 					if (in.contains("finished")) { // Server tells the client its turn is over
-						System.out.println("Your hand: " + table.get(ID) + " total: " + total(table.get(ID)));
+						System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
 						System.out.println(in + " turn... waiting for other players");
-						gameController.setLabel("Your hand: " + total(table.get(ID)) + "\nWaiting for others");
+						gameController.setLabel("Your hand: " + Deck.total(table.get(ID)) + "\nWaiting for others");
 						break;
 					}
 					if (in.equals("newPlayer")) {
@@ -298,7 +279,7 @@ public class Client implements Runnable {
 							System.out.println("All players finished");
 						}
 						if (in.contains("showDealerHand")) {
-							System.out.println("Dealers cards: " + table.get(0) + "total: " + total(table.get(0)));
+							System.out.println("Dealers cards: " + table.get(0) + "total: " + Deck.total(table.get(0)));
 							System.out.println("Dealer taking cards....");
 						}
 						if (in.contains("dealerCard"))
@@ -343,14 +324,14 @@ public class Client implements Runnable {
 	 * clients hand and dealers hand
 	 */
 	public void declareWinner() {
-		System.out.println("Dealers cards: " + table.get(0) + " total: " + total(table.get(0)));
-		if (total(table.get(ID)) > 21) {
+		System.out.println("Dealers cards: " + table.get(0) + " total: " + Deck.total(table.get(0)));
+		if (Deck.total(table.get(ID)) > 21) {
 			gameController.setLabel("Bust!! You lose!");
-		} else if (total(table.get(0)) > 21) {
+		} else if (Deck.total(table.get(0)) > 21) {
 			gameController.setLabel("Dealer bust! You Win!");
-		} else if (total(table.get(ID)) == total(table.get(0))) {
+		} else if (Deck.total(table.get(ID)) == Deck.total(table.get(0))) {
 			gameController.setLabel("Draw!");
-		} else if (total(table.get(ID)) > total(table.get(0))) {
+		} else if (Deck.total(table.get(ID)) > Deck.total(table.get(0))) {
 			gameController.setLabel("You win!!");
 		} else {
 			gameController.setLabel("Dealer Wins!!");

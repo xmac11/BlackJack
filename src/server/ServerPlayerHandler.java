@@ -19,7 +19,6 @@ public class ServerPlayerHandler implements Runnable {
 	private List<List<String>> table;
 	private Deck deck;
 	private Semaphore deckWait;
-	private Semaphore serverChatWait;
 	CyclicBarrier playersWait;
 	CyclicBarrier playersTurnWait;
 	CyclicBarrier dealersTurn;
@@ -27,27 +26,21 @@ public class ServerPlayerHandler implements Runnable {
 	private int noPlayers;
 	private boolean active;
 	private int barriers;
-	private List<String> chatLog;
 	private FinishedPlayers finishedPlayers;
 	private List<SocketConnection> gameQueue;
 
-	public ServerPlayerHandler(SocketConnection socketConnection, int ID, Deck deck, Semaphore deckWait,
-			CyclicBarrier playersWait, CyclicBarrier playersTurnWait, int noPlayers, CyclicBarrier dealersTurn,
-			List<List<String>> table, List<String> chatLog, Semaphore serverChatWait, FinishedPlayers finishedPlayers,
+	public ServerPlayerHandler(SocketConnection socketConnection, int ID, Deck deck, Semaphore deckWait, int noPlayers,
+			CyclicBarrier dealersTurn, List<List<String>> table, FinishedPlayers finishedPlayers,
 			List<SocketConnection> gameQueue) {
 		this.socketConnection = socketConnection;
 		this.ID = ID;
 		this.deck = deck;
 		this.deckWait = deckWait;
-		this.playersWait = playersWait;
-		this.playersTurnWait = playersTurnWait;
 		this.noPlayers = noPlayers;
 		active = true;
 		this.dealersTurn = dealersTurn;
 		this.table = table;
 		barriers = 0;
-		this.chatLog = chatLog;
-		this.serverChatWait = serverChatWait;
 		this.finishedPlayers = finishedPlayers;
 		this.gameQueue = gameQueue;
 	}
@@ -165,13 +158,6 @@ public class ServerPlayerHandler implements Runnable {
 			System.out.println("Table Sent");
 		}
 
-		try {
-			playersWait.await(); // Threads now reach the barrier that the main thread is waiting on, as all
-									// threads are now here (players+main) they can continue
-		} catch (InterruptedException | BrokenBarrierException e) {
-			triggerBarrier();
-			e.printStackTrace();
-		}
 		System.out.println("Dealers turn");
 		barriers++;
 		try {
