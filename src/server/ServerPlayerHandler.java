@@ -19,10 +19,7 @@ public class ServerPlayerHandler implements Runnable {
 	private List<List<String>> table;
 	private Deck deck;
 	private Semaphore deckWait;
-	CyclicBarrier playersWait;
-	CyclicBarrier playersTurnWait;
 	CyclicBarrier dealersTurn;
-	CyclicBarrier gameOver;
 	private int noPlayers;
 	private boolean active;
 	private int barriers;
@@ -191,14 +188,14 @@ public class ServerPlayerHandler implements Runnable {
 				System.out.println("releasing");
 				deckWait.release();
 				finishedPlayers.playerFinished();
-				playersWait.await();
 			case 1:
 				dealersTurn.await();
 			}
 			socketConnection.setInLobby(true);
 			socketConnection.getSessionWait().release();
 		} catch (Exception e) {
-
+			e.printStackTrace();
+			System.out.println("Error when releasing barriers");
 		}
 	}
 
