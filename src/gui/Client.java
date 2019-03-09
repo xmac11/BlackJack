@@ -8,6 +8,13 @@ import java.util.concurrent.Semaphore;
 
 import javax.security.auth.kerberos.KerberosKey;
 
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import server.Deck;
 
 import java.io.*;
@@ -351,5 +358,50 @@ public class Client implements Runnable {
 		} else {
 			gameController.setLabel("Dealer Wins!!");
 		}
+	}
+	
+	public void closeGame(Stage window) {
+		boolean confirmation = ConfirmClose.displayConfirmBox("Warning", "Are you sure you want to exit?");
+		if(confirmation) {
+			window.close();
+			gameController.playerLeft();
+		}
+	}
+}
+
+class ConfirmClose{
+	
+	static boolean confirm;
+
+	public static boolean displayConfirmBox(String title, String message) {
+		Stage stage = new Stage();
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.setTitle(title);
+		stage.setWidth(300);
+		stage.setHeight(150);
+		Label label = new Label(message);
+
+		// yes button
+		Button yesButton = new Button("Yes");
+		yesButton.setOnAction(e -> {
+			confirm = true;
+			stage.close();
+		});
+
+		// no button
+		Button noButton = new Button("No");
+		noButton.setOnAction(e -> {
+			confirm = false;
+			stage.close();
+		});
+		
+		HBox hBox = new HBox(10);
+		hBox.getChildren().addAll(label, yesButton, noButton);
+		hBox.setAlignment(Pos.CENTER);
+		Scene scene = new Scene(hBox, 250, 300);
+		stage.setScene(scene);
+		stage.showAndWait();
+		
+		return confirm;
 	}
 }
