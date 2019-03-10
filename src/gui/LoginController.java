@@ -38,6 +38,9 @@ public class LoginController implements Initializable {
 	@FXML
 	private Label errorLabel;
 
+	@FXML
+	private TextField passField;
+
 	private double userFieldX;
 	private double userFieldY;
 	private double ipFieldX;
@@ -48,13 +51,13 @@ public class LoginController implements Initializable {
 	}
 
 	public void joinPressed(ActionEvent event) throws IOException {
-		if (ipField.getText().trim().length() > 0 && userField.getText().trim().length() > 0) {
+		if (ipField.getText().trim().length() > 0 && userField.getText().trim().length() > 0 && passField.getText().trim().length() > 0) {
 			errorLabel.setVisible(false);
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("LobbyScreen.fxml"));
 			Scene lobbyScene = new Scene(loader.load());
 			LobbyController lobbyController = loader.<LobbyController>getController();
 			Stage thisStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-			lobbyController.initData(ipField.getText(), userField.getText(), thisStage);
+			lobbyController.initData(ipField.getText(), userField.getText(), passField.getText(), thisStage);
 			thisStage.setHeight(800);
 			thisStage.setWidth(800);
 			thisStage.setScene(lobbyScene);
@@ -66,11 +69,21 @@ public class LoginController implements Initializable {
 		if (!(userField.getText().trim().length() > 0)) {
 			wobbleField(userField, userFieldX, userFieldY);
 		}
+		if (!(passField.getText().trim().length() > 0)) {
+			wobbleField(passField, userFieldX, userFieldY);
+		}
+
+
 	}
 
-	public void moveToIP(ActionEvent actionEvent) {
+	public void moveToPassword(ActionEvent actionEvent) {
 		if (userField.getText().trim().length() > 0) {
-			userField.setOnAction(e -> ipField.requestFocus());
+			userField.setOnAction(e -> passField.requestFocus() );
+		}
+	}
+	public void moveToIP(ActionEvent actionEvent) {
+		if (passField.getText().trim().length() > 0) {
+			passField.setOnAction(e -> ipField.requestFocus());
 		}
 
 	}
@@ -147,6 +160,7 @@ public class LoginController implements Initializable {
 		timeline.play();
 	}
 
+
 	public void startIfFieldsFulfilled(ActionEvent actionEvent) throws IOException {
 		joinPressed(actionEvent);
 	}
@@ -158,4 +172,6 @@ public class LoginController implements Initializable {
 		ipFieldX = ipField.getTranslateX();
 		ipFieldY = ipField.getTranslateY();
 	}
+
+
 }

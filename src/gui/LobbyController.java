@@ -227,7 +227,7 @@ public class LobbyController implements Initializable {
 
 	}
 
-	public void initData(String IP, String username, Stage stage) {
+	public void initData(String IP, String username, String password, Stage stage) {
 		this.IP = IP;
 		this.username = username;
 		thisStage = stage;
