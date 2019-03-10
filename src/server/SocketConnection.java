@@ -1,5 +1,8 @@
 package server;
 
+import database.MatchHistory;
+import database.Session;
+
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -13,6 +16,8 @@ public class SocketConnection {
 	private BufferedReader input;
 	private boolean inLobby;
 	private String username;
+	private int points;
+	private int sessionID;
 	
 	public SocketConnection(Socket socket, Semaphore sessionWait, PrintWriter output, BufferedReader input, boolean inLobby, String username) {
 		this.socket = socket;
@@ -21,6 +26,8 @@ public class SocketConnection {
 		this.output = output;
 		this.setInLobby(inLobby);
 		this.setUsername(username);
+		this.points = MatchHistory.getGamesWon(username);
+		this.sessionID = 0;
 	}
 
 	public PrintWriter getOutput() {
@@ -75,4 +82,23 @@ public class SocketConnection {
 		this.username = username;
 	}
 
+	public int getPoints() {
+		return points;
+	}
+
+	public void setPoints(int points) {
+		this.points = points;
+	}
+
+	public int getSessionID() {
+		return sessionID;
+	}
+
+	/**
+	 * This method gets the maximum current session ID from the database and sets it in the object SocketConnection
+	 *
+	 */
+	public void updateSessionID() {
+		this.sessionID = Session.getMaxSessionID();
+	}
 }

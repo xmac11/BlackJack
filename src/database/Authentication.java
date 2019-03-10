@@ -59,12 +59,12 @@ public class Authentication {
     }
 
     public static void main(String[] args){
-        //newAccount("nxk827","password");
-        //System.out.println(login("nxk825","password"));
-        MatchHistory.setGamesWon("nxk827",2);
-        System.out.println(MatchHistory.getGamesWon("nxk827"));
-        MatchHistory.setGamesPlayed("nxk827",4);
-        System.out.println(MatchHistory.getGamesPlayed("nxk827"));
+       // newAccount("nxk828","password");
+        System.out.println(login("nxk828","password"));
+        //MatchHistory.setGamesWon("nxk827",2);
+        //System.out.println(MatchHistory.getGamesWon("nxk827"));
+        //MatchHistory.setGamesPlayed("nxk827",4);
+        //System.out.println(MatchHistory.getGamesPlayed("nxk827"));
     }
 
 }
