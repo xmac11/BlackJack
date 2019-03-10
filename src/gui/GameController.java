@@ -377,8 +377,6 @@ public class GameController implements Initializable {
                 if (empty || item==null) {
                     setGraphic(null);
                     setText(null);
-
-
                 }else{
                     // set the width's
                     setMinWidth(param.getWidth());
@@ -387,8 +385,6 @@ public class GameController implements Initializable {
                     // allow wrapping
                     setWrapText(true);
                     setText(item.toString());
-
-
                 }
             }
         });

@@ -33,7 +33,7 @@ public class Authentication {
         }
         return login;
     }
-    public static void newAccount(String username, String password){
+    public static boolean newAccount(String username, String password){
 
         String url = "jdbc:postgresql://mod-msc-sw1.cs.bham.ac.uk/";
         String user = "group21";
@@ -50,9 +50,10 @@ public class Authentication {
             PreparedStatement statement1 = connection.prepareStatement(newHistory);
             statement1.setString(1,username);
             statement1.executeUpdate();
-
+            return true;
         } catch (SQLException e) {
             System.out.println("Username already exists");
+            return false;
         }
 
     }
