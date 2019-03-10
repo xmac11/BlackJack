@@ -49,7 +49,7 @@ public class Client implements Runnable {
 	private List<String> inQueue;
 	private boolean playerLeft;
 	private boolean pocketBlackJack;
-	private boolean joined = false;
+	private boolean inGame = false;
 
 	public Client(List<List<String>> table, Semaphore waitForController, String IP, LobbyController lobbyController) {
 		this.table = table;
@@ -76,7 +76,6 @@ public class Client implements Runnable {
 			output = new PrintWriter(socket.getOutputStream(), true);
 			onlinePlayers = new ArrayList<>();
 			inQueue = new ArrayList<>();
-			joined = true;
 			try {
 				waitForController.acquire();
 			} catch (InterruptedException e) {
@@ -86,6 +85,7 @@ public class Client implements Runnable {
 			System.out.println(username + " has joined");
 			output.println(username);
 			while (true) {
+				inGame = false;
 				playerLeft = false;
 				String in = "";
 				lobbyController.setOutput(output);
@@ -148,6 +148,7 @@ public class Client implements Runnable {
 				gameController.setOutput(output);
 				gameController.setUsername(username);
 				gameController.setID(ID);
+				inGame = true;
 				noPlayers = Integer.parseInt(hello.substring(26, 27)); // Max of 3 players so reading one char is fine
 				gameController.setNoPlayers(noPlayers);
 				System.out.println(noPlayers);
@@ -209,7 +210,7 @@ public class Client implements Runnable {
 							System.out.println("Break");
 							gameController.setLabel("Busted: " + Deck.total(table.get(ID)));
 							System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
-							//output.println("p");
+							// output.println("p");
 							output.println("busted");
 							break;
 						} else if (Deck.total(table.get(ID)) == 21) {
@@ -244,7 +245,7 @@ public class Client implements Runnable {
 					gameController.disableStand();
 					// gameController.setLabel("Your hand: " + total(table.get(ID)));
 					boolean dealerTurn = true;
-					while (dealerTurn) { // Sits in loop whilst dealer chooses new cards					
+					while (dealerTurn) { // Sits in loop whilst dealer chooses new cards
 						in = input.readLine();
 						if (in.contains("gameChatMessage")) {
 							gameController.addToChat(in.replaceFirst("gameChatMessage", ""));
@@ -294,20 +295,24 @@ public class Client implements Runnable {
 						if (in.contains("playersFinished")) { // Server tells client what to display
 							System.out.println("All players finished");
 							in = input.readLine();
-							if(!in.equals("skipDealer")) {
+							if (!in.equals("skipDealer")) {
 								gameController.removeDealerFacedown();
-								gameController.addCardToDealerHand(table.get(0).get(1));	
+								gameController.addCardToDealerHand(table.get(0).get(1));
 								gameController.setDealerLabel("Dealer: " + Deck.total(table.get(0)));
 							}
-							
+
 						}
 						if (in.contains("showDealerHand")) {
 							System.out.println("Dealers cards: " + table.get(0) + "total: " + Deck.total(table.get(0)));
 							System.out.println("Dealer taking cards....");
 						}
-						if (in.contains("dealerCard")) {									
+						if (in.contains("dealerCard")) {
 							// sleep thread for 1s in order to simulate the dealer picking cards one by one
-							try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}	
+							try {
+								Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 							String dealerCard = in.replaceFirst("dealerCard", "");
 							table.get(0).add(dealerCard);
 							gameController.addCardToDealerHand(dealerCard);
@@ -321,10 +326,11 @@ public class Client implements Runnable {
 					}
 					if (!playerLeft) {
 						System.out.println(table.get(0));
-						/*gameController.removeDealerFacedown();
-						for (int i = 0; i < table.get(0).size(); i++) {
-							gameController.addCardToDealerHand(table.get(0).get(i));
-						}*/
+						/*
+						 * gameController.removeDealerFacedown(); for (int i = 0; i <
+						 * table.get(0).size(); i++) {
+						 * gameController.addCardToDealerHand(table.get(0).get(i)); }
+						 */
 						declareWinner();
 					}
 				}
@@ -335,6 +341,8 @@ public class Client implements Runnable {
 		} catch (IOException e) {
 			System.out.println("Session not joinable");
 			e.printStackTrace();
+			if (inGame)
+				gameController.connectionLost();
 			lobbyController.connectionLost();
 			output.close();
 			return;
@@ -367,10 +375,10 @@ public class Client implements Runnable {
 			gameController.setLabel("Dealer Wins!!");
 		}
 	}
-	
+
 	public void closeGame(Stage window) {
 		boolean confirmation = GameController.displayConfirmBox("Warning", "Are you sure you want to exit?");
-		if(confirmation) {
+		if (confirmation) {
 			window.close();
 			gameController.playerLeft();
 		}

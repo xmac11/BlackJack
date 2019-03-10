@@ -41,7 +41,7 @@ public class GameController implements Initializable {
 
 	@FXML
 	private Label label;
-	
+
 	@FXML
 	private Label labelDealer;
 
@@ -66,12 +66,12 @@ public class GameController implements Initializable {
 	@FXML
 	private ListView<String> chatView;
 
-
 	private String username;
 	private int ID;
 	private PrintWriter output;
 	private int noPlayers;
 	private static boolean confirm;
+	private Stage stage;
 
 	/**
 	 * Action handlers for hit and stand buttons being clicked. If the user clicks
@@ -82,7 +82,7 @@ public class GameController implements Initializable {
 		System.out.println("Player is dealt a new card from the deck.");
 		output.println("h");
 	}
-	
+
 	public void endChat() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -100,14 +100,14 @@ public class GameController implements Initializable {
 	public void setID(int ID) {
 		this.ID = ID;
 	}
-	
+
 	public void sendChat() {
 		String incomingText = textField.getText();
 		if (incomingText.matches("[a-zA-Z\\s\'\"]+") && incomingText.trim().length() > 0) {
 			output.println("gameChatMessage");
 			output.println("gameChatMessage" + username);
 			output.println("gameChatMessage" + incomingText);
-		}else {
+		} else {
 			addToChat("Error - Only letters and numbers allowed in chat");
 		}
 		textField.setText("");
@@ -121,9 +121,18 @@ public class GameController implements Initializable {
 			}
 		});
 	}
-	
+
+	public void connectionLost() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				stage.close();
+			}
+		});
+	}
+
 	public static boolean displayConfirmBox(String title, String message) {
-		
+
 		Stage stage = new Stage();
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.setTitle(title);
@@ -144,17 +153,17 @@ public class GameController implements Initializable {
 			confirm = false;
 			stage.close();
 		});
-		
+
 		HBox hBox = new HBox(10);
 		hBox.getChildren().addAll(label, yesButton, noButton);
 		hBox.setAlignment(Pos.CENTER);
 		Scene scene = new Scene(hBox, 250, 300);
 		stage.setScene(scene);
 		stage.showAndWait();
-		
+
 		return confirm;
 	}
-	
+
 	public void playerLeft() {
 		output.println("playerLeftGame");
 	}
@@ -183,7 +192,7 @@ public class GameController implements Initializable {
 			}
 		});
 	}
-	
+
 	public void setDealerLabel(String text) {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -311,7 +320,7 @@ public class GameController implements Initializable {
 	public void removeDealerFacedown() {
 		Platform.runLater(new Runnable() {
 			@Override
-			public void run() {				
+			public void run() {
 				hBoxDealer.getChildren().remove(1);
 			}
 		});
@@ -360,7 +369,9 @@ public class GameController implements Initializable {
 	}
 
 	/**
-	 * Code inspired by : https://stackoverflow.com/questions/53493111/javafx-wrapping-text-in-listview
+	 * Code inspired by :
+	 * https://stackoverflow.com/questions/53493111/javafx-wrapping-text-in-listview
+	 * 
 	 * @param location
 	 * @param resources
 	 */
@@ -370,24 +381,24 @@ public class GameController implements Initializable {
 		standButton.setDisable(true);
 		label.setVisible(false);
 		labelDealer.setVisible(false);
-        chatView.setCellFactory(param -> new ListCell<String>(){
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item==null) {
-                    setGraphic(null);
-                    setText(null);
-                }else{
-                    // set the width's
-                    setMinWidth(param.getWidth());
-                    setMaxWidth(param.getWidth());
-                    setPrefWidth(param.getWidth());
-                    // allow wrapping
-                    setWrapText(true);
-                    setText(item.toString());
-                }
-            }
-        });
+		chatView.setCellFactory(param -> new ListCell<String>() {
+			@Override
+			protected void updateItem(String item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty || item == null) {
+					setGraphic(null);
+					setText(null);
+				} else {
+					// set the width's
+					setMinWidth(param.getWidth());
+					setMaxWidth(param.getWidth());
+					setPrefWidth(param.getWidth());
+					// allow wrapping
+					setWrapText(true);
+					setText(item.toString());
+				}
+			}
+		});
 	}
 
 	public PrintWriter getOutput() {
@@ -397,11 +408,18 @@ public class GameController implements Initializable {
 	public void setOutput(PrintWriter output) {
 		this.output = output;
 	}
-	
-	public void chatButtonPressed(){
+
+	public void chatButtonPressed() {
 		sendChat();
 
 	}
 
+	public Stage getStage() {
+		return stage;
+	}
+
+	public void setStage(Stage stage) {
+		this.stage = stage;
+	}
 
 }
