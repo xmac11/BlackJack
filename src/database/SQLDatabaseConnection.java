@@ -7,12 +7,15 @@ import java.sql.*;
 import java.util.Properties;
 
 
-public class SQLDatabaseConnection {
+public class SQLDatabaseConnection implements Runnable {
 
 
-	public static void main(String[] args) throws IOException {
+//	public static void main(String[] args) throws IOException {
+//		
+//	}
 
-
+	@Override
+	public void run() {
 		String url = "jdbc:postgresql://mod-msc-sw1.cs.bham.ac.uk/";
 		String username = "group21";
 		String password = "tb2ij946i6";
@@ -45,7 +48,7 @@ public class SQLDatabaseConnection {
 
 		} catch (SQLException e) {
 			System.out.println("Connection not successful");
-		}
+		}		
 	}
 
 }
