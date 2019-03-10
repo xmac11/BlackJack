@@ -85,6 +85,7 @@ public class Session {
      * This method gets the maximum session ID from the session table in the database
      * @return max session ID
      */
+    
     public static int getMaxSessionID(){
         String url = "jdbc:postgresql://mod-msc-sw1.cs.bham.ac.uk/";
         String user = "group21";

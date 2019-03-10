@@ -10,6 +10,7 @@ import javax.security.auth.kerberos.KerberosKey;
 
 import com.sun.glass.ui.TouchInputSupport;
 
+import database.MatchHistory;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -163,7 +164,7 @@ public class Client implements Runnable {
 				table.get(ID).add(input.readLine()); // Player's first hands
 				gameController.setLabel("Your hand: " + Deck.total(table.get(ID)) + "\nWait for your turn");
 				System.out.println("Your Hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID))); // Prints
-																											// the
+				MatchHistory.setGamesPlayed(username, (MatchHistory.getGamesPlayed(username)+1));																							// the
 				// players hand
 				gameController.setTable(table);
 				if (Deck.total(table.get(ID)) == 21 && table.get(ID).size() == 2) {
@@ -366,10 +367,12 @@ public class Client implements Runnable {
 		if (Deck.total(table.get(ID)) > 21) {
 			gameController.setLabel("Bust!! You lose!");
 		} else if (Deck.total(table.get(0)) > 21) {
+			MatchHistory.setGamesWon(username, (MatchHistory.getGamesWon(username)+1));
 			gameController.setLabel("Dealer bust! You Win!");
 		} else if (Deck.total(table.get(ID)) == Deck.total(table.get(0))) {
 			gameController.setLabel("Draw!");
 		} else if (Deck.total(table.get(ID)) > Deck.total(table.get(0))) {
+			MatchHistory.setGamesWon(username, (MatchHistory.getGamesWon(username)+1));
 			gameController.setLabel("You win!!");
 		} else {
 			gameController.setLabel("Dealer Wins!!");
@@ -384,40 +387,3 @@ public class Client implements Runnable {
 		}
 	}
 }
-
-//class ConfirmClose{
-//	
-//	static boolean confirm;
-//
-//	public static boolean displayConfirmBox(String title, String message) {
-//		Stage stage = new Stage();
-//		stage.initModality(Modality.APPLICATION_MODAL);
-//		stage.setTitle(title);
-//		stage.setWidth(300);
-//		stage.setHeight(150);
-//		Label label = new Label(message);
-//
-//		// yes button
-//		Button yesButton = new Button("Yes");
-//		yesButton.setOnAction(e -> {
-//			confirm = true;
-//			stage.close();
-//		});
-//
-//		// no button
-//		Button noButton = new Button("No");
-//		noButton.setOnAction(e -> {
-//			confirm = false;
-//			stage.close();
-//		});
-//		
-//		HBox hBox = new HBox(10);
-//		hBox.getChildren().addAll(label, yesButton, noButton);
-//		hBox.setAlignment(Pos.CENTER);
-//		Scene scene = new Scene(hBox, 250, 300);
-//		stage.setScene(scene);
-//		stage.showAndWait();
-//		
-//		return confirm;
-//	}
-//}

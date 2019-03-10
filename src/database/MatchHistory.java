@@ -21,6 +21,7 @@ public class MatchHistory {
             System.out.println("Username does not exist");
         }
     }
+    
     public static int getGamesWon(String username){
         int points = 0;
         String url = "jdbc:postgresql://mod-msc-sw1.cs.bham.ac.uk/";

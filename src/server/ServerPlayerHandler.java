@@ -10,6 +10,7 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Semaphore;
 
+import database.Session;
 import shareable.FinishedPlayers;
 
 public class ServerPlayerHandler implements Runnable {
@@ -205,6 +206,7 @@ public class ServerPlayerHandler implements Runnable {
 		socketConnection.getOutput().println("dealerDone"); // Tells the client the dealer is finished
 		System.out.println("Dealer done");
 		socketConnection.setInLobby(true);
+		Session.setSessionend(socketConnection.getUsername());
 		socketConnection.getSessionWait().release();
 		System.out.println("player released");
 	}
@@ -212,6 +214,7 @@ public class ServerPlayerHandler implements Runnable {
 	public void triggerBarrier(Thread thread) {
 		try {
 			System.out.println("entered trigger");
+			Session.setSessionend(socketConnection.getUsername());
 			switch (barriers) {
 			case 0:
 				System.out.println("releasing");

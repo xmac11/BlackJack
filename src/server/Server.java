@@ -12,6 +12,7 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Semaphore;
 
 import database.SQLDatabaseConnection;
+import database.Session;
 import shareable.*;
 
 public class Server implements Runnable {
@@ -73,12 +74,14 @@ public class Server implements Runnable {
 				}
 			}
 			gameStart.setGameStart(true);
+			int sessionID = Session.getMaxSessionID() + 1;
 			for (int i = 0; i < joined.size(); i++) {
 				joined.get(i).getOutput().println("Game in progress");
 				joined.get(i).getOutput().println(gameQueue.size());
 			}
 			for (int i = 0; i < gameQueue.size(); i++) {
 				gameQueue.get(i).getOutput().println("Game Starting");
+				Session.startSession(gameQueue.get(i).getUsername(), sessionID);
 				gameQueue.get(i).setInLobby(false);
 			}
 			Deck deck = new Deck(); // Creates a deck

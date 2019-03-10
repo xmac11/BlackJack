@@ -47,43 +47,54 @@ public class LoginController implements Initializable {
 	private double userFieldY;
 	private double ipFieldX;
 	private double ipFieldY;
+	private double passFieldX;
+	private double passFieldY;
 
 	public void serverDown() {
 		System.out.println("Server is down.");
+		errorLabel.setText("Error - Cannot connect to server");
 		errorLabel.setVisible(true);
 	}
 
 	public void joinPressed(ActionEvent event) throws IOException {
-		if (ipField.getText().trim().length() > 0 && userField.getText().trim().length() > 0 && passField.getText().trim().length() > 0) {
-			errorLabel.setVisible(false);
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("LobbyScreen.fxml"));
-			Scene lobbyScene = new Scene(loader.load());
-			LobbyController lobbyController = loader.<LobbyController>getController();
-			Stage thisStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-			lobbyController.initData(ipField.getText(), userField.getText(), passField.getText(), thisStage);
-			thisStage.setHeight(800);
-			thisStage.setWidth(800);
-			thisStage.setScene(lobbyScene);
-			thisStage.show();
-			thisStage.setOnCloseRequest(e -> lobbyController.thisPlayerLeft());
+		if (ipField.getText().trim().length() > 0 && userField.getText().trim().length() > 0
+				&& passField.getText().trim().length() > 0) {
+			if (Authentication.login(userField.getText(), passField.getText())) {
+				errorLabel.setVisible(false);
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("LobbyScreen.fxml"));
+				Scene lobbyScene = new Scene(loader.load());
+				LobbyController lobbyController = loader.<LobbyController>getController();
+				Stage thisStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+				lobbyController.initData(ipField.getText(), userField.getText(), passField.getText(), thisStage);
+				thisStage.setHeight(800);
+				thisStage.setWidth(800);
+				thisStage.setScene(lobbyScene);
+				thisStage.show();
+				thisStage.setOnCloseRequest(e -> lobbyController.thisPlayerLeft());
+			} else {
+				errorLabel.setText("Error - Wrong log in credentials");
+				errorLabel.setVisible(true);
+				wobbleField(userField, userFieldX, userFieldY);
+				wobbleField(passField, passFieldX, passFieldY);
+			}
 		} else if (!(ipField.getText().trim().length() > 0)) {
-			wobbleField(ipField, userFieldX, userFieldY);
+			wobbleField(ipField, ipFieldX, ipFieldY);
 		}
 		if (!(userField.getText().trim().length() > 0)) {
 			wobbleField(userField, userFieldX, userFieldY);
 		}
 		if (!(passField.getText().trim().length() > 0)) {
-			wobbleField(passField, userFieldX, userFieldY);
+			wobbleField(passField, passFieldX, passFieldY);
 		}
-
 
 	}
 
 	public void moveToPassword(ActionEvent actionEvent) {
 		if (userField.getText().trim().length() > 0) {
-			userField.setOnAction(e -> passField.requestFocus() );
+			userField.setOnAction(e -> passField.requestFocus());
 		}
 	}
+
 	public void moveToIP(ActionEvent actionEvent) {
 		if (passField.getText().trim().length() > 0) {
 			passField.setOnAction(e -> ipField.requestFocus());
@@ -115,13 +126,13 @@ public class LoginController implements Initializable {
 		Button signButton = new Button("Sign up");
 		signButton.setOnAction(e -> {
 			error.setVisible(false);
-			if(username.getText().contains(" ")) {
+			if (username.getText().contains(" ")) {
 				error.setText("Username must not contain spaces");
 				error.setVisible(true);
-			}else if (password1.getText().equals(password2.getText())) {
+			} else if (password1.getText().equals(password2.getText())) {
 				if (Authentication.newAccount(username.getText(), password1.getText())) {
 					stage.close();
-				}else {
+				} else {
 					error.setText("Username already exists");
 					error.setVisible(true);
 				}
@@ -141,8 +152,7 @@ public class LoginController implements Initializable {
 		hBox1.getChildren().addAll(signButton, cancelButton);
 		hBox1.setAlignment(Pos.CENTER);
 		VBox vBox = new VBox(5);
-		vBox.getChildren().addAll(usernameLabel, username, passLabel, password1, passLabel2, password2, error,
-				hBox1);
+		vBox.getChildren().addAll(usernameLabel, username, passLabel, password1, passLabel2, password2, error, hBox1);
 		vBox.setAlignment(Pos.CENTER);
 		Scene scene = new Scene(vBox, 200, 400);
 		stage.setScene(scene);
@@ -163,7 +173,6 @@ public class LoginController implements Initializable {
 		timeline.play();
 	}
 
-
 	public void startIfFieldsFulfilled(ActionEvent actionEvent) throws IOException {
 		joinPressed(actionEvent);
 	}
@@ -174,10 +183,11 @@ public class LoginController implements Initializable {
 		userFieldY = userField.getTranslateY();
 		ipFieldX = ipField.getTranslateX();
 		ipFieldY = ipField.getTranslateY();
+		passFieldX = passField.getTranslateX();
+		passFieldY = passField.getTranslateY();
 		SQLDatabaseConnection sqlDatabaseConnection = new SQLDatabaseConnection();
 		Thread thread = new Thread(sqlDatabaseConnection);
 		thread.start();
 	}
-
 
 }
