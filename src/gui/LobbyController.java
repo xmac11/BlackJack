@@ -75,6 +75,7 @@ public class LobbyController implements Initializable {
 				
 				GameController gameController = loader.<GameController>getController();
 				client.setGameController(gameController);
+				gameController.setStage(window);
 				waitForController.release();
 				window.setScene(gameScene);
 				window.setHeight(900);
