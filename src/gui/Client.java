@@ -8,7 +8,17 @@ import java.util.concurrent.Semaphore;
 
 import javax.security.auth.kerberos.KerberosKey;
 
+import com.sun.glass.ui.TouchInputSupport;
+
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import server.Deck;
+import shareable.FinishedPlayers;
 
 import java.io.*;
 
@@ -150,7 +160,7 @@ public class Client implements Runnable {
 				}
 				table.get(ID).add(input.readLine());
 				table.get(ID).add(input.readLine()); // Player's first hands
-				gameController.setLabel("Your hand: " + Deck.total(table.get(ID)));
+				gameController.setLabel("Your hand: " + Deck.total(table.get(ID)) + "\nWait for your turn");
 				System.out.println("Your Hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID))); // Prints
 																											// the
 				// players hand
@@ -187,7 +197,7 @@ public class Client implements Runnable {
 						}
 						lobbyController.addQueue(inQueue);
 					}
-					if (in.equals("playerLeft")) {
+					if (in.equals("playerLeftGame")) {
 						playerLeft = true;
 						break;
 					}
@@ -199,7 +209,8 @@ public class Client implements Runnable {
 							System.out.println("Break");
 							gameController.setLabel("Busted: " + Deck.total(table.get(ID)));
 							System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
-							output.println("p");
+							//output.println("p");
+							output.println("busted");
 							break;
 						} else if (Deck.total(table.get(ID)) == 21) {
 							System.out.println("Black Jack!");
@@ -233,7 +244,7 @@ public class Client implements Runnable {
 					gameController.disableStand();
 					// gameController.setLabel("Your hand: " + total(table.get(ID)));
 					boolean dealerTurn = true;
-					while (dealerTurn) { // Sits in loop whilst dealer chooses new cards
+					while (dealerTurn) { // Sits in loop whilst dealer chooses new cards					
 						in = input.readLine();
 						if (in.contains("gameChatMessage")) {
 							gameController.addToChat(in.replaceFirst("gameChatMessage", ""));
@@ -262,7 +273,7 @@ public class Client implements Runnable {
 							}
 							System.out.println("<<< This is table");
 						}
-						if (in.equals("playerLeft")) {
+						if (in.equals("playerLeftGame")) {
 							playerLeft = true;
 							break;
 						}
@@ -282,13 +293,26 @@ public class Client implements Runnable {
 						}
 						if (in.contains("playersFinished")) { // Server tells client what to display
 							System.out.println("All players finished");
+							in = input.readLine();
+							if(!in.equals("skipDealer")) {
+								gameController.removeDealerFacedown();
+								gameController.addCardToDealerHand(table.get(0).get(1));	
+								gameController.setDealerLabel("Dealer: " + Deck.total(table.get(0)));
+							}
+							
 						}
 						if (in.contains("showDealerHand")) {
 							System.out.println("Dealers cards: " + table.get(0) + "total: " + Deck.total(table.get(0)));
 							System.out.println("Dealer taking cards....");
 						}
-						if (in.contains("dealerCard"))
-							table.get(0).add(in.replaceFirst("dealerCard", ""));
+						if (in.contains("dealerCard")) {									
+							// sleep thread for 1s in order to simulate the dealer picking cards one by one
+							try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}	
+							String dealerCard = in.replaceFirst("dealerCard", "");
+							table.get(0).add(dealerCard);
+							gameController.addCardToDealerHand(dealerCard);
+							gameController.setDealerLabel("Dealer: " + Deck.total(table.get(0)));
+						}
 						if (in.contains("dealerDone"))
 							dealerTurn = false; // Dealers turn is finished, break from loop
 						if (in.equals("Clear queue")) {
@@ -297,10 +321,10 @@ public class Client implements Runnable {
 					}
 					if (!playerLeft) {
 						System.out.println(table.get(0));
-						gameController.removeDealerFacedown();
+						/*gameController.removeDealerFacedown();
 						for (int i = 0; i < table.get(0).size(); i++) {
 							gameController.addCardToDealerHand(table.get(0).get(i));
-						}
+						}*/
 						declareWinner();
 					}
 				}
@@ -343,4 +367,49 @@ public class Client implements Runnable {
 			gameController.setLabel("Dealer Wins!!");
 		}
 	}
+	
+	public void closeGame(Stage window) {
+		boolean confirmation = GameController.displayConfirmBox("Warning", "Are you sure you want to exit?");
+		if(confirmation) {
+			window.close();
+			gameController.playerLeft();
+		}
+	}
 }
+
+//class ConfirmClose{
+//	
+//	static boolean confirm;
+//
+//	public static boolean displayConfirmBox(String title, String message) {
+//		Stage stage = new Stage();
+//		stage.initModality(Modality.APPLICATION_MODAL);
+//		stage.setTitle(title);
+//		stage.setWidth(300);
+//		stage.setHeight(150);
+//		Label label = new Label(message);
+//
+//		// yes button
+//		Button yesButton = new Button("Yes");
+//		yesButton.setOnAction(e -> {
+//			confirm = true;
+//			stage.close();
+//		});
+//
+//		// no button
+//		Button noButton = new Button("No");
+//		noButton.setOnAction(e -> {
+//			confirm = false;
+//			stage.close();
+//		});
+//		
+//		HBox hBox = new HBox(10);
+//		hBox.getChildren().addAll(label, yesButton, noButton);
+//		hBox.setAlignment(Pos.CENTER);
+//		Scene scene = new Scene(hBox, 250, 300);
+//		stage.setScene(scene);
+//		stage.showAndWait();
+//		
+//		return confirm;
+//	}
+//}

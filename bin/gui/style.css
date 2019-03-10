@@ -25,7 +25,7 @@
    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );
 }
 
-.button {
+.GameButton {
     -fx-background-color: linear-gradient(#ffd65b, #e68400),
     linear-gradient(#ffef84, #f2ba44),
     linear-gradient(#ffea6a, #efaa22),
@@ -39,7 +39,7 @@
     -fx-padding: 15 30 15 30;
 }
 
-.button:pressed{
+.GameButton:pressed{
 	 -fx-background-color: linear-gradient(#ffd65b, #e68400),
     linear-gradient(#ffef84, #f2ba44),
     linear-gradient(#ffea6a, #efaa22),
@@ -58,4 +58,25 @@
     -fx-min-height:400px;
     -fx-min-width:200px;
 }
+
+.joinButton {
+    -fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #F6F6F6, #BBBBBB);
+    -fx-background-radius: 30;
+    -fx-background-insets: 0, 1, 2, 3, 0;
+    -fx-text-fill: #000000;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-padding: 15 30 15 30;
+}
+
+.joinButton:hover{
+	-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #BBBBBB, #F6F6F6);
+    -fx-background-radius: 30;
+    -fx-background-insets: 0, 1, 2, 3, 0;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-padding: 15 30 15 30;
+}
+
 

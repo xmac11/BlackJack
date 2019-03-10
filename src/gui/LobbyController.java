@@ -81,7 +81,10 @@ public class LobbyController implements Initializable {
 				window.setWidth(1600);
 				window.setScene(gameScene);
 				window.show();
-				window.setOnCloseRequest(e -> gameController.playerLeft());
+				window.setOnCloseRequest(e -> {
+					e.consume();
+					client.closeGame(window);
+				});
 			}
 		});
 	}
@@ -191,9 +194,9 @@ public class LobbyController implements Initializable {
 	public void sendChat() {
 		String incomingText = chatField.getText();
 		if (incomingText.matches("[a-zA-Z\\s\'\"]+") && incomingText.trim().length() > 0) {
-			output.println("gameChatMessage");
-			output.println("gameChatMessage" + username);
-			output.println("gameChatMessage" + incomingText);
+			output.println("lobbyChatMessage");
+			output.println("lobbyChatMessage" + username);
+			output.println("lobbyChatMessage" + incomingText);
 		}else {
 			addToChat("Error - Only letters and numbers allowed in chat");
 		}
