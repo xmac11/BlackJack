@@ -7,9 +7,11 @@ import javafx.event.ActionEvent;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.channels.SelectableChannel;
 import java.util.ResourceBundle;
 
 import database.Authentication;
+import database.SQLDatabaseConnection;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -172,6 +174,9 @@ public class LoginController implements Initializable {
 		userFieldY = userField.getTranslateY();
 		ipFieldX = ipField.getTranslateX();
 		ipFieldY = ipField.getTranslateY();
+		SQLDatabaseConnection sqlDatabaseConnection = new SQLDatabaseConnection();
+		Thread thread = new Thread(sqlDatabaseConnection);
+		thread.start();
 	}
 
 

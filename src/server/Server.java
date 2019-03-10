@@ -11,6 +11,7 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Semaphore;
 
+import database.SQLDatabaseConnection;
 import shareable.*;
 
 public class Server implements Runnable {
@@ -42,6 +43,9 @@ public class Server implements Runnable {
 
 	@Override
 	public void run() {
+		SQLDatabaseConnection sqlDatabaseConnection = new SQLDatabaseConnection();
+		Thread thread = new Thread(sqlDatabaseConnection);
+		thread.start();
 		serverSocket = null;
 		gameStart = new GameStart();
 		gameStart.setGameStart(false);

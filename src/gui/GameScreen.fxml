@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -28,8 +29,14 @@
 				<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 			</rowConstraints>
 			<children>
-				<Button fx:id="standButton" alignment="CENTER" minHeight="-Infinity" minWidth="80.0" mnemonicParsing="false" onAction="#onStandButtonClicked" prefHeight="90.0" prefWidth="200.0" styleClass="GameButton" stylesheets="@style.css" text="STAND" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
-				<Button fx:id="hitButton" minHeight="-Infinity" minWidth="80.0" mnemonicParsing="false" onAction="#onHitButtonClicked" prefHeight="90.0" prefWidth="200.0" styleClass="GameButton" stylesheets="@style.css" text="HIT" textAlignment="CENTER" GridPane.halignment="CENTER" />
+				<Button fx:id="standButton" alignment="CENTER" minHeight="-Infinity" minWidth="80.0" mnemonicParsing="false" onAction="#onStandButtonClicked" prefHeight="90.0" prefWidth="200.0" styleClass="GameButton" stylesheets="@style.css" text="STAND" GridPane.columnIndex="2" GridPane.halignment="CENTER">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+				<Button fx:id="hitButton" minHeight="-Infinity" minWidth="80.0" mnemonicParsing="false" onAction="#onHitButtonClicked" prefHeight="90.0" prefWidth="200.0" styleClass="GameButton" stylesheets="@style.css" text="HIT" textAlignment="CENTER" GridPane.halignment="CENTER">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
 				<HBox fx:id="hBoxDealer" alignment="BOTTOM_CENTER" prefHeight="3.0" prefWidth="109.0" spacing="10.0" GridPane.columnIndex="1" />
 				<HBox fx:id="hBoxPlayer" alignment="CENTER" prefHeight="312.0" prefWidth="530.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 				<Label fx:id="player2Label" styleClass="gameLabel" text="Player 2" visible="false" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
@@ -61,7 +68,10 @@
                               <ImageView fitHeight="30.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../image/sendButtonSmallest.png" />
-                                 </image></ImageView>
+                                 </image>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor></ImageView>
                            </graphic></Button>
                      </children></HBox>
                </children></VBox>
