@@ -59,7 +59,7 @@
 								<Insets bottom="150.0" top="10.0" />
 							</GridPane.margin>
 						</TextField>
-						<Button fx:id="joinButton" alignment="CENTER" maxHeight="105.0" maxWidth="200.0" minHeight="38.0" minWidth="81.0" mnemonicParsing="false" onAction="#joinPressed" prefHeight="105.0" prefWidth="145.0" text="Start" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+						<Button fx:id="joinButton" alignment="CENTER" maxHeight="105.0" maxWidth="200.0" minHeight="38.0" minWidth="81.0" mnemonicParsing="false" onAction="#joinPressed" prefHeight="105.0" prefWidth="145.0" styleClass="joinButton" text="Start" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
 							<GridPane.margin>
 								<Insets top="200.0" />
 							</GridPane.margin>
@@ -69,7 +69,7 @@
 								<Insets top="90.0" />
 							</GridPane.margin>
 						</TextField>
-                  <TextField fx:id="passField" alignment="CENTER" centerShape="true" maxHeight="27.0" maxWidth="167.0" minHeight="27.0" minWidth="167.0" onAction="#moveToIP" prefHeight="27.0" prefWidth="167.0" promptText="Password" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                  <TextField fx:id="passField" accessibleRole="PASSWORD_FIELD" alignment="CENTER" centerShape="true" maxHeight="27.0" maxWidth="167.0" minHeight="27.0" minWidth="167.0" onAction="#moveToIP" prefHeight="27.0" prefWidth="167.0" promptText="Password" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                      <GridPane.margin>
                         <Insets bottom="20.0" />
                      </GridPane.margin>
