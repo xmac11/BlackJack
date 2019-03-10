@@ -1,4 +1,4 @@
-package server;
+package database;
 
 import java.sql.*;
 
@@ -42,11 +42,14 @@ public class Authentication {
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             String newEntry = "INSERT INTO User_Info (username, password_hash) VALUES (?,?);";
+            String newHistory = "INSERT INTO match_history (username, games_played, games_won) VALUES (?,0,0);";
             PreparedStatement statement = connection.prepareStatement(newEntry);
             statement.setString(1, username);
             statement.setInt(2, passwordHash);
             statement.executeUpdate();
-
+            PreparedStatement statement1 = connection.prepareStatement(newHistory);
+            statement1.setString(1,username);
+            statement1.executeUpdate();
 
         } catch (SQLException e) {
             System.out.println("Username already exists");
@@ -55,11 +58,12 @@ public class Authentication {
     }
 
     public static void main(String[] args){
-        newAccount("nxk825","password");
-        System.out.println(login("nxk825","password"));
-        newAccount("nxk825","password");
-        System.out.println(login("nxk825","password1"));
-
+        //newAccount("nxk827","password");
+        //System.out.println(login("nxk825","password"));
+        MatchHistory.setGamesWon("nxk827",2);
+        System.out.println(MatchHistory.getGamesWon("nxk827"));
+        MatchHistory.setGamesPlayed("nxk827",4);
+        System.out.println(MatchHistory.getGamesPlayed("nxk827"));
     }
 
 }
