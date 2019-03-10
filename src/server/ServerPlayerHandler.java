@@ -26,10 +26,11 @@ public class ServerPlayerHandler implements Runnable {
 	private int barriers;
 	private FinishedPlayers finishedPlayers;
 	private List<SocketConnection> gameQueue;
+	private int sessionID;
 
 	public ServerPlayerHandler(SocketConnection socketConnection, int ID, Deck deck, Semaphore deckWait, int noPlayers,
 			CyclicBarrier dealersTurn, List<List<String>> table, FinishedPlayers finishedPlayers,
-			List<SocketConnection> gameQueue) {
+			List<SocketConnection> gameQueue, int sessionID) {
 		this.socketConnection = socketConnection;
 		this.ID = ID;
 		this.deck = deck;
@@ -41,6 +42,7 @@ public class ServerPlayerHandler implements Runnable {
 		barriers = 0;
 		this.finishedPlayers = finishedPlayers;
 		this.gameQueue = gameQueue;
+		this.sessionID = sessionID;
 	}
 
 	@Override
@@ -206,7 +208,7 @@ public class ServerPlayerHandler implements Runnable {
 		socketConnection.getOutput().println("dealerDone"); // Tells the client the dealer is finished
 		System.out.println("Dealer done");
 		socketConnection.setInLobby(true);
-		Session.setSessionend(socketConnection.getUsername());
+		Session.setSessionend(socketConnection.getUsername(), sessionID);
 		socketConnection.getSessionWait().release();
 		System.out.println("player released");
 	}
@@ -214,7 +216,7 @@ public class ServerPlayerHandler implements Runnable {
 	public void triggerBarrier(Thread thread) {
 		try {
 			System.out.println("entered trigger");
-			Session.setSessionend(socketConnection.getUsername());
+			Session.setSessionend(socketConnection.getUsername(), sessionID);
 			switch (barriers) {
 			case 0:
 				System.out.println("releasing");

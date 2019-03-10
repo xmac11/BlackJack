@@ -62,7 +62,7 @@ public class Session {
         }
         return points;
     }
-    public static void setSessionend(String username){
+    public static void setSessionend(String username, int sessionID){
         String url = "jdbc:postgresql://mod-msc-sw1.cs.bham.ac.uk/";
         String user = "group21";
         String pass = "tb2ij946i6";

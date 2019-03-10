@@ -101,7 +101,7 @@ public class Server implements Runnable {
 					ServerPlayerHandler serverThread = null;
 					table.add(new ArrayList<>());
 					serverThread = new ServerPlayerHandler(gameQueue.get(i), i + 1, deck, deckWait,
-							gameQueue.size(), dealersTurn, table, finishedPlayers, gameQueue);
+							gameQueue.size(), dealersTurn, table, finishedPlayers, gameQueue, sessionID);
 					System.out.println("Player " + (i + 1) + " added"); // For debugging
 					new Thread(serverThread).start(); // Sends thread
 				}
