@@ -30,8 +30,10 @@ public class LoginController implements Initializable{
 	@FXML
 	private Label errorLabel;
 	
-	double userFieldX;
-	double userFieldY;
+	private double userFieldX;
+	private double userFieldY;
+	private double ipFieldX;
+	private double ipFieldY;
 
 	public void serverDown() {
 		errorLabel.setVisible(true);
@@ -89,5 +91,7 @@ public class LoginController implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {
 		userFieldX = userField.getTranslateX();	
 		userFieldY = userField.getTranslateY();	
+		ipFieldX = ipField.getTranslateX();	
+		ipFieldY = ipField.getTranslateY();	
 	}
 }
