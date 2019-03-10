@@ -306,8 +306,8 @@ public class Client implements Runnable {
 							System.out.println("Dealer taking cards....");
 						}
 						if (in.contains("dealerCard")) {									
-							// sleep thread for 2s in order to simulate the dealer picking cards one by one
-							try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}	
+							// sleep thread for 1s in order to simulate the dealer picking cards one by one
+							try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}	
 							String dealerCard = in.replaceFirst("dealerCard", "");
 							table.get(0).add(dealerCard);
 							gameController.addCardToDealerHand(dealerCard);

@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -19,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane id="pane" minHeight="800.0" minWidth="1300.0" prefHeight="900.0" prefWidth="1590.0" stylesheets="style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GameController">
+<StackPane id="pane" minHeight="800.0" minWidth="1300.0" prefHeight="900.0" prefWidth="1590.0" stylesheets="style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.GameController">
 	<children>
 		<GridPane StackPane.alignment="CENTER">
 			<columnConstraints>
@@ -33,8 +28,8 @@
 				<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 			</rowConstraints>
 			<children>
-				<Button fx:id="standButton" alignment="CENTER" minHeight="-Infinity" minWidth="80.0" mnemonicParsing="false" onAction="#onStandButtonClicked" prefHeight="90.0" prefWidth="200.0" text="STAND" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
-				<Button fx:id="hitButton" minHeight="-Infinity" minWidth="80.0" mnemonicParsing="false" onAction="#onHitButtonClicked" prefHeight="90.0" prefWidth="200.0" text="HIT" textAlignment="CENTER" GridPane.halignment="CENTER" />
+				<Button fx:id="standButton" alignment="CENTER" minHeight="-Infinity" minWidth="80.0" mnemonicParsing="false" onAction="#onStandButtonClicked" prefHeight="90.0" prefWidth="200.0" styleClass="GameButton" stylesheets="@style.css" text="STAND" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+				<Button fx:id="hitButton" minHeight="-Infinity" minWidth="80.0" mnemonicParsing="false" onAction="#onHitButtonClicked" prefHeight="90.0" prefWidth="200.0" styleClass="GameButton" stylesheets="@style.css" text="HIT" textAlignment="CENTER" GridPane.halignment="CENTER" />
 				<HBox fx:id="hBoxDealer" alignment="BOTTOM_CENTER" prefHeight="3.0" prefWidth="109.0" spacing="10.0" GridPane.columnIndex="1" />
 				<HBox fx:id="hBoxPlayer" alignment="CENTER" prefHeight="312.0" prefWidth="530.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 				<Label fx:id="player2Label" styleClass="gameLabel" text="Player 2" visible="false" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
@@ -61,7 +56,7 @@
                   <HBox maxHeight="59" maxWidth="530" prefHeight="59.0" prefWidth="530.0" style="-fx-padding: 1, 10, 12, 12; -fx-background-color: #5b5b5b;">
                      <children>
                         <TextField fx:id="textField" maxHeight="54" maxWidth="458" onAction="#sendChat" prefHeight="54.0" prefWidth="458.0" />
-                        <Button maxHeight="41" maxWidth="55" minHeight="41" minWidth="55" mnemonicParsing="false" onMouseClicked="#chatButtonPressed" prefHeight="41.0" prefWidth="55.0">
+                        <Button maxHeight="41" maxWidth="55" minHeight="41" minWidth="55" mnemonicParsing="false" onMouseClicked="#chatButtonPressed" prefHeight="41.0" prefWidth="55.0" styleClass="GameButton" stylesheets="@style.css">
                            <graphic>
                               <ImageView fitHeight="30.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
