@@ -47,6 +47,7 @@ public class LoginController implements Initializable {
 	private double ipFieldY;
 
 	public void serverDown() {
+		System.out.println("Server is down.");
 		errorLabel.setVisible(true);
 	}
 
