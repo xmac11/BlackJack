@@ -69,11 +69,12 @@ public class Session {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
-            String newPoints = "UPDATE session SET time_end = ? WHERE username = ?;";
+            String newPoints = "UPDATE session SET time_end = ? WHERE username = ? and session_id = ?;";
 
             PreparedStatement statement = connection.prepareStatement(newPoints);
             statement.setTimestamp(1,timestamp);
             statement.setString(2,username);
+            statement.setInt(3, sessionID);
             statement.executeUpdate();
 
         } catch (SQLException e) {
