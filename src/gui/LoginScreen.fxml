@@ -69,7 +69,7 @@
 								<Insets top="90.0" />
 							</GridPane.margin>
 						</TextField>
-                  <TextField fx:id="passField" accessibleRole="PASSWORD_FIELD" alignment="CENTER" centerShape="true" maxHeight="27.0" maxWidth="167.0" minHeight="27.0" minWidth="167.0" onAction="#moveToIP" prefHeight="27.0" prefWidth="167.0" promptText="Password" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                  <TextField fx:id="passField" alignment="CENTER" centerShape="true" maxHeight="27.0" maxWidth="167.0" minHeight="27.0" minWidth="167.0" onAction="#moveToIP" prefHeight="27.0" prefWidth="167.0" promptText="Password" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                      <GridPane.margin>
                         <Insets bottom="20.0" />
                      </GridPane.margin>
@@ -95,7 +95,14 @@
             <Label fx:id="errorLabel" alignment="CENTER" contentDisplay="CENTER" text="Error - Cannot connect to server" textFill="RED" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
                <font>
                   <Font name="System Font" size="13.0" />
-               </font></Label>
+               </font>
+               <GridPane.margin>
+                  <Insets bottom="60.0" />
+               </GridPane.margin></Label>
+				<Label onMouseClicked="#signUp" text="Sign up" textFill="WHITE" underline="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="TOP" GridPane.vgrow="NEVER">
+               <GridPane.margin>
+                  <Insets top="100.0" />
+               </GridPane.margin></Label>
 			</children>
 		</GridPane>
 	</children>
