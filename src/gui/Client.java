@@ -51,6 +51,7 @@ public class Client implements Runnable {
 	private boolean playerLeft;
 	private boolean pocketBlackJack;
 	private boolean inGame = false;
+	private boolean gameFinished;
 
 	public Client(List<List<String>> table, Semaphore waitForController, String IP, LobbyController lobbyController) {
 		this.table = table;
@@ -60,6 +61,7 @@ public class Client implements Runnable {
 		this.lobbyController = lobbyController;
 		gameController = null;
 		this.pocketBlackJack = false;
+		this.gameFinished = false;
 	}
 
 	public void setGameController(GameController gameController) {
@@ -68,6 +70,10 @@ public class Client implements Runnable {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	
+	public boolean isGameFinished() {
+		return gameFinished;
 	}
 
 	@Override
@@ -301,7 +307,8 @@ public class Client implements Runnable {
 								gameController.addCardToDealerHand(table.get(0).get(1));
 								gameController.setDealerLabel("Dealer: " + Deck.total(table.get(0)));
 							}
-
+							else
+								gameFinished = true;
 						}
 						if (in.contains("showDealerHand")) {
 							System.out.println("Dealers cards: " + table.get(0) + "total: " + Deck.total(table.get(0)));
@@ -319,8 +326,10 @@ public class Client implements Runnable {
 							gameController.addCardToDealerHand(dealerCard);
 							gameController.setDealerLabel("Dealer: " + Deck.total(table.get(0)));
 						}
-						if (in.contains("dealerDone"))
+						if (in.contains("dealerDone")) {
 							dealerTurn = false; // Dealers turn is finished, break from loop
+							gameFinished = true;
+						}
 						if (in.equals("Clear queue")) {
 							lobbyController.clearQueue();
 						}
