@@ -62,6 +62,14 @@ public class ServerLobbyThread implements Runnable {
 					if (in.equals("thisPlayerLeft")) {
 						joined.remove(socketConnection);
 						gameQueue.remove(socketConnection);
+						for (int i = 0; i < joined.size(); i++) {
+							joined.get(i).getOutput().println("playerQueue");
+							for (int j = 0; j < gameQueue.size(); j++) {
+								joined.get(i).getOutput()
+										.println("playerQueue" + gameQueue.get(j).getUsername());
+							}
+							joined.get(i).getOutput().println("queueUpdated");
+						}
 						newPlayer.setNewPlayer(true);
 					}
 					if (in.equals("joinQueue")) {
