@@ -117,7 +117,11 @@ public class GameController implements Initializable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
+				int index = chatView.getItems().size();
 				chatView.getItems().add(message);
+
+				chatView.scrollTo(index);
+
 			}
 		});
 	}

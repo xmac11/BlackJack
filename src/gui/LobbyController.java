@@ -79,6 +79,10 @@ public class LobbyController implements Initializable {
 				window.setScene(gameScene);
 				window.setHeight(900);
 				window.setWidth(1600);
+				window.setMinWidth(1366);
+				window.setMinHeight(768);
+				window.setTitle("Club21");
+				window.getIcons().add(new Image("image/appIcon.png"));
 				window.setScene(gameScene);
 				window.show();
 				window.setOnCloseRequest(e -> {
