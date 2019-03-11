@@ -28,7 +28,7 @@ public class SQLDatabaseConnection implements Runnable {
 			statement.executeUpdate(query1);
 			String query2 = "CREATE TABLE IF NOT EXISTS Session (session_id serial," +
 					" username VARCHAR(50) references User_Info(username)," +
-					" session_points INTEGER, " +
+					" session_points BOOLEAN, " +
 					"time_start TIMESTAMP NOT NULL ," +
 					" time_end TIMESTAMP, " +
 					"PRIMARY KEY(session_id, username));";

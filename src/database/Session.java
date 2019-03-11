@@ -23,7 +23,7 @@ public class Session {
             System.out.println("Username does not exist");
         }
     }
-    public static void setSessionPoints(String username, int points){
+    public static void setSessionPoints(String username, boolean points){
         String url = "jdbc:postgresql://mod-msc-sw1.cs.bham.ac.uk/";
         String user = "group21";
         String pass = "tb2ij946i6";
@@ -32,7 +32,7 @@ public class Session {
             String newPoints = "UPDATE session SET session_points = session_points + ? WHERE username = ?;";
 
             PreparedStatement statement = connection.prepareStatement(newPoints);
-            statement.setInt(1,points);
+            statement.setBoolean(1,points);
             statement.setString(2,username);
             statement.executeUpdate();
 
@@ -41,8 +41,8 @@ public class Session {
         }
     }
 
-    public static int getSessionPoints(String username){
-        int points = 0;
+    public static boolean getSessionPoints(String username){
+        boolean points = false;
         String url = "jdbc:postgresql://mod-msc-sw1.cs.bham.ac.uk/";
         String user = "group21";
         String pass = "tb2ij946i6";
@@ -54,7 +54,7 @@ public class Session {
             statement.setString(1,username);
             ResultSet rs = statement.executeQuery();
             while(rs.next()){
-                points = rs.getInt(1);
+                points = rs.getBoolean(1);
             }
 
         } catch (SQLException e) {
