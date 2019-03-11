@@ -170,7 +170,7 @@ public class Client implements Runnable {
 				table.get(ID).add(input.readLine()); // Player's first hands
 				gameController.setLabel("Your hand: " + Deck.total(table.get(ID)) + "\nWait for your turn");
 				System.out.println("Your Hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID))); // Prints
-				MatchHistory.setGamesPlayed(username, (MatchHistory.getGamesPlayed(username)+1));																							// the
+				MatchHistory.setGamesPlayed(username, 1);																							// the
 				// players hand
 				gameController.setTable(table);
 				if (Deck.total(table.get(ID)) == 21 && table.get(ID).size() == 2) {
@@ -376,12 +376,12 @@ public class Client implements Runnable {
 		if (Deck.total(table.get(ID)) > 21) {
 			gameController.setLabel("Bust!! You lose!");
 		} else if (Deck.total(table.get(0)) > 21) {
-			MatchHistory.setGamesWon(username, (MatchHistory.getGamesWon(username)+1));
+			MatchHistory.setGamesWon(username, 1);
 			gameController.setLabel("Dealer bust! You Win!");
 		} else if (Deck.total(table.get(ID)) == Deck.total(table.get(0))) {
 			gameController.setLabel("Draw!");
 		} else if (Deck.total(table.get(ID)) > Deck.total(table.get(0))) {
-			MatchHistory.setGamesWon(username, (MatchHistory.getGamesWon(username)+1));
+			MatchHistory.setGamesWon(username, 1);
 			gameController.setLabel("You win!!");
 		} else {
 			gameController.setLabel("Dealer Wins!!");

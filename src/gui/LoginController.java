@@ -126,7 +126,7 @@ public class LoginController implements Initializable {
 		Button signButton = new Button("Sign up");
 		signButton.setOnAction(e -> {
 			error.setVisible(false);
-			if (username.getText().contains(" ")) {
+			if (username.getText().contains(" ") || !(username.getText().matches("[a-zA-Z0-9\\_]*"))) {
 				error.setText("Username must not contain spaces");
 				error.setVisible(true);
 			} else if (password1.getText().equals(password2.getText())) {
