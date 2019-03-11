@@ -89,6 +89,7 @@ public class LobbyController implements Initializable {
 					if(!client.isGameFinished()) {
 						e.consume();
 						client.closeGame(window);
+						gameController.playerLeft();
 					}
 				});
 			}
@@ -193,7 +194,7 @@ public class LobbyController implements Initializable {
 
 	public void thisPlayerLeft() {
 		System.out.println("leaving");
-		output.println("thisPlayerLeft");
+		output.println("thisPlayerSignedOut");
 		System.exit(0);
 	}
 

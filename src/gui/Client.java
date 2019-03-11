@@ -71,7 +71,7 @@ public class Client implements Runnable {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
+
 	public boolean isGameFinished() {
 		return gameFinished;
 	}
@@ -100,6 +100,9 @@ public class Client implements Runnable {
 				while (true) { // Loops this until it reaches a 'break;'
 					in = input.readLine();
 					System.out.println("Client in: " + in);
+					if (in.equals("accountAlreadyActive")) {
+						System.exit(0);
+					}
 					if (in.equals("Game Starting")) { // Reads the message received and responds accordingly
 						System.out.println("break from lobby");
 						output.println("breakFromLobby");
@@ -114,13 +117,12 @@ public class Client implements Runnable {
 					if (in.equals("Game in progress")) {
 						lobbyController.gameInProgress(input.readLine());
 					}
-					if (in.equals("newPlayer")) {
-						in = input.readLine();
-						onlinePlayers.clear();
-						while (!in.equals("playersUpdated")) {
-							onlinePlayers.add(in.replaceFirst("newPlayer", ""));
-							in = input.readLine();
-						}
+					if (in.contains("playerSignedOut")) {
+						onlinePlayers.remove(in.replaceFirst("playerSignedOut", ""));
+						lobbyController.addOnline(onlinePlayers);
+					}
+					if (in.contains("newPlayer")) {
+						onlinePlayers.add(in.replaceFirst("newPlayer", ""));
 						lobbyController.addOnline(onlinePlayers);
 					}
 					if (in.contains("activeGame")) {
@@ -170,7 +172,7 @@ public class Client implements Runnable {
 				table.get(ID).add(input.readLine()); // Player's first hands
 				gameController.setLabel("Your hand: " + Deck.total(table.get(ID)) + "\nWait for your turn");
 				System.out.println("Your Hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID))); // Prints
-				MatchHistory.setGamesPlayed(username, 1);																							// the
+				MatchHistory.setGamesPlayed(username, 1); // the
 				// players hand
 				gameController.setTable(table);
 				if (Deck.total(table.get(ID)) == 21 && table.get(ID).size() == 2) {
@@ -210,26 +212,33 @@ public class Client implements Runnable {
 						break;
 					}
 					if (in.contains("playerCard")) {
-						String card = in.replaceFirst("playerCard", "");
-						table.get(ID).add(card);
-						gameController.addCardToPlayerHand(card);
-						if (Deck.total(table.get(ID)) > 21) {
-							System.out.println("Break");
-							gameController.setLabel("Busted: " + Deck.total(table.get(ID)));
-							System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
-							// output.println("p");
-							output.println("busted");
-							break;
-						} else if (Deck.total(table.get(ID)) == 21) {
-							System.out.println("Black Jack!");
-							gameController.setLabel("Black Jack!" /* + total(table.get(ID)) */);
-							System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
-							output.println("p");
-							break;
-						} else {
-							output.println("move");
-							System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
-						}
+						int playerID = Integer.parseInt(in.replaceFirst("playerCard", ""));
+						String card = input.readLine().replaceFirst("playerCard", "");
+						table.get(playerID).add(card);
+						if (ID == playerID) {
+							gameController.addCardToPlayerHand(card);
+							if (Deck.total(table.get(ID)) > 21) {
+								System.out.println("Break");
+								gameController.setLabel("Busted: " + Deck.total(table.get(ID)));
+								System.out.println(
+										"Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
+								output.println("busted");
+								break;
+							} else if (Deck.total(table.get(ID)) == 21) {
+								System.out.println("Black Jack!");
+								gameController.setLabel("Black Jack!");
+								System.out.println(
+										"Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
+								output.println("p");
+								break;
+							} else {
+								output.println("move");
+								System.out.println(
+										"Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
+							}
+						} else
+							gameController.addCardToOpposingPlayerHand(getOtherPlayerID(playerID), "facedown.jpg");
+
 					}
 					if (in.contains("finished")) { // Server tells the client its turn is over
 						System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
@@ -237,14 +246,17 @@ public class Client implements Runnable {
 						gameController.setLabel("Your hand: " + Deck.total(table.get(ID)) + "\nWaiting for others");
 						break;
 					}
-					if (in.equals("newPlayer")) {
-						in = input.readLine();
-						onlinePlayers.clear();
-						while (!in.equals("playersUpdated")) {
-							onlinePlayers.add(in.replaceFirst("newPlayer", ""));
-							in = input.readLine();
-						}
+					if (in.contains("newPlayer")) {
+						onlinePlayers.add(in.replaceFirst("newPlayer", ""));
 						lobbyController.addOnline(onlinePlayers);
+					}
+					if (in.contains("playerSignedOut")) {
+						onlinePlayers.remove(in.replaceFirst("playerSignedOut", ""));
+						lobbyController.addOnline(onlinePlayers);
+						if (in.replaceFirst("playerSignedOut", "").equals(username)) {
+							lobbyController.connectionLost();
+						}
+						return;
 					}
 				}
 				if (!playerLeft) {
@@ -258,61 +270,57 @@ public class Client implements Runnable {
 							gameController.addToChat(in.replaceFirst("gameChatMessage", ""));
 						}
 						if (in.equals("breakFromLoop")) {
-							output.println("break");
+							output.println("breakFromLoop");
 						}
-						if (in.equals("newPlayer")) {
-							in = input.readLine();
-							onlinePlayers.clear();
-							while (!in.equals("playersUpdated")) {
-								onlinePlayers.add(in.replaceFirst("newPlayer", ""));
-								in = input.readLine();
-							}
+						if (in.contains("playerCard")) {
+							int playerID = Integer.parseInt(in.replaceFirst("playerCard", ""));
+							String card = input.readLine().replaceFirst("playerCard", "");
+							table.get(playerID).add(card);
+							if (ID == playerID)
+								gameController.addCardToPlayerHand(card);
+							else
+								gameController.addCardToOpposingPlayerHand(getOtherPlayerID(playerID), "facedown.jpg");
+						}
+						if (in.contains("newPlayer")) {
+							onlinePlayers.add(in.replaceFirst("newPlayer", ""));
 							lobbyController.addOnline(onlinePlayers);
 						}
-						if (in.contains("otherPlayer")) {
-							int otherPlayerID = Integer.parseInt(input.readLine());
-							List<String> cards = extractCards(input.readLine());
-							for (int j = 0; j < cards.size(); j++) {
-								table.get(otherPlayerID).add(cards.get(j));
-							}
-							System.out.println("This is table >>>");
-							for (int i = 0; i < table.size(); i++) {
-								System.out.println(table.get(i));
-							}
-							System.out.println("<<< This is table");
+						if (in.contains("playerSignedOut")) {
+							onlinePlayers.remove(in.replaceFirst("playerSignedOut", ""));
+							lobbyController.addOnline(onlinePlayers);
 						}
 						if (in.equals("playerLeftGame")) {
 							playerLeft = true;
 							break;
 						}
-						if (in.contains("tableSent")) {
-							int playerCount = 2; // If cards have been sent then there is at least a player in player 2
-													// slot
+						if (in.contains("showPlayerCards")) {
+							System.out.println("displaying cards");
+							System.out.println(table);
 							for (int i = 1; i < table.size(); i++) {
 								if (i != ID) {
-									gameController.removeFacedown(playerCount);
+									gameController.removeFacedown(getOtherPlayerID(i));
 									for (int j = 0; j < table.get(i).size(); j++) {
-										gameController.addCardToOpposingPlayerHand(playerCount, table.get(i).get(j));
+										gameController.addCardToOpposingPlayerHand(getOtherPlayerID(i),
+												table.get(i).get(j));
 									}
-									playerCount++; // Moves to player 3 slot, will break from outer for loop if only 2
-													// players
 								}
 							}
 						}
+						if (in.contains("playerInitialCard")) {
+							int playerID = Integer.parseInt(in.replaceFirst("playerInitialCard", ""));
+							System.out.println("initial card received");
+							table.get(playerID).add(input.readLine().replaceFirst("playerInitialCard", ""));
+							table.get(playerID).add(input.readLine().replaceFirst("playerInitialCard", ""));
+						}
 						if (in.contains("playersFinished")) { // Server tells client what to display
 							System.out.println("All players finished");
-							in = input.readLine();
 							if (!in.equals("skipDealer")) {
 								gameController.removeDealerFacedown();
 								gameController.addCardToDealerHand(table.get(0).get(1));
 								gameController.setDealerLabel("Dealer: " + Deck.total(table.get(0)));
-							}
-							else
+							} else {
 								gameFinished = true;
-						}
-						if (in.contains("showDealerHand")) {
-							System.out.println("Dealers cards: " + table.get(0) + "total: " + Deck.total(table.get(0)));
-							System.out.println("Dealer taking cards....");
+							}
 						}
 						if (in.contains("dealerCard")) {
 							// sleep thread for 1s in order to simulate the dealer picking cards one by one
@@ -336,11 +344,6 @@ public class Client implements Runnable {
 					}
 					if (!playerLeft) {
 						System.out.println(table.get(0));
-						/*
-						 * gameController.removeDealerFacedown(); for (int i = 0; i <
-						 * table.get(0).size(); i++) {
-						 * gameController.addCardToDealerHand(table.get(0).get(i)); }
-						 */
 						declareWinner();
 					}
 				}
@@ -393,6 +396,19 @@ public class Client implements Runnable {
 		if (confirmation) {
 			window.close();
 			gameController.playerLeft();
+		}
+	}
+
+	public int getOtherPlayerID(int playerID) {
+		switch (ID) {
+		case 1:
+			return playerID;
+		case 2:
+			return ((playerID % noPlayers) + (noPlayers - 1));
+		case 3:
+			return playerID + 1;
+		default:
+			return -1;
 		}
 	}
 }

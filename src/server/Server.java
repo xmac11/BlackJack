@@ -27,7 +27,6 @@ public class Server implements Runnable {
 	private GameStart gameStart;
 	private ServerSocket serverSocket;
 	private FinishedPlayers finishedPlayers;
-	private NewPlayer newPlayer;
 
 	public Server() {
 		table = new ArrayList<>();
@@ -50,9 +49,7 @@ public class Server implements Runnable {
 		serverSocket = null;
 		gameStart = new GameStart();
 		gameStart.setGameStart(false);
-		newPlayer = new NewPlayer();
-		newPlayer.setNewPlayer(false);
-		PlayerJoin playerJoin = new PlayerJoin(joined, gameQueue, serverSocket, gameStart, newPlayer);
+		PlayerJoin playerJoin = new PlayerJoin(joined, gameQueue, serverSocket, gameStart);
 		new Thread(playerJoin).start();
 		// Sends off a thread which waits on the socket to accept clients. The main
 		while (true) {
@@ -62,16 +59,6 @@ public class Server implements Runnable {
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 				}
-				if (newPlayer.isNewPlayer()) {
-					for (int i = 0; i < joined.size(); i++) {
-						joined.get(i).getOutput().println("newPlayer");
-						for (int j = 0; j < joined.size(); j++) {
-							joined.get(i).getOutput().println("newPlayer" + joined.get(j).getUsername());
-						}
-						joined.get(i).getOutput().println("playersUpdated");
-					}
-					newPlayer.setNewPlayer(false);
-				}
 			}
 			gameStart.setGameStart(true);
 			int sessionID = Session.getMaxSessionID() + 1;
@@ -80,9 +67,9 @@ public class Server implements Runnable {
 				joined.get(i).getOutput().println(gameQueue.size());
 			}
 			for (int i = 0; i < gameQueue.size(); i++) {
+				gameQueue.get(i).setInLobby(false);
 				gameQueue.get(i).getOutput().println("Game Starting");
 				Session.startSession(gameQueue.get(i).getUsername(), sessionID);
-				gameQueue.get(i).setInLobby(false);
 			}
 			Deck deck = new Deck(); // Creates a deck
 			table.clear();
@@ -100,8 +87,8 @@ public class Server implements Runnable {
 				for (int i = 0; i < gameQueue.size(); i++) {
 					ServerPlayerHandler serverThread = null;
 					table.add(new ArrayList<>());
-					serverThread = new ServerPlayerHandler(gameQueue.get(i), i + 1, deck, deckWait,
-							gameQueue.size(), dealersTurn, table, finishedPlayers, gameQueue, sessionID);
+					serverThread = new ServerPlayerHandler(gameQueue.get(i), i + 1, deck, deckWait, gameQueue.size(),
+							dealersTurn, table, finishedPlayers, gameQueue, sessionID);
 					System.out.println("Player " + (i + 1) + " added"); // For debugging
 					new Thread(serverThread).start(); // Sends thread
 				}
@@ -111,20 +98,12 @@ public class Server implements Runnable {
 					} catch (InterruptedException e1) {
 						e1.printStackTrace();
 					}
-					if (newPlayer.isNewPlayer()) {
-						for (int i = 0; i < joined.size(); i++) {
-							joined.get(i).getOutput().println("newPlayer");
-							for (int j = 0; j < joined.size(); j++) {
-								joined.get(i).getOutput().println("newPlayer" + joined.get(j).getUsername());
-							}
-							joined.get(i).getOutput().println("playersUpdated");
-						}
-						newPlayer.setNewPlayer(false);
-					}
 				}
+				
 				for (int i = 0; i < gameQueue.size(); i++) {
 					gameQueue.get(i).getOutput().println("breakFromLoop");
 				}
+
 				System.out.println("All players finished, dealer picking cards"); // Once all players in
 																					// ServerThread have reached the
 																					// barrier the main thread

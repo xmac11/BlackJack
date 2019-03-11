@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import shareable.GameStart;
-import shareable.NewPlayer;
 
 public class ServerLobbyThread implements Runnable {
 
@@ -14,19 +13,18 @@ public class ServerLobbyThread implements Runnable {
 	private List<SocketConnection> joined;
 	Semaphore gameBegin;
 	private GameStart gameStart;
-	private NewPlayer newPlayer;
 
 	public ServerLobbyThread(SocketConnection socketConnection, List<SocketConnection> gameQueue,
-			List<SocketConnection> joined, GameStart gameStart, NewPlayer newPlayer) {
+			List<SocketConnection> joined, GameStart gameStart) {
 		this.socketConnection = socketConnection;
 		this.gameQueue = gameQueue;
 		this.joined = joined;
 		this.gameStart = gameStart;
-		this.newPlayer = newPlayer;
 	}
 
 	@Override
 	public void run() {
+		
 		String in = "";
 		socketConnection.getOutput().println("playerQueue");
 		for (int j = 0; j < gameQueue.size(); j++) {
@@ -34,6 +32,11 @@ public class ServerLobbyThread implements Runnable {
 		}
 		socketConnection.getOutput().println("queueUpdated");
 		socketConnection.getOutput().println("activeGame" + gameStart.isGameStart());
+		for (int i = 0; i < joined.size(); i++) {
+			if (!socketConnection.getUsername().equals(joined.get(i).getUsername()))
+				socketConnection.getOutput().println("newPlayer" + joined.get(i).getUsername());
+			joined.get(i).getOutput().println("newPlayer" + socketConnection.getUsername());
+		}
 		while (true) {
 			System.out.println(socketConnection.getUsername() + " back in lobby");
 			while (socketConnection.isInLobby()) {
@@ -56,21 +59,17 @@ public class ServerLobbyThread implements Runnable {
 					if (in.equals("breakFromLobby")) {
 						break;
 					}
-					if (in.equals("playerLeft")) {
-						newPlayer.setNewPlayer(true);
-					}
-					if (in.equals("thisPlayerLeft")) {
+					if (in.equals("thisPlayerSignedOut")) {
 						joined.remove(socketConnection);
 						gameQueue.remove(socketConnection);
 						for (int i = 0; i < joined.size(); i++) {
+							joined.get(i).getOutput().println("playerSignedOut" + socketConnection.getUsername());
 							joined.get(i).getOutput().println("playerQueue");
 							for (int j = 0; j < gameQueue.size(); j++) {
-								joined.get(i).getOutput()
-										.println("playerQueue" + gameQueue.get(j).getUsername());
+								joined.get(i).getOutput().println("playerQueue" + gameQueue.get(j).getUsername());
 							}
 							joined.get(i).getOutput().println("queueUpdated");
 						}
-						newPlayer.setNewPlayer(true);
 					}
 					if (in.equals("joinQueue")) {
 						synchronized (gameQueue) {
@@ -97,7 +96,9 @@ public class ServerLobbyThread implements Runnable {
 					System.out.println("lobby thread error");
 					gameQueue.remove(socketConnection);
 					joined.remove(socketConnection);
-					newPlayer.setNewPlayer(true);
+					for (int i = 0; i < joined.size(); i++) {
+						joined.get(i).getOutput().println("playerSignedOut" + socketConnection.getUsername());
+					}
 					return;
 				}
 			}
