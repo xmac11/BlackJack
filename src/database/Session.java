@@ -1,16 +1,27 @@
 package database;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.*;
+import java.util.Properties;
 
 public class Session {
 
     public static void startSession(String username, int id){
-        String url = "jdbc:postgresql://mod-msc-sw1.cs.bham.ac.uk/";
-        String user = "group21";
-        String pass = "tb2ij946i6";
+        String url;
+        String user;
+        String pass;
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        try(FileInputStream input = new FileInputStream(new File("db.properties"))){
+            Properties props = new Properties();
+            props.load(input);
+            user = (String) props.getProperty("username");
+            pass = (String) props.getProperty("password");
+            url = (String) props.getProperty("URL");
 
-        try (Connection connection = DriverManager.getConnection(url, user, pass)) {
+
+            try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             String newPoints = "INSERT INTO session(username, session_points, time_start, session_id) VALUES(?,0,?,?);";
 
             PreparedStatement statement = connection.prepareStatement(newPoints);
@@ -22,11 +33,20 @@ public class Session {
         } catch (SQLException e) {
             System.out.println("Username does not exist");
         }
+        }catch (IOException e){
+            System.out.println("No properties found");
+        }
     }
     public static void setSessionPoints(int sessionID, String username, boolean points){
-        String url = "jdbc:postgresql://mod-msc-sw1.cs.bham.ac.uk/";
-        String user = "group21";
-        String pass = "tb2ij946i6";
+        String url;
+        String user;
+        String pass;
+        try(FileInputStream input = new FileInputStream(new File("db.properties"))){
+            Properties props = new Properties();
+            props.load(input);
+            user = (String) props.getProperty("username");
+            pass = (String) props.getProperty("password");
+            url = (String) props.getProperty("URL");
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             String newPoints = "UPDATE session SET session_points = ? WHERE username = ? and session_id = ?;";
@@ -40,13 +60,22 @@ public class Session {
         } catch (SQLException e) {
             System.out.println("Username does not exist");
         }
+        }catch (IOException e){
+            System.out.println("No properties found");
+        }
     }
 
     public static boolean getSessionPoints(String username){
         boolean points = false;
-        String url = "jdbc:postgresql://mod-msc-sw1.cs.bham.ac.uk/";
-        String user = "group21";
-        String pass = "tb2ij946i6";
+        String url;
+        String user;
+        String pass;
+        try(FileInputStream input = new FileInputStream(new File("db.properties"))){
+            Properties props = new Properties();
+            props.load(input);
+            user = (String) props.getProperty("username");
+            pass = (String) props.getProperty("password");
+            url = (String) props.getProperty("URL");
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             String getPoints = "SELECT session_points FROM session WHERE username = ?;";
@@ -61,13 +90,23 @@ public class Session {
         } catch (SQLException e) {
             System.out.println("Username does not exist");
         }
+        }catch (IOException e){
+            System.out.println("No properties found");
+        }
         return points;
     }
+
     public static void setSessionend(String username, int sessionID){
-        String url = "jdbc:postgresql://mod-msc-sw1.cs.bham.ac.uk/";
-        String user = "group21";
-        String pass = "tb2ij946i6";
+        String url;
+        String user;
+        String pass;
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        try(FileInputStream input = new FileInputStream(new File("db.properties"))){
+            Properties props = new Properties();
+            props.load(input);
+            user = (String) props.getProperty("username");
+            pass = (String) props.getProperty("password");
+            url = (String) props.getProperty("URL");
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             String newPoints = "UPDATE session SET time_end = ? WHERE username = ? and session_id = ?;";
@@ -81,6 +120,9 @@ public class Session {
         } catch (SQLException e) {
             System.out.println("Username does not exist");
         }
+        }catch (IOException e){
+            System.out.println("No properties found");
+        }
     }
 
     /**
@@ -89,10 +131,16 @@ public class Session {
      */
     
     public static int getMaxSessionID(){
-        String url = "jdbc:postgresql://mod-msc-sw1.cs.bham.ac.uk/";
-        String user = "group21";
-        String pass = "tb2ij946i6";
+        String url;
+        String user;
+        String pass;
         int maxID = 0;
+        try(FileInputStream input = new FileInputStream(new File("db.properties"))){
+            Properties props = new Properties();
+            props.load(input);
+            user = (String) props.getProperty("username");
+            pass = (String) props.getProperty("password");
+            url = (String) props.getProperty("URL");
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             String getPoints = "SELECT MAX(session_id) from session;";
 
@@ -105,6 +153,9 @@ public class Session {
 
         } catch (SQLException e) {
             System.out.println("Username does not exist");
+        }
+        }catch (IOException e){
+            System.out.println("No properties found");
         }
         return maxID;
     }

@@ -1,15 +1,25 @@
 package database;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.*;
+import java.util.Properties;
 
 public class Authentication {
 
     public static boolean login(String username, String password){
         boolean login = false;
-        String url = "jdbc:postgresql://mod-msc-sw1.cs.bham.ac.uk/";
-        String user = "group21";
-        String pass = "tb2ij946i6";
+        String url;
+        String user;
+        String pass;
         int passwordHash = password.hashCode();
+        try(FileInputStream input = new FileInputStream(new File("db.properties"))){
+            Properties props = new Properties();
+            props.load(input);
+            user = (String) props.getProperty("username");
+            pass = (String) props.getProperty("password");
+            url = (String) props.getProperty("URL");
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
 
@@ -31,14 +41,24 @@ public class Authentication {
         } catch (SQLException e) {
             System.out.println("Connection not successfull");
         }
+        }catch (IOException e){
+            System.out.println("No properties found");
+        }
         return login;
     }
     public static boolean newAccount(String username, String password){
 
-        String url = "jdbc:postgresql://mod-msc-sw1.cs.bham.ac.uk/";
-        String user = "group21";
-        String pass = "tb2ij946i6";
+        String url;
+        String user;
+        String pass;
         int passwordHash = password.hashCode();
+        boolean success = false;
+        try(FileInputStream input = new FileInputStream(new File("db.properties"))){
+            Properties props = new Properties();
+            props.load(input);
+            user = (String) props.getProperty("username");
+            pass = (String) props.getProperty("password");
+            url = (String) props.getProperty("URL");
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             String newEntry = "INSERT INTO User_Info (username, password_hash) VALUES (?,?);";
@@ -50,12 +70,15 @@ public class Authentication {
             PreparedStatement statement1 = connection.prepareStatement(newHistory);
             statement1.setString(1,username);
             statement1.executeUpdate();
-            return true;
+            success = true;
         } catch (SQLException e) {
             System.out.println("Username already exists");
-            return false;
+            success = false;
         }
-
+        }catch (IOException e){
+            System.out.println("No properties found");
+        }
+        return success;
     }
 
     public static void main(String[] args){

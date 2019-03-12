@@ -10,15 +10,21 @@ import java.util.Properties;
 public class SQLDatabaseConnection implements Runnable {
 
 
-//	public static void main(String[] args) throws IOException {
-//		
-//	}
+
 
 	@Override
 	public void run() {
-		String url = "jdbc:postgresql://mod-msc-sw1.cs.bham.ac.uk/";
-		String username = "group21";
-		String password = "tb2ij946i6";
+		String url;
+		String username;
+		String password;
+
+		try(FileInputStream input = new FileInputStream(new File("db.properties"))){
+			Properties props = new Properties();
+			props.load(input);
+			username = (String) props.getProperty("username");
+			password = (String) props.getProperty("password");
+			url = (String) props.getProperty("URL");
+
 
 		try (Connection connection = DriverManager.getConnection(url, username, password)) {
 
@@ -48,7 +54,10 @@ public class SQLDatabaseConnection implements Runnable {
 
 		} catch (SQLException e) {
 			System.out.println("Connection not successful");
-		}		
+		}
+		}catch (IOException e){
+			System.out.println("No properties found");
+		}
 	}
 
 }
