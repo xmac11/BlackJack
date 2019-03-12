@@ -16,6 +16,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -252,8 +253,10 @@ public class LobbyController implements Initializable {
 			@Override
 			public void run() {
 				chatView.getItems().add(message);
+				chatView.scrollTo(chatView.getItems().size() - 1);
 			}
 		});
+
 	}
 
 	public void joinQueue() {
@@ -306,9 +309,9 @@ public class LobbyController implements Initializable {
 					setText(null);
 				} else {
 					// set the width's
-					setMinWidth(param.getWidth());
-					setMaxWidth(param.getWidth());
-					setPrefWidth(param.getWidth());
+					setMinWidth(param.getWidth() -20);
+					setMaxWidth(param.getWidth() -20);
+					setPrefWidth(param.getWidth()-20);
 					// allow wrapping
 					setWrapText(true);
 					setText(item.toString());

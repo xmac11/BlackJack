@@ -122,6 +122,7 @@ public class GameController implements Initializable {
 			@Override
 			public void run() {
 				chatView.getItems().add(message);
+				chatView.scrollTo(chatView.getItems().size() - 1);
 			}
 		});
 	}
@@ -449,9 +450,9 @@ public class GameController implements Initializable {
 					setText(null);
 				} else {
 					// set the width's
-					setMinWidth(param.getWidth());
-					setMaxWidth(param.getWidth());
-					setPrefWidth(param.getWidth());
+					setMinWidth(param.getWidth() -20);
+					setMaxWidth(param.getWidth() -20);
+					setPrefWidth(param.getWidth()-20);
 					// allow wrapping
 					setWrapText(true);
 					setText(item.toString());
