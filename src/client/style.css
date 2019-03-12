@@ -19,11 +19,11 @@
     -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
 }
 
-#lobbyScreen{
-    -fx-background-image: url("../image/lobbyBackground.jpg");
+.lobbyScreen{
+    -fx-background-image: url("../image/lobbyBackground.png");
     -fx-background-repeat: repeat;
-    -fx-background-size: 600 800;
-    -fx-background-position: center center;
+    -fx-background-size: 864 324;
+    -fx-background-position: top left;
     -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
 }
 

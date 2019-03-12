@@ -36,8 +36,7 @@ public class Authentication {
                 login = true;
             }
         }
-
-
+        
         } catch (SQLException e) {
             System.out.println("Connection not successfull");
         }
