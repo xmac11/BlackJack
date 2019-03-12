@@ -1,4 +1,4 @@
-package gui;
+package client;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -70,7 +70,7 @@ public class LoginController implements Initializable {
 				thisStage.setWidth(800);
 				thisStage.setScene(lobbyScene);
 				thisStage.show();
-				thisStage.setOnCloseRequest(e -> lobbyController.thisPlayerLeft());
+				thisStage.setOnCloseRequest(e -> lobbyController.thisPlayerClosedLobby());
 			} else {
 				errorLabel.setText("Error - Wrong log in credentials");
 				errorLabel.setVisible(true);

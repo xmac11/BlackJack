@@ -92,6 +92,22 @@ public class ServerLobbyThread implements Runnable {
 							}
 						}
 					}
+					if (in.equals("leaveQueue")) {
+						synchronized (gameQueue) {
+							if (gameQueue.size() < 3) {
+								gameQueue.remove(socketConnection);
+								socketConnection.getOutput().println("queueLeft");
+								for (int i = 0; i < joined.size(); i++) {
+									joined.get(i).getOutput().println("playerQueue");
+									for (int j = 0; j < gameQueue.size(); j++) {
+										joined.get(i).getOutput()
+												.println("playerQueue" + gameQueue.get(j).getUsername());
+									}
+									joined.get(i).getOutput().println("queueUpdated");
+								}
+							}
+						}
+					}
 				} catch (IOException e) {
 					System.out.println("lobby thread error");
 					gameQueue.remove(socketConnection);

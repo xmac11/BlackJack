@@ -60,6 +60,7 @@ public class ServerPlayerHandler implements Runnable {
 		 */
 
 		synchronized (deck) {
+			socketConnection.getOutput().println("sessionID"+sessionID);
 			socketConnection.getOutput().println(table.get(0).get(0));
 			socketConnection.getOutput().println(table.get(0).get(1)); // Sends the dealers hand to the client
 			String card1 = deck.drawCard();
@@ -173,11 +174,6 @@ public class ServerPlayerHandler implements Runnable {
 
 		System.out.println("players finished");
 		socketConnection.getOutput().println("playersFinished"); // Once all threads have reached playersTurnWait they
-		if (finishedPlayers.getBustedPlayers() == noPlayers) { // will all be allowed to
-			socketConnection.getOutput().println("skipDealer");
-		} else {
-			socketConnection.getOutput().println("dealerPlays");
-		}
 		for (int j = 1; j < table.size(); j++) {
 			if (ID != j) {
 				socketConnection.getOutput().println("playerInitialCard" + j);
@@ -196,11 +192,11 @@ public class ServerPlayerHandler implements Runnable {
 //		}
 		socketConnection.getOutput().println("initialCardsSent");
 //		deckWait.release();
-		/*if (finishedPlayers.getBustedPlayers() == noPlayers) { // will all be allowed to
+		if (finishedPlayers.getBustedPlayers() == noPlayers) { // will all be allowed to
 			socketConnection.getOutput().println("skipDealer");
 		} else {
 			socketConnection.getOutput().println("dealerPlays");
-		}*/
+		}
 		// if (noPlayers > 1) {
 		// for (int i = 1; i < table.size(); i++) {
 		// if (i != ID) {

@@ -1,4 +1,4 @@
-package gui;
+package client;
 
 import java.net.*;
 import java.util.ArrayList;
@@ -8,9 +8,10 @@ import java.util.concurrent.Semaphore;
 
 import javax.security.auth.kerberos.KerberosKey;
 
-//import com.sun.glass.ui.TouchInputSupport;
+import com.sun.glass.ui.TouchInputSupport;
 
 import database.MatchHistory;
+import database.Session;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -52,6 +53,7 @@ public class Client implements Runnable {
 	private boolean pocketBlackJack;
 	private boolean inGame = false;
 	private boolean gameFinished;
+	private int sessionID;
 
 	public Client(List<List<String>> table, Semaphore waitForController, String IP, LobbyController lobbyController) {
 		this.table = table;
@@ -101,7 +103,8 @@ public class Client implements Runnable {
 					in = input.readLine();
 					System.out.println("Client in: " + in);
 					if (in.equals("accountAlreadyActive")) {
-						System.exit(0);
+						lobbyController.connectionLost();
+						return;
 					}
 					if (in.equals("Game Starting")) { // Reads the message received and responds accordingly
 						System.out.println("break from lobby");
@@ -110,6 +113,9 @@ public class Client implements Runnable {
 					}
 					if (in.equals("queueJoined")) {
 						lobbyController.queueJoined();
+					}
+					if (in.equals("queueLeft")) {
+						lobbyController.queueLeft();
 					}
 					if (in.equals("Clear queue")) {
 						lobbyController.clearQueue();
@@ -153,7 +159,8 @@ public class Client implements Runnable {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-
+				sessionID = Integer.parseInt(input.readLine().replaceFirst("sessionID", ""));
+				Session.setSessionPoints(sessionID,username, false);
 				gameController.setOutput(output);
 				gameController.setUsername(username);
 				gameController.setID(ID);
@@ -175,25 +182,28 @@ public class Client implements Runnable {
 				MatchHistory.setGamesPlayed(username, 1); // the
 				// players hand
 				gameController.setTable(table);
-				if (Deck.total(table.get(ID)) == 21) {
+				if (Deck.total(table.get(ID)) == 21 && table.get(ID).size() == 2) {
 					System.out.println("Black Jack!");
 					gameController.setLabel("Black Jack!");
 					System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
 					pocketBlackJack = true;
 				}
-				while (true) { // Loops this until it reaches a 'break;'
+				while (!gameFinished && !playerLeft) { // Loops this until it reaches a 'break;'
 					in = input.readLine();
 					System.out.println("Client in: " + in);
 					if (in.equals("Make move")) { // Reads the message received and responds accordingly
 						if (pocketBlackJack) {
 							output.println("p");
-							break;
+							gameController.disableHit();
+							gameController.disableStand();
+							//							break;
+						} else {
+							gameController.enableHit();
+							gameController.enableStand();
+							System.out.println(in + ", h (hit) p (pass)");
+							System.out.println("Waiting for move");
+							gameController.setLabel("Make Move: " + Deck.total(table.get(ID)));
 						}
-						gameController.enableHit();
-						gameController.enableStand();
-						System.out.println(in + ", h (hit) p (pass)");
-						System.out.println("Waiting for move");
-						gameController.setLabel("Make Move: " + Deck.total(table.get(ID)));
 					}
 					if (in.contains("gameChatMessage")) {
 						gameController.addToChat(in.replaceFirst("gameChatMessage", ""));
@@ -209,7 +219,9 @@ public class Client implements Runnable {
 					}
 					if (in.equals("playerLeftGame")) {
 						playerLeft = true;
-						break;
+						gameController.disableHit();
+						gameController.disableStand();
+						//						break;
 					}
 					if (in.contains("playerCard")) {
 						int playerID = Integer.parseInt(in.replaceFirst("playerCard", ""));
@@ -223,14 +235,18 @@ public class Client implements Runnable {
 								System.out.println(
 										"Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
 								output.println("busted");
-								break;
+								gameController.disableHit();
+								gameController.disableStand();
+								//								break;
 							} else if (Deck.total(table.get(ID)) == 21) {
 								System.out.println("Black Jack!");
 								gameController.setLabel("Black Jack!");
 								System.out.println(
 										"Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
 								output.println("p");
-								break;
+								gameController.disableHit();
+								gameController.disableStand();
+								//								break;
 							} else {
 								output.println("move");
 								System.out.println(
@@ -240,16 +256,41 @@ public class Client implements Runnable {
 							gameController.addCardToOpposingPlayerHand(getOtherPlayerID(playerID), "facedown.jpg");
 
 					}
+					if (in.equals("breakFromLoop")) {
+						output.println("breakFromLoop");
+					}
 					if (in.contains("finished")) { // Server tells the client its turn is over
 						System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
 						System.out.println(in + " turn... waiting for other players");
 						gameController.setLabel("Your hand: " + Deck.total(table.get(ID)) + "\nWaiting for others");
-						break;
+						gameController.disableHit();
+						gameController.disableStand();
+						//						break;
 					}
 					if (in.contains("newPlayer")) {
 						onlinePlayers.add(in.replaceFirst("newPlayer", ""));
 						lobbyController.addOnline(onlinePlayers);
 					}
+					if (in.contains("showPlayerCards")) {
+						System.out.println("displaying cards");
+						System.out.println(table);
+						for (int i = 1; i < table.size(); i++) {
+							if (i != ID) {
+								gameController.removeFacedown(getOtherPlayerID(i));
+								for (int j = 0; j < table.get(i).size(); j++) {
+									gameController.addCardToOpposingPlayerHand(getOtherPlayerID(i),
+											table.get(i).get(j));
+								}
+							}
+						}
+					}
+					if (in.contains("playerInitialCard")) {
+						int playerID = Integer.parseInt(in.replaceFirst("playerInitialCard", ""));
+						System.out.println("initial card received");
+						table.get(playerID).add(input.readLine().replaceFirst("playerInitialCard", ""));
+						table.get(playerID).add(input.readLine().replaceFirst("playerInitialCard", ""));
+					}
+
 					if (in.contains("playerSignedOut")) {
 						onlinePlayers.remove(in.replaceFirst("playerSignedOut", ""));
 						lobbyController.addOnline(onlinePlayers);
@@ -258,96 +299,124 @@ public class Client implements Runnable {
 						}
 						return;
 					}
-				}
-				if (!playerLeft) {
-					gameController.disableHit();
-					gameController.disableStand();
-					// gameController.setLabel("Your hand: " + total(table.get(ID)));
-					boolean dealerTurn = true;
-					while (dealerTurn) { // Sits in loop whilst dealer chooses new cards
-						in = input.readLine();
-						if (in.contains("gameChatMessage")) {
-							gameController.addToChat(in.replaceFirst("gameChatMessage", ""));
-						}
-						if (in.equals("breakFromLoop")) {
-							output.println("breakFromLoop");
-						}
-						if (in.contains("playerCard")) {
-							int playerID = Integer.parseInt(in.replaceFirst("playerCard", ""));
-							String card = input.readLine().replaceFirst("playerCard", "");
-							table.get(playerID).add(card);
-							if (ID == playerID)
-								gameController.addCardToPlayerHand(card);
-							else
-								gameController.addCardToOpposingPlayerHand(getOtherPlayerID(playerID), "facedown.jpg");
-						}
-						if (in.contains("newPlayer")) {
-							onlinePlayers.add(in.replaceFirst("newPlayer", ""));
-							lobbyController.addOnline(onlinePlayers);
-						}
-						if (in.contains("playerSignedOut")) {
-							onlinePlayers.remove(in.replaceFirst("playerSignedOut", ""));
-							lobbyController.addOnline(onlinePlayers);
-						}
-						if (in.equals("playerLeftGame")) {
-							playerLeft = true;
-							break;
-						}
-						if (in.contains("showPlayerCards")) {
-							System.out.println("displaying cards");
-							System.out.println(table);
-							for (int i = 1; i < table.size(); i++) {
-								if (i != ID) {
-									gameController.removeFacedown(getOtherPlayerID(i));
-									for (int j = 0; j < table.get(i).size(); j++) {
-										gameController.addCardToOpposingPlayerHand(getOtherPlayerID(i),
-												table.get(i).get(j));
-									}
-								}
-							}
-						}
-						if (in.contains("playerInitialCard")) {
-							int playerID = Integer.parseInt(in.replaceFirst("playerInitialCard", ""));
-							System.out.println("initial card received");
-							table.get(playerID).add(input.readLine().replaceFirst("playerInitialCard", ""));
-							table.get(playerID).add(input.readLine().replaceFirst("playerInitialCard", ""));
-						}
-						if (in.contains("playersFinished")) { // Server tells client what to display
-							System.out.println("All players finished");
-							in = input.readLine();
-							if (!in.equals("skipDealer")) {
-								gameController.removeDealerFacedown();
-								gameController.addCardToDealerHand(table.get(0).get(1));
-								gameController.setDealerLabel("Dealer: " + Deck.total(table.get(0)));
-							} else {
-								gameFinished = true;
-							}
-						}
-						if (in.contains("dealerCard")) {
-							// sleep thread for 1s in order to simulate the dealer picking cards one by one
-							try {
-								Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-							String dealerCard = in.replaceFirst("dealerCard", "");
-							table.get(0).add(dealerCard);
-							gameController.addCardToDealerHand(dealerCard);
+					if (in.contains("playersFinished")) { // Server tells client what to display
+						System.out.println("All players finished");
+						if (!in.equals("skipDealer")) {
+							gameController.removeDealerFacedown();
+							gameController.addCardToDealerHand(table.get(0).get(1));
 							gameController.setDealerLabel("Dealer: " + Deck.total(table.get(0)));
-						}
-						if (in.contains("dealerDone")) {
-							dealerTurn = false; // Dealers turn is finished, break from loop
+						} else {
 							gameFinished = true;
 						}
-						if (in.equals("Clear queue")) {
-							lobbyController.clearQueue();
-						}
 					}
+					if (in.contains("dealerCard")) {
+						// sleep thread for 1s in order to simulate the dealer picking cards one by one
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						String dealerCard = in.replaceFirst("dealerCard", "");
+						table.get(0).add(dealerCard);
+						gameController.addCardToDealerHand(dealerCard);
+						gameController.setDealerLabel("Dealer: " + Deck.total(table.get(0)));
+					}
+					if (in.contains("dealerDone")) {
+//						dealerTurn = false; // Dealers turn is finished, break from loop
+						gameFinished = true;
+					}
+					if (in.equals("Clear queue")) {
+						lobbyController.clearQueue();
+					}
+				}
+//				if (!playerLeft) {
+//					gameController.disableHit();
+//					gameController.disableStand();
+//					// gameController.setLabel("Your hand: " + total(table.get(ID)));
+//					boolean dealerTurn = true;
+//					while (dealerTurn) { // Sits in loop whilst dealer chooses new cards
+//						in = input.readLine();
+//						if (in.contains("gameChatMessage")) {
+//							gameController.addToChat(in.replaceFirst("gameChatMessage", ""));
+//						}
+//						if (in.equals("breakFromLoop")) {
+//							output.println("breakFromLoop");
+//						}
+//						if (in.contains("playerCard")) {
+//							int playerID = Integer.parseInt(in.replaceFirst("playerCard", ""));
+//							String card = input.readLine().replaceFirst("playerCard", "");
+//							table.get(playerID).add(card);
+//							if (ID == playerID)
+//								gameController.addCardToPlayerHand(card);
+//							else
+//								gameController.addCardToOpposingPlayerHand(getOtherPlayerID(playerID), "facedown.jpg");
+//						}
+//						if (in.contains("newPlayer")) {
+//							onlinePlayers.add(in.replaceFirst("newPlayer", ""));
+//							lobbyController.addOnline(onlinePlayers);
+//						}
+//						if (in.contains("playerSignedOut")) {
+//							onlinePlayers.remove(in.replaceFirst("playerSignedOut", ""));
+//							lobbyController.addOnline(onlinePlayers);
+//						}
+//						if (in.equals("playerLeftGame")) {
+//							playerLeft = true;
+//							break;
+//						}
+//						if (in.contains("showPlayerCards")) {
+//							System.out.println("displaying cards");
+//							System.out.println(table);
+//							for (int i = 1; i < table.size(); i++) {
+//								if (i != ID) {
+//									gameController.removeFacedown(getOtherPlayerID(i));
+//									for (int j = 0; j < table.get(i).size(); j++) {
+//										gameController.addCardToOpposingPlayerHand(getOtherPlayerID(i),
+//												table.get(i).get(j));
+//									}
+//								}
+//							}
+//						}
+//						if (in.contains("playerInitialCard")) {
+//							int playerID = Integer.parseInt(in.replaceFirst("playerInitialCard", ""));
+//							System.out.println("initial card received");
+//							table.get(playerID).add(input.readLine().replaceFirst("playerInitialCard", ""));
+//							table.get(playerID).add(input.readLine().replaceFirst("playerInitialCard", ""));
+//						}
+//						if (in.contains("playersFinished")) { // Server tells client what to display
+//							System.out.println("All players finished");
+//							if (!in.equals("skipDealer")) {
+//								gameController.removeDealerFacedown();
+//								gameController.addCardToDealerHand(table.get(0).get(1));
+//								gameController.setDealerLabel("Dealer: " + Deck.total(table.get(0)));
+//							} else {
+//								gameFinished = true;
+//							}
+//						}
+//						if (in.contains("dealerCard")) {
+//							// sleep thread for 1s in order to simulate the dealer picking cards one by one
+//							try {
+//								Thread.sleep(1000);
+//							} catch (InterruptedException e) {
+//								e.printStackTrace();
+//							}
+//							String dealerCard = in.replaceFirst("dealerCard", "");
+//							table.get(0).add(dealerCard);
+//							gameController.addCardToDealerHand(dealerCard);
+//							gameController.setDealerLabel("Dealer: " + Deck.total(table.get(0)));
+//						}
+//						if (in.contains("dealerDone")) {
+//							dealerTurn = false; // Dealers turn is finished, break from loop
+//							gameFinished = true;
+//						}
+//						if (in.equals("Clear queue")) {
+//							lobbyController.clearQueue();
+//						}
+//					}
 					if (!playerLeft) {
 						System.out.println(table.get(0));
 						declareWinner();
 					}
-				}
+//				}
 				table.clear();
 				inQueue.clear();
 				gameController.endChat();
@@ -381,10 +450,12 @@ public class Client implements Runnable {
 			gameController.setLabel("Bust!! You lose!");
 		} else if (Deck.total(table.get(0)) > 21) {
 			MatchHistory.setGamesWon(username, 1);
+			Session.setSessionPoints(sessionID,username, true);
 			gameController.setLabel("Dealer bust! You Win!");
 		} else if (Deck.total(table.get(ID)) == Deck.total(table.get(0))) {
 			gameController.setLabel("Draw!");
 		} else if (Deck.total(table.get(ID)) > Deck.total(table.get(0))) {
+			Session.setSessionPoints(sessionID,username, true);
 			MatchHistory.setGamesWon(username, 1);
 			gameController.setLabel("You win!!");
 		} else {

@@ -1,4 +1,4 @@
-package gui;
+package client;
 
 import java.io.PrintWriter;
 import java.net.URL;
@@ -403,7 +403,6 @@ public class GameController implements Initializable {
 
 	public void chatButtonPressed() {
 		sendChat();
-
 	}
 
 	public Stage getStage() {

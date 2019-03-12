@@ -11,18 +11,19 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import shareable.GameStart;
+import shareable.ServerSock;
 
 public class PlayerJoin implements Runnable {
 
 	int maxPlayers = 3;
-	ServerSocket serverSocket = null;
+	ServerSock serverSocket;
 	List<SocketConnection> joined;
 	List<SocketConnection> gameQueue;
 	Socket socket = null;
 	boolean sessionJoinable;
 	GameStart gameStart;
 
-	public PlayerJoin(List<SocketConnection> joined, List<SocketConnection> gameQueue, ServerSocket serverSocket,
+	public PlayerJoin(List<SocketConnection> joined, List<SocketConnection> gameQueue, ServerSock serverSocket,
 			GameStart gameStart) {
 		this.joined = joined;
 		this.serverSocket = serverSocket;
@@ -35,7 +36,7 @@ public class PlayerJoin implements Runnable {
 	public void run() {
 
 		try {
-			serverSocket = new ServerSocket(9999);
+			serverSocket.setServerSocket( new ServerSocket(9999));
 			InetAddress inetAddress = InetAddress.getLocalHost();
 			System.out.println("Connection launched on : " + inetAddress.getHostAddress());
 		} catch (IOException e) {
@@ -44,7 +45,7 @@ public class PlayerJoin implements Runnable {
 		while (true) {
 			try {
 				System.out.println("waiting for player...");
-				socket = serverSocket.accept();
+				socket = serverSocket.getServerSocket().accept();
 				if (!sessionJoinable) {
 					break;
 				}
@@ -53,7 +54,7 @@ public class PlayerJoin implements Runnable {
 					System.out.println("Session no longer joinable");
 					break;
 				}
-				e.printStackTrace();
+				return;
 			}
 			PrintWriter output = null;
 			BufferedReader input = null;
@@ -72,7 +73,6 @@ public class PlayerJoin implements Runnable {
 					try {
 						socket.close();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					sessionJoinable = false;
@@ -88,7 +88,7 @@ public class PlayerJoin implements Runnable {
 			sessionJoinable = true;
 		}
 		try {
-			serverSocket.close();
+			serverSocket.getServerSocket().close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -98,7 +98,7 @@ public class PlayerJoin implements Runnable {
 	public void closeConnection() {
 		sessionJoinable = false;
 		try {
-			serverSocket.close();
+			serverSocket.getServerSocket().close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

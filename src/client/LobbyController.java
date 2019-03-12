@@ -1,4 +1,4 @@
-package gui;
+package client;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -89,10 +89,33 @@ public class LobbyController implements Initializable {
 					if(!client.isGameFinished()) {
 						e.consume();
 						client.closeGame(window);
+//						gameController.playerLeft();
 					}
 				});
 			}
 		});
+	}
+	
+	public void signOut() {
+//		Platform.runLater(new Runnable() {
+//			@Override
+//			public void run() {
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginScreen.fxml"));
+				Scene loginScene = null;
+				try {
+					loginScene = new Scene(loader.load());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				thisStage.setResizable(true);
+				thisStage.setScene(loginScene);
+				thisStage.show();
+				thisStage.setMinWidth(600);
+				thisStage.setMinHeight(500);
+				thisStage.setOnCloseRequest(e -> System.exit(0));
+//			}
+//		});
 	}
 	
 	public void connectionLost() {
@@ -127,13 +150,22 @@ public class LobbyController implements Initializable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				playButton.setVisible(true);
 				playButton.setDisable(false);
 				joinButton.setDisable(true);
 			}
 		});
 	}
 
+	public void queueLeft() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				playButton.setDisable(true);
+				joinButton.setDisable(false);
+			}
+		});
+	}
+	
 	public void addQueue(List<String> queue) {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -185,13 +217,13 @@ public class LobbyController implements Initializable {
 			public void run() {
 				queueView.getItems().clear();
 				joinButton.setDisable(false);
-				playButton.setVisible(false);
+				playButton.setDisable(true);
 				chatView.getItems().add("Game finished");
 			}
 		});
 	}
 
-	public void thisPlayerLeft() {
+	public void thisPlayerClosedLobby() {
 		System.out.println("leaving");
 		output.println("thisPlayerSignedOut");
 		System.exit(0);
@@ -221,6 +253,11 @@ public class LobbyController implements Initializable {
 	public void joinQueue() {
 		System.out.println("join queue pressed");
 		output.println("joinQueue");
+	}
+	
+	public void leaveQueue() {
+		System.out.println("join queue pressed");
+		output.println("leaveQueue");
 	}
 
 	public void startGame() throws IOException {
@@ -253,7 +290,7 @@ public class LobbyController implements Initializable {
 		waitForController = new Semaphore(0);
 		table = new ArrayList<>();
 		client = new Client(table, waitForController, IP, this);
-		playButton.setVisible(false);
+		playButton.setDisable(true);
 		Thread thread = new Thread(client);
 		thread.start();
 	}

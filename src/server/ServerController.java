@@ -1,4 +1,4 @@
-package gui;
+package server;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -6,7 +6,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
-import server.Server;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -14,7 +13,7 @@ import java.util.ResourceBundle;
 public class ServerController  {
 
     @FXML
-    private ListView serverView;
+    private ListView<String> serverView;
 
     @FXML
     private ToggleButton toggler;
@@ -40,15 +39,16 @@ public class ServerController  {
     }
 
     public void toggleOn(MouseEvent mouseEvent) {
+    	System.out.println(toggle);
         if(toggle){
             thread.interrupt();
-            toggle = false;
+            initialize();
+//            toggle = false;
         }else{
             thread = new Thread(server);
             thread.start();
             toggle = true;
         }
-
     }
 
     public void addToServerView(String incommingSystemMessage) {
