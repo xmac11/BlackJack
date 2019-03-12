@@ -13,8 +13,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import java.net.URL?>
 <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LobbyController">
-  <columnConstraints>
+   <stylesheets>
+      <URL value="@style.css" />
+   </stylesheets>
+   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
   <rowConstraints>
@@ -65,12 +69,12 @@
                         <Font size="18.0" />
                      </font>
                   </Button>
-                  <Button minHeight="89.0" minWidth="130.0" mnemonicParsing="false" prefHeight="89.0" prefWidth="130.0" text="Leave Queue" textAlignment="JUSTIFY">
+                  <Button minHeight="89.0" minWidth="130.0" mnemonicParsing="false" prefHeight="89.0" prefWidth="130.0" styleClass="joinButton" text="Leave Queue" textAlignment="JUSTIFY">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Button>
-                  <Button fx:id="playButton" minHeight="78.4" minWidth="130.0" mnemonicParsing="false" onAction="#startGame" prefHeight="78.4" prefWidth="130.0" text="Play" textAlignment="JUSTIFY" textFill="#09c205">
+                  <Button fx:id="playButton" minHeight="78.4" minWidth="130.0" mnemonicParsing="false" onAction="#startGame" prefHeight="78.4" prefWidth="130.0" styleClass="playButton" text="Play" textAlignment="JUSTIFY" textFill="#09c205">
                      <font>
                         <Font size="35.0" />
                      </font>

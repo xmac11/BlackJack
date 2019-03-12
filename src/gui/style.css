@@ -79,4 +79,21 @@
 
 }
 
+.playButton {
+    -fx-background-color: linear-gradient(from 75% 75% to 100% 100%, #F6F6F6, #AAAAAA);
+        -fx-background-radius: 30;
+        -fx-background-insets: 0, 1, 2, 3, 0;
+        -fx-text-fill: #399F13;
+        -fx-font-weight: bold;
+        -fx-font-size: 15px;
+}
 
+.playButton:hover{
+	-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #AAAAAA, #F6F6F6);
+    -fx-background-radius: 30;
+    -fx-background-insets: 0, 1, 2, 3, 0;
+    -fx-text-fill: #399F13;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+
+}
