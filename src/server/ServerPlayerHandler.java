@@ -172,8 +172,6 @@ public class ServerPlayerHandler implements Runnable {
 			}
 		}
 
-		System.out.println("players finished");
-		socketConnection.getOutput().println("playersFinished"); // Once all threads have reached playersTurnWait they
 		for (int j = 1; j < table.size(); j++) {
 			if (ID != j) {
 				socketConnection.getOutput().println("playerInitialCard" + j);
@@ -181,33 +179,15 @@ public class ServerPlayerHandler implements Runnable {
 				socketConnection.getOutput().println("playerInitialCard" + table.get(j).get(1));
 			}
 		}
-//		for(int i = 0;i<gameQueue.size();i++) {
-//			if(i!=(ID-1)) {
-//				gameQueue.get(i).getOutput().println("playerInitialCard"+(ID));
-//				gameQueue.get(i).getOutput().println("playerInitialCard"+table.get(ID).get(0));
-//				System.out.println("playerInitialCard"+table.get(ID).get(0));
-//				System.out.println("playerInitialCard"+table.get(ID).get(1));
-//				gameQueue.get(i).getOutput().println("playerInitialCard"+table.get(ID).get(1));
-//			}
-//		}
 		socketConnection.getOutput().println("initialCardsSent");
-//		deckWait.release();
+		System.out.println("players finished");
+		socketConnection.getOutput().println("playersFinished"); // Once all threads have reached playersTurnWait they
+		
 		if (finishedPlayers.getBustedPlayers() == noPlayers) { // will all be allowed to
 			socketConnection.getOutput().println("skipDealer");
 		} else {
 			socketConnection.getOutput().println("dealerPlays");
 		}
-		// if (noPlayers > 1) {
-		// for (int i = 1; i < table.size(); i++) {
-		// if (i != ID) {
-		// socketConnection.getOutput().println("otherPlayer");
-		// socketConnection.getOutput().println(i);
-		// socketConnection.getOutput().println(table.get(i));
-		// }
-		// }
-		// socketConnection.getOutput().println("tableSent");
-		// System.out.println("Table Sent");
-		// }
 
 		socketConnection.getOutput().println("showPlayerCards");
 		System.out.println("Dealers turn");
@@ -246,7 +226,6 @@ public class ServerPlayerHandler implements Runnable {
 				System.out.println("releasing");
 				if (!thread.isAlive())
 					deckWait.release();
-//				finishedPlayers.playerFinished();
 			case 1:
 				dealersTurn.await();
 			}

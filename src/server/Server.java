@@ -25,7 +25,7 @@ public class Server implements Runnable {
 	private List<SocketConnection> joined;
 	private List<SocketConnection> gameQueue;
 	private GameStart gameStart;
-	private ServerSock serverSock;
+	private ServerSocket serverSocket;
 	private FinishedPlayers finishedPlayers;
 
 	public Server() {
@@ -36,9 +36,9 @@ public class Server implements Runnable {
 	}
 
 	public static void main(String[] args) {
-//		Server server = new Server();
-//		Thread gameSession = new Thread(server);
-//		gameSession.start(); // Sends off a thread that represents a game session
+		Server server = new Server();
+		Thread gameSession = new Thread(server);
+		gameSession.start(); // Sends off a thread that represents a game session
 	}
 
 	@Override
@@ -46,10 +46,10 @@ public class Server implements Runnable {
 		SQLDatabaseConnection sqlDatabaseConnection = new SQLDatabaseConnection();
 		Thread thread = new Thread(sqlDatabaseConnection);
 		thread.start();
-		serverSock = new ServerSock(null);
+		serverSocket = null;
 		gameStart = new GameStart();
 		gameStart.setGameStart(false);
-		PlayerJoin playerJoin = new PlayerJoin(joined, gameQueue, serverSock, gameStart);
+		PlayerJoin playerJoin = new PlayerJoin(joined, gameQueue, serverSocket, gameStart);
 		new Thread(playerJoin).start();
 		// Sends off a thread which waits on the socket to accept clients. The main
 		while (true) {
@@ -57,14 +57,7 @@ public class Server implements Runnable {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e1) {
-					try {
-						serverSock.getServerSocket().close();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					return;
-//					e1.printStackTrace();
+					e1.printStackTrace();
 				}
 			}
 			gameStart.setGameStart(true);
@@ -103,14 +96,7 @@ public class Server implements Runnable {
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e1) {
-						try {
-							serverSock.getServerSocket().close();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						return;
-//						e1.printStackTrace();
+						e1.printStackTrace();
 					}
 				}
 				
@@ -131,14 +117,7 @@ public class Server implements Runnable {
 					dealersTurn.await(); // Dealers turn is finished, all player threads waiting on this barrier in
 											// server threads can now continue
 				} catch (InterruptedException | BrokenBarrierException e) {
-					try {
-						serverSock.getServerSocket().close();
-					} catch (IOException error) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					return;
-//					e.printStackTrace();
+					e.printStackTrace();
 				}
 			} else {
 				System.out.println("No players joined, session ending");

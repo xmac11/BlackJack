@@ -11,19 +11,18 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import shareable.GameStart;
-import shareable.ServerSock;
 
 public class PlayerJoin implements Runnable {
 
 	int maxPlayers = 3;
-	ServerSock serverSocket;
+	ServerSocket serverSocket;
 	List<SocketConnection> joined;
 	List<SocketConnection> gameQueue;
 	Socket socket = null;
 	boolean sessionJoinable;
 	GameStart gameStart;
 
-	public PlayerJoin(List<SocketConnection> joined, List<SocketConnection> gameQueue, ServerSock serverSocket,
+	public PlayerJoin(List<SocketConnection> joined, List<SocketConnection> gameQueue, ServerSocket serverSocket,
 			GameStart gameStart) {
 		this.joined = joined;
 		this.serverSocket = serverSocket;
@@ -36,7 +35,7 @@ public class PlayerJoin implements Runnable {
 	public void run() {
 
 		try {
-			serverSocket.setServerSocket( new ServerSocket(9999));
+			serverSocket = new ServerSocket(9999);
 			InetAddress inetAddress = InetAddress.getLocalHost();
 			System.out.println("Connection launched on : " + inetAddress.getHostAddress());
 		} catch (IOException e) {
@@ -45,7 +44,7 @@ public class PlayerJoin implements Runnable {
 		while (true) {
 			try {
 				System.out.println("waiting for player...");
-				socket = serverSocket.getServerSocket().accept();
+				socket = serverSocket.accept();
 				if (!sessionJoinable) {
 					break;
 				}
@@ -88,7 +87,7 @@ public class PlayerJoin implements Runnable {
 			sessionJoinable = true;
 		}
 		try {
-			serverSocket.getServerSocket().close();
+			serverSocket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -98,7 +97,7 @@ public class PlayerJoin implements Runnable {
 	public void closeConnection() {
 		sessionJoinable = false;
 		try {
-			serverSocket.getServerSocket().close();
+			serverSocket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
