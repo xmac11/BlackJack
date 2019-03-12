@@ -175,7 +175,7 @@ public class Client implements Runnable {
 				MatchHistory.setGamesPlayed(username, 1); // the
 				// players hand
 				gameController.setTable(table);
-				if (Deck.total(table.get(ID)) == 21 && table.get(ID).size() == 2) {
+				if (Deck.total(table.get(ID)) == 21) {
 					System.out.println("Black Jack!");
 					gameController.setLabel("Black Jack!");
 					System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
@@ -314,7 +314,8 @@ public class Client implements Runnable {
 						}
 						if (in.contains("playersFinished")) { // Server tells client what to display
 							System.out.println("All players finished");
-							if (!input.readLine().equals("skipDealer")) {
+							in = input.readLine();
+							if (!in.equals("skipDealer")) {
 								gameController.removeDealerFacedown();
 								gameController.addCardToDealerHand(table.get(0).get(1));
 								gameController.setDealerLabel("Dealer: " + Deck.total(table.get(0)));
