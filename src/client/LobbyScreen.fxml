@@ -15,7 +15,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane maxHeight="1080" maxWidth="1920" minHeight="480" minWidth="640" prefHeight="600.0" prefWidth="8000.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.LobbyController">
+<?import javafx.scene.layout.Priority?>
+<GridPane maxHeight="1080" maxWidth="1920" minHeight="480" minWidth="640" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.LobbyController">
     <stylesheets>
         <URL value="@style.css" />
     </stylesheets>
@@ -29,11 +30,11 @@
 	</rowConstraints>
 	<children>
 		<BorderPane maxHeight="1080.0" maxWidth="1920.0"
-			minHeight="480.0" minWidth="640.0" prefHeight="600.0"
-			prefWidth="800.0">
+			minHeight="480.0" minWidth="640.0" prefHeight="480.0"
+			prefWidth="640.0">
 			<top>
 				<HBox maxHeight="26.4" maxWidth="1920.0" minHeight="26.4"
-					minWidth="640.0" prefHeight="26.4" prefWidth="800.0"
+					minWidth="640.0" prefHeight="26.4" prefWidth="640.0"
 					style="-fx-background-color: #000000;"
 					BorderPane.alignment="CENTER">
 					<children>
@@ -45,7 +46,7 @@
 							textFill="WHITE" />
 						<Region minHeight="26.4" prefHeight="26.4"
 							HBox.hgrow="ALWAYS" />
-						<Label onMouseClicked="#signOut" minHeight="26.4" prefHeight="17.0"
+						<Label onMouseClicked="#signOut" minHeight="26.4" minWidth="49" prefHeight="26.4"
 							prefWidth="49.0" text="Sign out" textFill="RED" underline="true">
 							<cursor>
 								<Cursor fx:constant="HAND" />
@@ -66,7 +67,7 @@
 						<ListView fx:id="onlineView" minHeight="327" minWidth="178"
 							prefHeight="327.0" prefWidth="178.0" VBox.vgrow="ALWAYS" />
 						<Label alignment="CENTER" contentDisplay="CENTER" minHeight="18" minWidth="178"
-							prefHeight="18.0" prefWidth="165.0" text="MATCH QUEUE"
+							prefHeight="18.0" prefWidth="178.0" text="MATCH QUEUE"
 							textAlignment="JUSTIFY" textFill="WHITE" />
 						<ListView fx:id="queueView" minHeight="75" minWidth="178"
 							prefHeight="75.0" prefWidth="178.0" />
@@ -75,21 +76,21 @@
 			</left>
 			<center>
 				<VBox minHeight="400.0" minWidth="332" prefHeight="400.0"
-					prefWidth="354.0" style="-fx-background-color: #000000;"
+					prefWidth="332.0" style="-fx-background-color: #000000;"
 					BorderPane.alignment="CENTER">
 					<children>
 						<Label alignment="CENTER" minHeight="18" minWidth="332" prefHeight="18.0"
-							prefWidth="491.0" text="CHAT" textFill="WHITE" />
+							prefWidth="332.0" text="CHAT" textFill="WHITE" />
 						<ListView fx:id="chatView" minHeight="220"
-							minWidth="-332" prefHeight="220.0" prefWidth="333.0" />
+							minWidth="332" prefHeight="220.0" prefWidth="332" />
 						<TextField fx:id="chatField" alignment="CENTER"
-							minHeight="37" minWidth="332" onAction="#sendChat" prefHeight="30.0"
-							prefWidth="354.0" promptText="chat here">
+							minHeight="37" minWidth="332" onAction="#sendChat" prefHeight="37"
+							prefWidth="332" promptText="chat here">
 							<font>
 								<Font size="14.0" />
 							</font>
 						</TextField>
-                        <Region minHeight="187" minWidth="332" prefHeight="332"
+                        <Region minHeight="187" minWidth="332" prefHeight="187" prefWidth="332"
                                 HBox.hgrow="ALWAYS" />
 					</children>
 				</VBox>
@@ -104,7 +105,7 @@
 							text="ACTIONS" textFill="WHITE" />
 						<Button fx:id="joinButton" minHeight="80"
 							minWidth="130.0" mnemonicParsing="false" onAction="#joinQueue"
-							prefHeight="83.2" prefWidth="130.0" styleClass="lobbyButton"
+							prefHeight="80" prefWidth="130.0" styleClass="lobbyButton"
 							text="Join Queue" textOverrun="CENTER_ELLIPSIS">
 							<font>
 								<Font size="18.0" />
@@ -114,7 +115,7 @@
 							</cursor>
 						</Button>
 						<Button minHeight="80" minWidth="130.0"
-							mnemonicParsing="false" onAction="#leaveQueue" prefHeight="83.2"
+							mnemonicParsing="false" onAction="#leaveQueue" prefHeight="80"
 							prefWidth="130.0" styleClass="lobbyButton" text="Leave Queue"
 							textAlignment="JUSTIFY">
 							<font>
@@ -126,7 +127,7 @@
 						</Button>
 						<Button fx:id="playButton" minHeight="97"
 							minWidth="130.0" mnemonicParsing="false" onAction="#startGame"
-							prefHeight="83.2" prefWidth="130.0" styleClass="lobbyButton"
+							prefHeight="97" prefWidth="130.0" styleClass="lobbyButton"
 							text="Play" textAlignment="JUSTIFY" textFill="#09c205">
 							<font>
 								<Font size="35.0" />
@@ -135,7 +136,7 @@
 								<Cursor fx:constant="HAND" />
 							</cursor>
 						</Button>
-                        <Region minHeight="163" minWidth="130" prefHeight="332"
+                        <Region minHeight="163" minWidth="130" prefHeight="163" prefWidth="130"
                                 HBox.hgrow="ALWAYS" />
 					</children>
 				</VBox>
@@ -145,15 +146,14 @@
 					minWidth="640.0" prefHeight="33.6" prefWidth="640.0"
 					BorderPane.alignment="CENTER">
 					<children>
-						<Region maxHeight="33.6"
+						<Region maxHeight="33.6" minHeight="15.6" prefHeight="15.6"
 							style="-fx-background-color: #000000;" HBox.hgrow="ALWAYS" />
 						<Label alignment="CENTER" contentDisplay="CENTER"
-							maxHeight="18.0" maxWidth="1920.0" minHeight="18.0"
-							minWidth="298.0" prefHeight="18.0" prefWidth="298.0"
+							maxHeight="18.0" minHeight="18.0" prefHeight="18.0"
 							style="-fx-background-color: #000000;"
 							text="© 2019 Group21 All Rights Reserved" textAlignment="JUSTIFY"
 							textFill="WHITE" />
-						<Region maxHeight="33.6"
+						<Region maxHeight="33.6" minHeight="15.6" prefHeight="15.6"
 							style="-fx-background-color: #000000;" HBox.hgrow="ALWAYS" />
 					</children>
 				</HBox>
