@@ -314,7 +314,7 @@ public class Client implements Runnable {
 						}
 						if (in.contains("playersFinished")) { // Server tells client what to display
 							System.out.println("All players finished");
-							if (!in.equals("skipDealer")) {
+							if (!input.readLine().equals("skipDealer")) {
 								gameController.removeDealerFacedown();
 								gameController.addCardToDealerHand(table.get(0).get(1));
 								gameController.setDealerLabel("Dealer: " + Deck.total(table.get(0)));
