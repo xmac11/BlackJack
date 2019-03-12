@@ -11,29 +11,24 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import shareable.GameStart;
-import shareable.NewPlayer;
-
 
 public class PlayerJoin implements Runnable {
 
 	int maxPlayers = 3;
-	int joinedPlayers;
 	ServerSocket serverSocket = null;
 	List<SocketConnection> joined;
 	List<SocketConnection> gameQueue;
 	Socket socket = null;
 	boolean sessionJoinable;
 	GameStart gameStart;
-	private NewPlayer newPlayer;
 
-	public PlayerJoin(List<SocketConnection> joined, List<SocketConnection> gameQueue, ServerSocket serverSocket, GameStart gameStart, NewPlayer newPlayer ) {
+	public PlayerJoin(List<SocketConnection> joined, List<SocketConnection> gameQueue, ServerSocket serverSocket,
+			GameStart gameStart) {
 		this.joined = joined;
-		joinedPlayers = joined.size();
 		this.serverSocket = serverSocket;
 		this.gameQueue = gameQueue;
 		sessionJoinable = true;
 		this.gameStart = gameStart;
-		this.newPlayer = newPlayer;
 	}
 
 	@Override
@@ -46,7 +41,7 @@ public class PlayerJoin implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		while (sessionJoinable) {
+		while (true) {
 			try {
 				System.out.println("waiting for player...");
 				socket = serverSocket.accept();
@@ -71,14 +66,26 @@ public class PlayerJoin implements Runnable {
 				System.out.println("Error when joining");
 				return;
 			}
-			SocketConnection socketConnection = new SocketConnection(socket, new Semaphore(0), output, input, true, username);
-			joined.add(socketConnection);
-			joinedPlayers = joined.size();
-			newPlayer.setNewPlayer(true);
-			Runnable runnable = new ServerLobbyThread(socketConnection, gameQueue, joined, gameStart, newPlayer);
-			Thread thread = new Thread(runnable);
-			thread.start();
-			System.out.println("players in lobby " + joinedPlayers);
+			for (int i = 0; i < joined.size(); i++) {
+				if (joined.get(i).getUsername().equals(username)) {
+					output.println("accountAlreadyActive");
+					try {
+						socket.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					sessionJoinable = false;
+				}
+			}
+			if (sessionJoinable) {
+				SocketConnection socketConnection = new SocketConnection(socket, new Semaphore(0), output, input, true, username);
+				joined.add(socketConnection);
+				Runnable runnable = new ServerLobbyThread(socketConnection, gameQueue, joined, gameStart);
+				Thread thread = new Thread(runnable);
+				thread.start();
+			}
+			sessionJoinable = true;
 		}
 		try {
 			serverSocket.close();

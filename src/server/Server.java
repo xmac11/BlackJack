@@ -11,26 +11,22 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Semaphore;
 
+import database.SQLDatabaseConnection;
+import database.Session;
 import shareable.*;
 
 public class Server implements Runnable {
 
 	Semaphore deckWait;
-	Semaphore initialCardWait;
 	Semaphore gameBegin;
-	CyclicBarrier playersWait;
-	CyclicBarrier playersTurnWait;
 	CyclicBarrier dealersTurn;
 	private List<List<String>> table;
 	Boolean join;
-	private List<String> chatLog;
-	private Semaphore serverChatWait;
 	private List<SocketConnection> joined;
 	private List<SocketConnection> gameQueue;
 	private GameStart gameStart;
 	private ServerSocket serverSocket;
 	private FinishedPlayers finishedPlayers;
-	private NewPlayer newPlayer;
 
 	public Server() {
 		table = new ArrayList<>();
@@ -40,21 +36,20 @@ public class Server implements Runnable {
 	}
 
 	public static void main(String[] args) {
-		Server server = new Server();
-		Thread gameSession = new Thread(server);
-		gameSession.start(); // Sends off a thread that represents a game session
+//		Server server = new Server();
+//		Thread gameSession = new Thread(server);
+//		gameSession.start(); // Sends off a thread that represents a game session
 	}
 
 	@Override
 	public void run() {
-		serverChatWait = new Semaphore(0);
+		SQLDatabaseConnection sqlDatabaseConnection = new SQLDatabaseConnection();
+		Thread thread = new Thread(sqlDatabaseConnection);
+		thread.start();
 		serverSocket = null;
-		gameBegin = new Semaphore(0);
 		gameStart = new GameStart();
 		gameStart.setGameStart(false);
-		newPlayer = new NewPlayer();
-		newPlayer.setNewPlayer(false);
-		PlayerJoin playerJoin = new PlayerJoin(joined, gameQueue, serverSocket, gameStart, newPlayer);
+		PlayerJoin playerJoin = new PlayerJoin(joined, gameQueue, serverSocket, gameStart);
 		new Thread(playerJoin).start();
 		// Sends off a thread which waits on the socket to accept clients. The main
 		while (true) {
@@ -62,27 +57,26 @@ public class Server implements Runnable {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e1) {
-					e1.printStackTrace();
-				}
-				if (newPlayer.isNewPlayer()) {
-					for (int i = 0; i < joined.size(); i++) {
-						joined.get(i).getOutput().println("newPlayer");
-						for (int j = 0; j < joined.size(); j++) {
-							joined.get(i).getOutput().println("newPlayer" + joined.get(j).getUsername());
-						}
-						joined.get(i).getOutput().println("playersUpdated");
+					try {
+						serverSocket.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
-					newPlayer.setNewPlayer(false);
+					return;
+//					e1.printStackTrace();
 				}
 			}
 			gameStart.setGameStart(true);
+			int sessionID = Session.getMaxSessionID() + 1;
 			for (int i = 0; i < joined.size(); i++) {
 				joined.get(i).getOutput().println("Game in progress");
 				joined.get(i).getOutput().println(gameQueue.size());
 			}
 			for (int i = 0; i < gameQueue.size(); i++) {
-				gameQueue.get(i).getOutput().println("Game Starting");
 				gameQueue.get(i).setInLobby(false);
+				gameQueue.get(i).getOutput().println("Game Starting");
+				Session.startSession(gameQueue.get(i).getUsername(), sessionID);
 			}
 			Deck deck = new Deck(); // Creates a deck
 			table.clear();
@@ -91,29 +85,17 @@ public class Server implements Runnable {
 			table.get(0).add(deck.drawCard());
 			System.out.println("This is Dealers cards: " + table.get(0)); // Prints the dealers hand to the server
 																			// console
-			// (for debugging)
-			playersWait = new CyclicBarrier(gameQueue.size() + 1); // Sets the barrier to be used to wait for all
-																	// players + main server thread, makes threads wait
-																	// until it is the dealers turn.
-			dealersTurn = new CyclicBarrier(gameQueue.size() + 1); // Same as above barrier, this barrier is
-																	// potentially redundant, I just haven't got round
-																	// to removing it yet
-			playersTurnWait = new CyclicBarrier(gameQueue.size()); // Sets the barrier to wait for all players to
-																	// finish their turn
 			deckWait = new Semaphore(1); // Creates a semaphore to allow 1 thread to access a critical section, this
 											// is used to control access to the deck
-			initialCardWait = new Semaphore(1);
-			chatLog = new ArrayList<>();
-			serverChatWait = new Semaphore(0);
+			dealersTurn = new CyclicBarrier((gameQueue.size() + 1));
 			finishedPlayers = new FinishedPlayers();
 			if (gameQueue.size() > 0) { // Ensures there are players in the session
 				System.out.println("Game Starting...");
 				for (int i = 0; i < gameQueue.size(); i++) {
 					ServerPlayerHandler serverThread = null;
 					table.add(new ArrayList<>());
-					serverThread = new ServerPlayerHandler(gameQueue.get(i), i + 1, deck, deckWait, playersWait,
-							playersTurnWait, gameQueue.size(), dealersTurn, table, chatLog, serverChatWait,
-							finishedPlayers, gameQueue);
+					serverThread = new ServerPlayerHandler(gameQueue.get(i), i + 1, deck, deckWait, gameQueue.size(),
+							dealersTurn, table, finishedPlayers, gameQueue, sessionID);
 					System.out.println("Player " + (i + 1) + " added"); // For debugging
 					new Thread(serverThread).start(); // Sends thread
 				}
@@ -121,32 +103,26 @@ public class Server implements Runnable {
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e1) {
-						e1.printStackTrace();
-					}
-					if (newPlayer.isNewPlayer()) {
-						for (int i = 0; i < joined.size(); i++) {
-							joined.get(i).getOutput().println("newPlayer");
-							for (int j = 0; j < joined.size(); j++) {
-								joined.get(i).getOutput().println("newPlayer" + joined.get(j).getUsername());
-							}
-							joined.get(i).getOutput().println("playersUpdated");
+						try {
+							serverSocket.close();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
-						newPlayer.setNewPlayer(false);
+						return;
+//						e1.printStackTrace();
 					}
 				}
+				
 				for (int i = 0; i < gameQueue.size(); i++) {
 					gameQueue.get(i).getOutput().println("breakFromLoop");
 				}
-				try {
-					playersWait.await(); // Main thread waits here until all clients have completed their turn
-				} catch (InterruptedException | BrokenBarrierException e) {
-					e.printStackTrace();
-				}
+
 				System.out.println("All players finished, dealer picking cards"); // Once all players in
 																					// ServerThread have reached the
 																					// barrier the main thread
 																					// continues...
-				while (deck.total(table.get(0)) < 17) {
+				while (Deck.total(table.get(0)) < 17) {
 					table.get(0).add(deck.drawCard()); // Logic to make the dealer pick their cards, since the
 														// dealersHand variable passed to the threads is a reference
 														// to this variable, all threads will see the changes.
@@ -155,19 +131,27 @@ public class Server implements Runnable {
 					dealersTurn.await(); // Dealers turn is finished, all player threads waiting on this barrier in
 											// server threads can now continue
 				} catch (InterruptedException | BrokenBarrierException e) {
-					e.printStackTrace();
+					try {
+						serverSocket.close();
+					} catch (IOException error) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					return;
+//					e.printStackTrace();
 				}
 			} else {
 				System.out.println("No players joined, session ending");
 			}
 			for (int i = 0; i < joined.size(); i++) {
-				System.out.println("sending to joined");
+				System.out.println("sending clear queue to joined");
 				joined.get(i).getOutput().println("Clear queue");
 			}
 			gameStart.setGameStart(false);
 			gameQueue.clear();
 			System.out.println("Game over");
 		}
+		
 	}
 
 }

@@ -10,6 +10,7 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Semaphore;
 
+import database.Session;
 import shareable.FinishedPlayers;
 
 public class ServerPlayerHandler implements Runnable {
@@ -19,37 +20,29 @@ public class ServerPlayerHandler implements Runnable {
 	private List<List<String>> table;
 	private Deck deck;
 	private Semaphore deckWait;
-	private Semaphore serverChatWait;
-	CyclicBarrier playersWait;
-	CyclicBarrier playersTurnWait;
 	CyclicBarrier dealersTurn;
-	CyclicBarrier gameOver;
 	private int noPlayers;
 	private boolean active;
 	private int barriers;
-	private List<String> chatLog;
 	private FinishedPlayers finishedPlayers;
 	private List<SocketConnection> gameQueue;
+	private int sessionID;
 
-	public ServerPlayerHandler(SocketConnection socketConnection, int ID, Deck deck, Semaphore deckWait,
-			CyclicBarrier playersWait, CyclicBarrier playersTurnWait, int noPlayers, CyclicBarrier dealersTurn,
-			List<List<String>> table, List<String> chatLog, Semaphore serverChatWait, FinishedPlayers finishedPlayers,
-			List<SocketConnection> gameQueue) {
+	public ServerPlayerHandler(SocketConnection socketConnection, int ID, Deck deck, Semaphore deckWait, int noPlayers,
+			CyclicBarrier dealersTurn, List<List<String>> table, FinishedPlayers finishedPlayers,
+			List<SocketConnection> gameQueue, int sessionID) {
 		this.socketConnection = socketConnection;
 		this.ID = ID;
 		this.deck = deck;
 		this.deckWait = deckWait;
-		this.playersWait = playersWait;
-		this.playersTurnWait = playersTurnWait;
 		this.noPlayers = noPlayers;
 		active = true;
 		this.dealersTurn = dealersTurn;
 		this.table = table;
 		barriers = 0;
-		this.chatLog = chatLog;
-		this.serverChatWait = serverChatWait;
 		this.finishedPlayers = finishedPlayers;
 		this.gameQueue = gameQueue;
+		this.sessionID = sessionID;
 	}
 
 	@Override
@@ -67,6 +60,7 @@ public class ServerPlayerHandler implements Runnable {
 		 */
 
 		synchronized (deck) {
+			socketConnection.getOutput().println("sessionID"+sessionID);
 			socketConnection.getOutput().println(table.get(0).get(0));
 			socketConnection.getOutput().println(table.get(0).get(1)); // Sends the dealers hand to the client
 			String card1 = deck.drawCard();
@@ -95,18 +89,33 @@ public class ServerPlayerHandler implements Runnable {
 						gameQueue.get(i).getOutput().println("gameChatMessage" + toSend);
 					}
 				}
-				if (in.equals("playerLeft")) {
-					socketConnection.getOutput().println("playerLeft");
-					triggerBarrier();
+				if (in.equals("playerLeftGame")) {
+					socketConnection.getOutput().println("playerLeftGame");
+					socketConnection.setInLobby(true);
+					socketConnection.getSessionWait().release();
+					triggerBarrier(thread);
+					return;
+				}
+				if (in.equals("thisPlayerLeft")) {
+					socketConnection.getOutput().println("playerLeftGame");
+					socketConnection.setInLobby(true);
+					socketConnection.getSessionWait().release();
+					triggerBarrier(thread);
 					return;
 				}
 				if (in.equals("h")) {
 					String card = deck.drawCard();
 					table.get(ID).add(card);
-					socketConnection.getOutput().println("playerCard" + card); // If the client asked for a card then
-																				// send a new card from the deck
+					for (int i = 0; i < gameQueue.size(); i++) {
+						gameQueue.get(i).getOutput().println("playerCard" + ID);
+						gameQueue.get(i).getOutput().println("playerCard" + card);
+					}
 				}
 				if (in.equals("p")) { // If the client passed then set active to false to break from loop
+					active = false;
+				}
+				if (in.equals("busted")) {
+					finishedPlayers.increaseBustedPlayers();
 					active = false;
 				}
 				if (in.equals("move")) { // Client requests the Make move message
@@ -114,9 +123,9 @@ public class ServerPlayerHandler implements Runnable {
 				}
 			} catch (IOException e) {
 				System.out.println("Player disconnected");
-				triggerBarrier();
 				socketConnection.setInLobby(true);
 				socketConnection.getSessionWait().release();
+				triggerBarrier(thread);
 				return;
 			}
 		}
@@ -124,13 +133,23 @@ public class ServerPlayerHandler implements Runnable {
 		System.out.println("Player " + ID + " finished");
 		finishedPlayers.playerFinished();
 		deckWait.release();
-		while (finishedPlayers.getFinishedPlayers() < noPlayers) {
+		while (finishedPlayers.getFinishedPlayers() < gameQueue.size()) {
 			try {
-				System.out.println("Finished players " + finishedPlayers.getFinishedPlayers());
+				System.out.println(
+						"Finished players " + finishedPlayers.getFinishedPlayers() + " out of " + gameQueue.size());
 				in = socketConnection.getInput().readLine();
-				if (in.equals("playerLeft")) {
-					socketConnection.getOutput().println("playerLeft");
-					triggerBarrier();
+				if (in.equals("playerLeftGame")) {
+					socketConnection.getOutput().println("playerLeftGame");
+					socketConnection.setInLobby(true);
+					socketConnection.getSessionWait().release();
+					triggerBarrier(thread);
+					return;
+				}
+				if (in.equals("thisPlayerLeft")) {
+					socketConnection.getOutput().println("playerLeftGame");
+					socketConnection.setInLobby(true);
+					socketConnection.getSessionWait().release();
+					triggerBarrier(thread);
 					return;
 				}
 				if (in.equals("breakFromLoop")) {
@@ -145,74 +164,95 @@ public class ServerPlayerHandler implements Runnable {
 					}
 				}
 			} catch (IOException e) {
-				System.out.println("Connection closed...");
-				break;
+				System.out.println("Player disconnected");
+				socketConnection.setInLobby(true);
+				socketConnection.getSessionWait().release();
+				triggerBarrier(thread);
+				return;
 			}
 		}
 
 		System.out.println("players finished");
 		socketConnection.getOutput().println("playersFinished"); // Once all threads have reached playersTurnWait they
-																	// will all be allowed to
-		if (noPlayers > 1) {
-			for (int i = 1; i < table.size(); i++) {
-				if (i != ID) {
-					socketConnection.getOutput().println("otherPlayer");
-					socketConnection.getOutput().println(i);
-					socketConnection.getOutput().println(table.get(i));
-				}
+		for (int j = 1; j < table.size(); j++) {
+			if (ID != j) {
+				socketConnection.getOutput().println("playerInitialCard" + j);
+				socketConnection.getOutput().println("playerInitialCard" + table.get(j).get(0));
+				socketConnection.getOutput().println("playerInitialCard" + table.get(j).get(1));
 			}
-			socketConnection.getOutput().println("tableSent");
-			System.out.println("Table Sent");
 		}
+//		for(int i = 0;i<gameQueue.size();i++) {
+//			if(i!=(ID-1)) {
+//				gameQueue.get(i).getOutput().println("playerInitialCard"+(ID));
+//				gameQueue.get(i).getOutput().println("playerInitialCard"+table.get(ID).get(0));
+//				System.out.println("playerInitialCard"+table.get(ID).get(0));
+//				System.out.println("playerInitialCard"+table.get(ID).get(1));
+//				gameQueue.get(i).getOutput().println("playerInitialCard"+table.get(ID).get(1));
+//			}
+//		}
+		socketConnection.getOutput().println("initialCardsSent");
+//		deckWait.release();
+		if (finishedPlayers.getBustedPlayers() == noPlayers) { // will all be allowed to
+			socketConnection.getOutput().println("skipDealer");
+		} else {
+			socketConnection.getOutput().println("dealerPlays");
+		}
+		// if (noPlayers > 1) {
+		// for (int i = 1; i < table.size(); i++) {
+		// if (i != ID) {
+		// socketConnection.getOutput().println("otherPlayer");
+		// socketConnection.getOutput().println(i);
+		// socketConnection.getOutput().println(table.get(i));
+		// }
+		// }
+		// socketConnection.getOutput().println("tableSent");
+		// System.out.println("Table Sent");
+		// }
 
-		try {
-			playersWait.await(); // Threads now reach the barrier that the main thread is waiting on, as all
-									// threads are now here (players+main) they can continue
-		} catch (InterruptedException | BrokenBarrierException e) {
-			triggerBarrier();
-			e.printStackTrace();
-		}
+		socketConnection.getOutput().println("showPlayerCards");
 		System.out.println("Dealers turn");
 		barriers++;
 		try {
 			dealersTurn.await(); // Player threads get stopped here, main server thread continues in server
 									// class.
 		} catch (InterruptedException | BrokenBarrierException e) {
-			triggerBarrier();
+			triggerBarrier(thread);
 			e.printStackTrace();
 		}
+
 		barriers++;
-		socketConnection.getOutput().println("showDealerHand"); // Tells the client to display the dealers hand to the
-																// players, the clients
-		// only have the dealers first 2 cards at this point
 		System.out.println("Dealers hand: " + table.get(0));
-		for (int i = 2; i < table.get(0).size(); i++) {
-			socketConnection.getOutput().println("dealerCard" + table.get(0).get(i)); // Sends the clients the dealers
-																						// new cards
+		if (finishedPlayers.getBustedPlayers() != noPlayers) {
+			for (int i = 2; i < table.get(0).size(); i++) {
+				socketConnection.getOutput().println("dealerCard" + table.get(0).get(i)); // Sends the clients the
+																							// dealers
+			}
 		}
 		socketConnection.getOutput().println("dealerDone"); // Tells the client the dealer is finished
 		System.out.println("Dealer done");
 		socketConnection.setInLobby(true);
+		Session.setSessionend(socketConnection.getUsername(), sessionID);
 		socketConnection.getSessionWait().release();
 		System.out.println("player released");
 	}
 
-	public void triggerBarrier() {
+	public void triggerBarrier(Thread thread) {
 		try {
 			System.out.println("entered trigger");
+			gameQueue.remove(socketConnection);
+			Session.setSessionend(socketConnection.getUsername(), sessionID);
 			switch (barriers) {
 			case 0:
 				System.out.println("releasing");
-				deckWait.release();
-				finishedPlayers.playerFinished();
-				playersWait.await();
+				if (!thread.isAlive())
+					deckWait.release();
+//				finishedPlayers.playerFinished();
 			case 1:
 				dealersTurn.await();
 			}
-			socketConnection.setInLobby(true);
-			socketConnection.getSessionWait().release();
 		} catch (Exception e) {
-
+			e.printStackTrace();
+			System.out.println("Error when releasing barriers");
 		}
 	}
 

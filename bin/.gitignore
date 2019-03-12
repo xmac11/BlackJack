@@ -1,4 +1,7 @@
 /gui/
+/image/
 /server/
 /shareable/
-/image/
+/src/
+/client/
+/database/

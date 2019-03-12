@@ -1,0 +1,82 @@
+#loginScreen{
+    -fx-background-image: url("../image/tileableStarsBackground.png");
+    -fx-background-repeat: repeat;
+    -fx-background-size: 600 800;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
+}
+
+.loginLabel{
+    -fx-font-family: "Arial Black";
+
+}
+
+#pane {
+    -fx-background-image: url("../image/background.jpg");
+    -fx-background-repeat: repeat;
+    -fx-background-size: 450 450;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
+}
+
+.gameLabel {
+   -fx-font-family: "Arial Black";
+   -fx-fill: #818181;
+   -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );
+}
+
+.GameButton {
+    -fx-background-color: linear-gradient(#ffd65b, #e68400),
+    linear-gradient(#ffef84, #f2ba44),
+    linear-gradient(#ffea6a, #efaa22),
+    linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),
+    linear-gradient(from 0% 0% to 15% 50%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+    -fx-background-radius: 30;
+    -fx-background-insets: 0, 1, 2, 3, 0;
+    -fx-text-fill: #654b00;
+    -fx-font-weight: bold;
+    -fx-font-size: 30px;
+    -fx-padding: 15 30 15 30;
+}
+
+.GameButton:pressed{
+	 -fx-background-color: linear-gradient(#ffd65b, #e68400),
+    linear-gradient(#ffef84, #f2ba44),
+    linear-gradient(#ffea6a, #efaa22),
+    linear-gradient(#ffe657 100%, #f8c202 50%, #eea10b 0%),
+    linear-gradient(from 0% 0% to 15% 50%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+    -fx-background-radius: 30;
+    -fx-background-insets: 0, 1, 2, 3, 0;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 30px;
+    -fx-padding: 15 30 15 30;
+}
+
+.chatBox {
+    -fx-background-color:#333333;
+    -fx-min-height:400px;
+    -fx-min-width:200px;
+}
+
+.joinButton {
+    -fx-background-color: linear-gradient(from 75% 75% to 100% 100%, #F6F6F6, #AAAAAA);
+    -fx-background-radius: 30;
+    -fx-background-insets: 0, 1, 2, 3, 0;
+    -fx-text-fill: #000000;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+
+}
+
+.joinButton:hover{
+	-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #AAAAAA, #F6F6F6);
+    -fx-background-radius: 30;
+    -fx-background-insets: 0, 1, 2, 3, 0;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+
+}
+
+
