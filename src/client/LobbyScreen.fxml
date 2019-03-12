@@ -15,14 +15,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane maxHeight="1080" maxWidth="1920" minHeight="480"
-	minWidth="640" prefHeight="480.0" prefWidth="640.0"
-	xmlns="http://javafx.com/javafx/8.0.171"
-	xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="client.LobbyController">
-	<stylesheets>
-		<URL value="@style.css" />
-	</stylesheets>
+<GridPane maxHeight="1080" maxWidth="1920" minHeight="480" minWidth="640" prefHeight="600.0" prefWidth="8000.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.LobbyController">
+    <stylesheets>
+        <URL value="@style.css" />
+    </stylesheets>
 	<columnConstraints>
 		<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
 			prefWidth="100.0" />
@@ -64,47 +60,49 @@
 					BorderPane.alignment="CENTER">
 					<children>
 						<Label alignment="CENTER" contentDisplay="CENTER"
-							minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0"
+							minHeight="18" minWidth="178" prefHeight="18.0"
 							prefWidth="178.0" text="ONLINE PLAYERS" textAlignment="JUSTIFY"
 							textFill="#ffffff" />
-						<ListView fx:id="onlineView" minHeight="100.0"
+						<ListView fx:id="onlineView" minHeight="327" minWidth="178"
 							prefHeight="327.0" prefWidth="178.0" VBox.vgrow="ALWAYS" />
-						<Label alignment="CENTER" contentDisplay="CENTER"
+						<Label alignment="CENTER" contentDisplay="CENTER" minHeight="18" minWidth="178"
 							prefHeight="18.0" prefWidth="165.0" text="MATCH QUEUE"
 							textAlignment="JUSTIFY" textFill="WHITE" />
-						<ListView fx:id="queueView" minHeight="-Infinity"
+						<ListView fx:id="queueView" minHeight="75" minWidth="178"
 							prefHeight="75.0" prefWidth="178.0" />
 					</children>
 				</VBox>
 			</left>
 			<center>
-				<VBox minHeight="400.0" minWidth="-Infinity" prefHeight="400.0"
+				<VBox minHeight="400.0" minWidth="332" prefHeight="400.0"
 					prefWidth="354.0" style="-fx-background-color: #000000;"
 					BorderPane.alignment="CENTER">
 					<children>
-						<Label alignment="CENTER" prefHeight="18.0"
+						<Label alignment="CENTER" minHeight="18" minWidth="332" prefHeight="18.0"
 							prefWidth="491.0" text="CHAT" textFill="WHITE" />
-						<ListView fx:id="chatView" minHeight="-Infinity"
-							minWidth="-Infinity" prefHeight="220.0" prefWidth="333.0" />
+						<ListView fx:id="chatView" minHeight="220"
+							minWidth="-332" prefHeight="220.0" prefWidth="333.0" />
 						<TextField fx:id="chatField" alignment="CENTER"
-							minHeight="-Infinity" onAction="#sendChat" prefHeight="30.0"
+							minHeight="37" minWidth="332" onAction="#sendChat" prefHeight="30.0"
 							prefWidth="354.0" promptText="chat here">
 							<font>
 								<Font size="14.0" />
 							</font>
 						</TextField>
+                        <Region minHeight="187" minWidth="332" prefHeight="332"
+                                HBox.hgrow="ALWAYS" />
 					</children>
 				</VBox>
 			</center>
 			<right>
-				<VBox minHeight="400.0" minWidth="108.0" prefHeight="400.0"
+				<VBox minHeight="400.0" minWidth="130" prefHeight="400.0"
 					prefWidth="130.0" style="-fx-background-color: #000000;"
 					BorderPane.alignment="CENTER">
 					<children>
-						<Label alignment="CENTER" minHeight="-Infinity"
-							minWidth="-Infinity" prefHeight="18.0" prefWidth="130.0"
+						<Label alignment="CENTER" minHeight="18"
+							minWidth="130" prefHeight="18.0" prefWidth="130.0"
 							text="ACTIONS" textFill="WHITE" />
-						<Button fx:id="joinButton" minHeight="-Infinity"
+						<Button fx:id="joinButton" minHeight="80"
 							minWidth="130.0" mnemonicParsing="false" onAction="#joinQueue"
 							prefHeight="83.2" prefWidth="130.0" styleClass="lobbyButton"
 							text="Join Queue" textOverrun="CENTER_ELLIPSIS">
@@ -115,7 +113,7 @@
 								<Cursor fx:constant="HAND" />
 							</cursor>
 						</Button>
-						<Button minHeight="-Infinity" minWidth="130.0"
+						<Button minHeight="80" minWidth="130.0"
 							mnemonicParsing="false" onAction="#leaveQueue" prefHeight="83.2"
 							prefWidth="130.0" styleClass="lobbyButton" text="Leave Queue"
 							textAlignment="JUSTIFY">
@@ -126,7 +124,7 @@
 								<Cursor fx:constant="HAND" />
 							</cursor>
 						</Button>
-						<Button fx:id="playButton" minHeight="-Infinity"
+						<Button fx:id="playButton" minHeight="97"
 							minWidth="130.0" mnemonicParsing="false" onAction="#startGame"
 							prefHeight="83.2" prefWidth="130.0" styleClass="lobbyButton"
 							text="Play" textAlignment="JUSTIFY" textFill="#09c205">
@@ -137,6 +135,8 @@
 								<Cursor fx:constant="HAND" />
 							</cursor>
 						</Button>
+                        <Region minHeight="163" minWidth="130" prefHeight="332"
+                                HBox.hgrow="ALWAYS" />
 					</children>
 				</VBox>
 			</right>
