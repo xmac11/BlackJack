@@ -19,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -72,7 +73,7 @@ public class LobbyController implements Initializable {
 				joinButton.setDisable(true);
 				gameScene.getStylesheets().addAll(getClass().getResource("style.css").toExternalForm());
 				Stage window = new Stage();
-				
+
 				GameController gameController = loader.<GameController>getController();
 				client.setGameController(gameController);
 				waitForController.release();
@@ -89,7 +90,7 @@ public class LobbyController implements Initializable {
 				window.setScene(gameScene);
 				window.show();
 				window.setOnCloseRequest(e -> {
-					if(!client.isGameFinished()) {
+					if (!client.isGameFinished()) {
 						e.consume();
 						client.closeGame(window);
 					}
@@ -97,30 +98,31 @@ public class LobbyController implements Initializable {
 			}
 		});
 	}
-	
+
 	public void signOut() {
 //		Platform.runLater(new Runnable() {
 //			@Override
 //			public void run() {
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginScreen.fxml"));
-				Scene loginScene = null;
-				try {
-					loginScene = new Scene(loader.load());
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				thisStage.setResizable(true);
-				thisStage.setScene(loginScene);
-				thisStage.show();
-				thisStage.setWidth(800);
-				thisStage.setHeight(600);
-				thisStage.setResizable(false);
-				thisStage.setOnCloseRequest(e -> System.exit(0));
+		client.signOut();
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginScreen.fxml"));
+		Scene loginScene = null;
+		try {
+			loginScene = new Scene(loader.load());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		thisStage.setResizable(true);
+		thisStage.setScene(loginScene);
+		thisStage.show();
+		thisStage.setWidth(800);
+		thisStage.setHeight(600);
+		thisStage.setResizable(false);
+		thisStage.setOnCloseRequest(e -> System.exit(0));
 //			}
 //		});
 	}
-	
+
 	public void connectionLost() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -169,7 +171,7 @@ public class LobbyController implements Initializable {
 			}
 		});
 	}
-	
+
 	public void addQueue(List<String> queue) {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -239,7 +241,7 @@ public class LobbyController implements Initializable {
 			output.println("lobbyChatMessage");
 			output.println("lobbyChatMessage" + username);
 			output.println("lobbyChatMessage" + incomingText);
-		}else {
+		} else {
 			addToChat("Error - Only letters and numbers allowed in chat");
 		}
 		chatField.setText("");
@@ -258,7 +260,7 @@ public class LobbyController implements Initializable {
 		System.out.println("join queue pressed");
 		output.println("joinQueue");
 	}
-	
+
 	public void leaveQueue() {
 		System.out.println("join queue pressed");
 		output.println("leaveQueue");
@@ -295,6 +297,24 @@ public class LobbyController implements Initializable {
 		table = new ArrayList<>();
 		client = new Client(table, waitForController, IP, this);
 		playButton.setDisable(true);
+		chatView.setCellFactory(param -> new ListCell<String>() {
+			@Override
+			protected void updateItem(String item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty || item == null) {
+					setGraphic(null);
+					setText(null);
+				} else {
+					// set the width's
+					setMinWidth(param.getWidth());
+					setMaxWidth(param.getWidth());
+					setPrefWidth(param.getWidth());
+					// allow wrapping
+					setWrapText(true);
+					setText(item.toString());
+				}
+			}
+		});
 		Thread thread = new Thread(client);
 		thread.start();
 	}

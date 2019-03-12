@@ -357,6 +357,10 @@ public class Client implements Runnable {
 		cards.addAll(Arrays.asList(arr));
 		return cards;
 	}
+	
+	public void signOut() {
+		output.println("thisPlayerSignedOut");
+	}
 
 	/*
 	 * The following calculates the result of the game using the total scores of the

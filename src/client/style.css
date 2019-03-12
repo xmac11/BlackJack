@@ -19,6 +19,14 @@
     -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
 }
 
+#lobbyScreen{
+    -fx-background-image: url("../image/lobbyBackground.jpg");
+    -fx-background-repeat: repeat;
+    -fx-background-size: 600 800;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
+}
+
 .gameLabel {
    -fx-font-family: "Arial Black";
    -fx-fill: #818181;
@@ -78,4 +86,24 @@
 
 }
 
+.lobbyButton {
+    -fx-background-color: linear-gradient(from 75% 75% to 100% 100%, #F6F6F6, #AAAAAA);
+    -fx-background-insets: 0, 1, 2, 3, 0;
+    -fx-border-color: black ;
+    -fx-border-width: 1 ; 
+    -fx-text-fill: #000000;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+}
+
+.lobbyButton:hover{
+	-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #AAAAAA, #F6F6F6);
+    -fx-background-insets: 0, 1, 2, 3, 0;
+    -fx-border-color: black ;
+    -fx-border-width: 1 ;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+
+}
 
