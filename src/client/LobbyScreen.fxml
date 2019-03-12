@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" styleClass="lobbyScreen" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.LobbyController">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" styleClass="lobbyScreen" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.LobbyController">
 	<stylesheets>
 		<URL value="@style.css" />
 	</stylesheets>
@@ -45,9 +45,9 @@
 				<VBox alignment="TOP_CENTER" minWidth="178.0" prefHeight="400.0" prefWidth="178.0" BorderPane.alignment="TOP_CENTER">
 					<children>
 						<Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="18" minWidth="178" prefHeight="18.0" prefWidth="178.0" text="ONLINE PLAYERS" textAlignment="JUSTIFY" textFill="#ffffff" />
-						<ListView fx:id="onlineView" maxWidth="-Infinity" minWidth="178" prefHeight="327.0" prefWidth="178.0" VBox.vgrow="ALWAYS" />
+						<ListView fx:id="onlineView" focusTraversable="false" maxWidth="-Infinity" minWidth="178" mouseTransparent="true" pickOnBounds="false" prefHeight="327.0" prefWidth="178.0" styleClass="lobbyListView" VBox.vgrow="ALWAYS" />
 						<Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="18" minWidth="178" prefHeight="18.0" prefWidth="165.0" text="MATCH QUEUE" textAlignment="JUSTIFY" textFill="WHITE" />
-						<ListView fx:id="queueView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="75.0" minWidth="178" prefHeight="75.0" prefWidth="178.0" />
+						<ListView fx:id="queueView" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="75.0" minWidth="178" mouseTransparent="true" pickOnBounds="false" prefHeight="75.0" prefWidth="178.0" styleClass="lobbyListView" />
 					</children>
 				</VBox>
 			</left>
@@ -55,8 +55,8 @@
 				<VBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="200.0" prefHeight="275.0" prefWidth="354.0" BorderPane.alignment="TOP_CENTER">
 					<children>
 						<Label alignment="CENTER" maxHeight="-Infinity" minHeight="18" prefHeight="18.0" prefWidth="491.0" text="CHAT" textFill="WHITE" />
-						<ListView fx:id="chatView" maxHeight="-Infinity" minHeight="220" prefHeight="220.0" prefWidth="333.0" />
-						<TextField fx:id="chatField" alignment="CENTER" maxHeight="-Infinity" minHeight="37" onAction="#sendChat" prefHeight="30.0" prefWidth="354.0" promptText="chat here">
+						<ListView fx:id="chatView" focusTraversable="false" maxHeight="-Infinity" minHeight="220" prefHeight="220.0" prefWidth="333.0" styleClass="lobbyListView" />
+						<TextField fx:id="chatField" alignment="CENTER" maxHeight="-Infinity" minHeight="37" onAction="#sendChat" prefHeight="30.0" prefWidth="354.0" promptText="chat here" styleClass="lobbyChatField">
 							<font>
 								<Font size="14.0" />
 							</font>
