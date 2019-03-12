@@ -23,17 +23,18 @@ public class Session {
             System.out.println("Username does not exist");
         }
     }
-    public static void setSessionPoints(String username, boolean points){
+    public static void setSessionPoints(int sessionID, String username, boolean points){
         String url = "jdbc:postgresql://mod-msc-sw1.cs.bham.ac.uk/";
         String user = "group21";
         String pass = "tb2ij946i6";
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
-            String newPoints = "UPDATE session SET session_points = session_points + ? WHERE username = ?;";
+            String newPoints = "UPDATE session SET session_points = ? WHERE username = ? and session_id = ?;";
 
             PreparedStatement statement = connection.prepareStatement(newPoints);
             statement.setBoolean(1,points);
             statement.setString(2,username);
+            statement.setInt(3,sessionID);
             statement.executeUpdate();
 
         } catch (SQLException e) {
