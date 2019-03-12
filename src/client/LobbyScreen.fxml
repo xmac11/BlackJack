@@ -45,7 +45,7 @@
 							textFill="WHITE" />
 						<Region minHeight="26.4" prefHeight="26.4"
 							HBox.hgrow="ALWAYS" />
-						<Label onMouseClicked="#signOut" prefHeight="17.0"
+						<Label onMouseClicked="#signOut" minHeight="26.4" prefHeight="17.0"
 							prefWidth="49.0" text="Sign out" textFill="RED" underline="true">
 							<cursor>
 								<Cursor fx:constant="HAND" />
