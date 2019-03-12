@@ -19,7 +19,7 @@ public class Main extends Application {
 		Scene scene = new Scene(root, WIDTH, HEIGHT);
 		primaryStage.setResizable(true);
 		primaryStage.setScene(scene);
-		primaryStage.getIcons().add(new Image("image/Playing Cards/a_of_spades.png"));
+		primaryStage.getIcons().add(new Image("image/appIcon.png"));
 		primaryStage.show();
 		primaryStage.setMinWidth(WIDTH-400);
 		primaryStage.setMinHeight(HEIGHT-150);

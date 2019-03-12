@@ -79,6 +79,10 @@ public class LobbyController implements Initializable {
 				window.setScene(gameScene);
 				window.setHeight(900);
 				window.setWidth(1600);
+				window.setMinWidth(1366);
+				window.setMinHeight(768);
+				window.setTitle("Club21");
+				window.getIcons().add(new Image("image/appIcon.png"));
 				window.setScene(gameScene);
 				window.show();
 				window.setOnCloseRequest(e -> {
@@ -189,13 +193,13 @@ public class LobbyController implements Initializable {
 
 	public void thisPlayerLeft() {
 		System.out.println("leaving");
-		output.println("thisPlayerLeft");
+		output.println("thisPlayerSignedOut");
 		System.exit(0);
 	}
 
 	public void sendChat() {
 		String incomingText = chatField.getText();
-		if (incomingText.matches("[a-zA-Z\\s\'\"]+") && incomingText.trim().length() > 0) {
+		if (incomingText.matches("[a-zA-Z\\s0-9]*") && incomingText.trim().length() > 0) {
 			output.println("lobbyChatMessage");
 			output.println("lobbyChatMessage" + username);
 			output.println("lobbyChatMessage" + incomingText);

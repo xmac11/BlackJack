@@ -4,27 +4,89 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0"
-	xmlns="http://javafx.com/javafx/8.0.171"
-	xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LobbyController">
-	<children>
-		<Label layoutX="14.0" layoutY="14.0" text="Online" />
-		<ListView fx:id="chatView" layoutX="14.0" layoutY="322.0"
-			prefHeight="240.0" prefWidth="770.0" />
-		<ListView fx:id="onlineView" layoutX="14.0" layoutY="31.0"
-			prefHeight="257.0" prefWidth="200.0" />
-		<TextField fx:id="chatField" layoutX="14.0" layoutY="562.0"
-			onAction="#sendChat" prefHeight="25.0" prefWidth="770.0" />
-		<Label layoutX="14.0" layoutY="300.0" text="Chat" />
-		<Button fx:id="joinButton" layoutX="663.0" layoutY="14.0"
-			mnemonicParsing="false" onAction="#joinQueue" prefHeight="64.0"
-			prefWidth="121.0" text="Join Game Queue" />
-		<Button fx:id="playButton" layoutX="329.0" layoutY="121.0"
-			mnemonicParsing="false" onAction="#startGame" prefHeight="77.0"
-			prefWidth="140.0" text="Play" />
-		<ListView fx:id="queueView" layoutX="663.0" layoutY="78.0"
-			prefHeight="77.0" prefWidth="121.0" />
-	</children>
-</AnchorPane>
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LobbyController">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <BorderPane maxHeight="1080.0" maxWidth="1920.0" minHeight="480.0" minWidth="640.0" prefHeight="600.0" prefWidth="800.0">
+         <top>
+            <HBox maxHeight="26.4" maxWidth="1920.0" minHeight="26.4" minWidth="640.0" prefHeight="26.4" prefWidth="800.0" style="-fx-background-color: #000000;" BorderPane.alignment="CENTER">
+               <children>
+                  <Region minHeight="26.4" prefHeight="26.4" HBox.hgrow="ALWAYS" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" minHeight="26.4" prefHeight="26.4" text="WELCOME TO GROUP21 LOBBY" textAlignment="JUSTIFY" textFill="WHITE" />
+                  <Region minHeight="26.4" prefHeight="26.4" HBox.hgrow="ALWAYS" />
+                  <Button alignment="CENTER" contentDisplay="CENTER" minHeight="26.4" minWidth="-Infinity" mnemonicParsing="false" prefHeight="26.4" prefWidth="130.0" text="Sign Out" textFill="#d70a0a" />
+               </children>
+            </HBox>
+         </top>
+         <left>
+            <VBox minHeight="-Infinity" minWidth="178.0" prefHeight="400.0" prefWidth="178.0" style="-fx-background-color: #000000;" BorderPane.alignment="CENTER">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="178.0" text="ONLINE PLAYERS" textAlignment="JUSTIFY" textFill="#ffffff" />
+                  <ListView fx:id="onlineView" minHeight="-Infinity" prefHeight="327.0" prefWidth="178.0" VBox.vgrow="ALWAYS" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="165.0" text="MATCH QUEUE" textAlignment="JUSTIFY" textFill="WHITE" />
+                  <ListView fx:id="queueView" minHeight="-Infinity" prefHeight="75.0" prefWidth="178.0" />
+               </children>
+            </VBox>
+         </left>
+         <center>
+            <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="354.0" style="-fx-background-color: #000000;" BorderPane.alignment="CENTER">
+               <children>
+                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="491.0" text="CHAT" textFill="WHITE" />
+                  <ListView fx:id="chatView" minHeight="-Infinity" minWidth="-Infinity" prefHeight="221.0" prefWidth="333.0" />
+                  <TextField fx:id="chatField" alignment="CENTER" minHeight="-Infinity" prefHeight="37.0" prefWidth="492.0" promptText="chat here">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </TextField>
+                  <HBox fx:id="imageBox" alignment="CENTER" prefHeight="401.0" prefWidth="492.0" />
+               </children>
+            </VBox>
+         </center>
+         <right>
+            <VBox minHeight="400.0" minWidth="130.0" prefHeight="400.0" prefWidth="130.0" style="-fx-background-color: #000000;" BorderPane.alignment="CENTER">
+               <children>
+                  <Label alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="130.0" text="ACTIONS" textFill="WHITE" />
+                  <Button fx:id="joinButton" minHeight="89.0" minWidth="130.0" mnemonicParsing="false" onAction="#joinQueue" prefHeight="89.0" prefWidth="130.0" styleClass="joinButton" text="Join Queue" textOverrun="CENTER_ELLIPSIS">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+                  <Button minHeight="89.0" minWidth="130.0" mnemonicParsing="false" prefHeight="89.0" prefWidth="130.0" text="Leave Queue" textAlignment="JUSTIFY">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="playButton" minHeight="78.4" minWidth="130.0" mnemonicParsing="false" onAction="#startGame" prefHeight="78.4" prefWidth="130.0" text="Play" textAlignment="JUSTIFY" textFill="#09c205">
+                     <font>
+                        <Font size="35.0" />
+                     </font>
+                  </Button>
+               </children>
+            </VBox>
+         </right>
+         <bottom>
+            <HBox maxHeight="18.0" maxWidth="1920.0" minHeight="18.0" minWidth="640.0" prefHeight="18.0" prefWidth="640.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Region style="-fx-background-color: #000000;" HBox.hgrow="ALWAYS" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="18.0" maxWidth="1920.0" minHeight="18.0" minWidth="298.0" prefHeight="18.0" prefWidth="298.0" style="-fx-background-color: #000000;" text="© 2019 Group21 All Rights Reserved" textAlignment="JUSTIFY" textFill="WHITE" />
+                  <Region style="-fx-background-color: #000000;" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+         </bottom>
+      </BorderPane>
+   </children>
+</GridPane>

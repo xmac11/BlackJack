@@ -103,7 +103,7 @@ public class GameController implements Initializable {
 
 	public void sendChat() {
 		String incomingText = textField.getText();
-		if (incomingText.matches("[a-zA-Z\\s\'\"]+") && incomingText.trim().length() > 0) {
+		if (incomingText.matches("[a-zA-Z\\s0-9]*") && incomingText.trim().length() > 0) {
 			output.println("gameChatMessage");
 			output.println("gameChatMessage" + username);
 			output.println("gameChatMessage" + incomingText);
@@ -208,6 +208,7 @@ public class GameController implements Initializable {
 		file = file.replaceAll(" ", "_of_");
 		file = file.toLowerCase();
 		file += ".png";
+		System.out.println("card file:"+file);
 		return file;
 	}
 
@@ -251,21 +252,16 @@ public class GameController implements Initializable {
 		ImageView cardImage = new ImageView();
 		cardImage.setFitHeight(150);
 		cardImage.setFitWidth(100);
-		Image image = null;
-		if (card.contains("facedown")) {
-			image = getImage(card);
-		} else {
-			image = getImage(card);
-		}
+		Image image = getImage(card);
 		cardImage.setImage(image);
 		hand.getChildren().add(cardImage);
 	}
 
 	public Image getImage(String card) {
 		if (card.contains("facedown")) {
-			return new javafx.scene.image.Image("/image/Playing Cards/" + card);
+			return new Image("/image/Playing Cards/" + card);
 		} else {
-			return new javafx.scene.image.Image("/image/Playing Cards/" + cardToFile(card));
+			return new Image("/image/Playing Cards/" + cardToFile(card));
 		}
 	}
 
@@ -276,8 +272,7 @@ public class GameController implements Initializable {
 				ImageView cardImage = new ImageView();
 				cardImage.setFitHeight(150);
 				cardImage.setFitWidth(100);
-				javafx.scene.image.Image image = new javafx.scene.image.Image(
-						"/image/Playing Cards/" + cardToFile(card));
+				Image image = getImage(card);
 				cardImage.setImage(image);
 				hBoxPlayer.getChildren().add(cardImage);
 			}
@@ -291,8 +286,7 @@ public class GameController implements Initializable {
 				ImageView cardImage = new ImageView();
 				cardImage.setFitHeight(150);
 				cardImage.setFitWidth(100);
-				javafx.scene.image.Image image = new javafx.scene.image.Image(
-						"/image/Playing Cards/" + cardToFile(card));
+				javafx.scene.image.Image image = getImage(card);
 				cardImage.setImage(image);
 				if (player == 2)
 					hBoxPlayer2.getChildren().add(cardImage);
@@ -331,11 +325,9 @@ public class GameController implements Initializable {
 			@Override
 			public void run() {
 				if (player == 2) {
-					hBoxPlayer2.getChildren().remove(0);
-					hBoxPlayer2.getChildren().remove(0);
+					hBoxPlayer2.getChildren().clear();
 				} else {
-					hBoxPlayer3.getChildren().remove(0);
-					hBoxPlayer3.getChildren().remove(0);
+					hBoxPlayer3.getChildren().clear();
 				}
 			}
 		});
