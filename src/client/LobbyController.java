@@ -81,6 +81,9 @@ public class LobbyController implements Initializable {
 				window.setWidth(1600);
 				window.setMinWidth(1366);
 				window.setMinHeight(768);
+				gameController.setStage(window);
+				window.setMaxHeight(1080);
+				window.setMaxWidth(1920);
 				window.setTitle("Club21");
 				window.getIcons().add(new Image("image/appIcon.png"));
 				window.setScene(gameScene);
@@ -89,7 +92,6 @@ public class LobbyController implements Initializable {
 					if(!client.isGameFinished()) {
 						e.consume();
 						client.closeGame(window);
-//						gameController.playerLeft();
 					}
 				});
 			}
@@ -111,8 +113,9 @@ public class LobbyController implements Initializable {
 				thisStage.setResizable(true);
 				thisStage.setScene(loginScene);
 				thisStage.show();
-				thisStage.setMinWidth(600);
-				thisStage.setMinHeight(500);
+				thisStage.setWidth(800);
+				thisStage.setHeight(600);
+				thisStage.setResizable(false);
 				thisStage.setOnCloseRequest(e -> System.exit(0));
 //			}
 //		});
@@ -135,8 +138,9 @@ public class LobbyController implements Initializable {
 				thisStage.setResizable(true);
 				thisStage.setScene(loginScene);
 				thisStage.show();
-				thisStage.setMinWidth(600);
-				thisStage.setMinHeight(500);
+				thisStage.setWidth(800);
+				thisStage.setHeight(600);
+				thisStage.setResizable(false);
 				thisStage.setOnCloseRequest(e -> System.exit(0));
 			}
 		});

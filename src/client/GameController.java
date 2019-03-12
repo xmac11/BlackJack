@@ -17,6 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.ConstraintsBase;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
@@ -56,6 +57,9 @@ public class GameController implements Initializable {
 
 	@FXML
 	private Button hitButton;
+	
+	@FXML
+	private Button leaveButton;
 
 	@FXML
 	private TextField textField;
@@ -93,9 +97,9 @@ public class GameController implements Initializable {
 		});
 	}
 
-	public void leaveGame() {
-		System.exit(0);
-	}
+//	public void leaveGame() {
+//		System.exit(0);
+//	}
 
 	public void setID(int ID) {
 		this.ID = ID;
@@ -193,6 +197,10 @@ public class GameController implements Initializable {
 		});
 	}
 
+	public void closeGameScreen() {
+		stage.close();
+	}
+	
 	public void setDealerLabel(String text) {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -208,7 +216,7 @@ public class GameController implements Initializable {
 		file = file.replaceAll(" ", "_of_");
 		file = file.toLowerCase();
 		file += ".png";
-		System.out.println("card file:"+file);
+		System.out.println("card file:" + file);
 		return file;
 	}
 
@@ -247,14 +255,14 @@ public class GameController implements Initializable {
 			}
 		});
 	}
-
-	public void addCardToHand(String card, HBox hand) {
-		ImageView cardImage = new ImageView();
-		cardImage.setFitHeight(150);
-		cardImage.setFitWidth(100);
-		Image image = getImage(card);
-		cardImage.setImage(image);
-		hand.getChildren().add(cardImage);
+	
+	public void showLeaveButton() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				leaveButton.setVisible(true);
+			}
+		});
 	}
 
 	public Image getImage(String card) {
@@ -275,6 +283,43 @@ public class GameController implements Initializable {
 				Image image = getImage(card);
 				cardImage.setImage(image);
 				hBoxPlayer.getChildren().add(cardImage);
+				if(hBoxPlayer.getChildren().size()>4) {
+					List<ImageView> smallerImages = new ArrayList<>();
+					for (int i = 0; i < hBoxPlayer.getChildren().size(); i++) {
+						ImageView smaller = (ImageView) hBoxPlayer.getChildren().remove(i);
+						i--;
+						smaller.setFitHeight(100);
+						smaller.setFitWidth(66);
+						smallerImages.add(smaller);
+					}
+				}
+				if (hBoxPlayer.getChildren().size() > 3) {
+					switch (noPlayers) {
+					case 3:
+						List<ImageView> smallerImages = new ArrayList<>();
+						for (int i = 0; i < hBoxPlayer3.getChildren().size(); i++) {
+							ImageView smaller = (ImageView) hBoxPlayer3.getChildren().remove(i);
+							i--;
+							smaller.setFitHeight(80);
+							smaller.setFitWidth(55);
+							smallerImages.add(smaller);
+						}
+						hBoxPlayer3.getChildren().addAll(smallerImages);
+						
+					case 2:
+						smallerImages = new ArrayList<>();
+						for (int i = 0; i < hBoxPlayer2.getChildren().size(); i++) {
+							ImageView smaller = (ImageView) hBoxPlayer2.getChildren().remove(i);
+							i--;
+							smaller.setFitHeight(80);
+							smaller.setFitWidth(55);
+							smallerImages.add(smaller);
+						}
+						hBoxPlayer2.getChildren().addAll(smallerImages);
+					default:
+						break;
+					}
+				}
 			}
 		});
 	}
@@ -288,10 +333,33 @@ public class GameController implements Initializable {
 				cardImage.setFitWidth(100);
 				javafx.scene.image.Image image = getImage(card);
 				cardImage.setImage(image);
-				if (player == 2)
+				if (player == 2) {
 					hBoxPlayer2.getChildren().add(cardImage);
-				else
+					if (hBoxPlayer2.getChildren().size() > 3 || hBoxPlayer.getChildren().size() > 3) {
+						List<ImageView> smallerImages = new ArrayList<>();
+						for (int i = 0; i < hBoxPlayer2.getChildren().size(); i++) {
+							ImageView smaller = (ImageView) hBoxPlayer2.getChildren().remove(i);
+							i--;
+							smaller.setFitHeight(80);
+							smaller.setFitWidth(55);
+							smallerImages.add(smaller);
+						}
+						hBoxPlayer2.getChildren().addAll(smallerImages);
+					}
+				} else {
 					hBoxPlayer3.getChildren().add(cardImage);
+					if (hBoxPlayer3.getChildren().size() > 3 || hBoxPlayer.getChildren().size() > 3) {
+						List<ImageView> smallerImages = new ArrayList<>();
+						for (int i = 0; i < hBoxPlayer3.getChildren().size(); i++) {
+							ImageView smaller = (ImageView) hBoxPlayer3.getChildren().remove(i);
+							i--;
+							smaller.setFitHeight(80);
+							smaller.setFitWidth(55);
+							smallerImages.add(smaller);
+						}
+						hBoxPlayer3.getChildren().addAll(smallerImages);
+					}
+				}
 			}
 		});
 	}
@@ -303,8 +371,7 @@ public class GameController implements Initializable {
 				ImageView cardImage = new ImageView();
 				cardImage.setFitHeight(150);
 				cardImage.setFitWidth(100);
-				javafx.scene.image.Image image = new javafx.scene.image.Image(
-						"/image/Playing Cards/" + cardToFile(card));
+				Image image = getImage(card);
 				cardImage.setImage(image);
 				hBoxDealer.getChildren().add(cardImage);
 			}
@@ -339,19 +406,19 @@ public class GameController implements Initializable {
 			public void run() {
 				if (noPlayers > 1) {
 					player2Label.setVisible(true);
-					addCardToHand("facedown.jpg", hBoxPlayer2);
-					addCardToHand("facedown.jpg", hBoxPlayer2);
+					addCardToOpposingPlayerHand(2, "facedown.jpg");
+					addCardToOpposingPlayerHand(2, "facedown.jpg");
 				}
 				if (noPlayers > 2) {
 					player3Label.setVisible(true);
-					addCardToHand("facedown.jpg", hBoxPlayer3);
-					addCardToHand("facedown.jpg", hBoxPlayer3);
+					addCardToOpposingPlayerHand(3, "facedown.jpg");
+					addCardToOpposingPlayerHand(3, "facedown.jpg");
 				}
 				if (table.size() > 0) {
-					addCardToHand(table.get(0).get(0), hBoxDealer);
-					addCardToHand("facedown.jpg", hBoxDealer);
-					addCardToHand(table.get(ID).get(0), hBoxPlayer);
-					addCardToHand(table.get(ID).get(1), hBoxPlayer);
+					addCardToDealerHand(table.get(0).get(0));
+					addCardToDealerHand("facedown.jpg");
+					addCardToPlayerHand(table.get(ID).get(0));
+					addCardToPlayerHand(table.get(ID).get(1));
 				} else {
 					setLabel("Error! Unable to join session.");
 				}

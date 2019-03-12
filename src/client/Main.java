@@ -21,8 +21,7 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.getIcons().add(new Image("image/appIcon.png"));
 		primaryStage.show();
-		primaryStage.setMinWidth(WIDTH-400);
-		primaryStage.setMinHeight(HEIGHT-150);
+		primaryStage.setResizable(false);
 		primaryStage.setOnCloseRequest(e -> System.exit(0));
 	}
 

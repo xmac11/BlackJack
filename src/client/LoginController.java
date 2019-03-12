@@ -23,8 +23,18 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -103,21 +113,30 @@ public class LoginController implements Initializable {
 	}
 
 	public void signUp() {
-		System.out.println("Clicked");
 		Stage stage = new Stage();
 		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.getIcons().add(new Image("image/appIcon.png"));
 		stage.setTitle("Sign Up");
 		stage.setWidth(400);
 		stage.setHeight(300);
+		stage.setResizable(false);
 		Label usernameLabel = new Label("Enter Username");
 		Label passLabel = new Label("Enter Password");
 		Label passLabel2 = new Label("Enter Password again");
 		Label error = new Label("");
+		usernameLabel.setTextFill(Color.WHITE);
+		passLabel.setTextFill(Color.WHITE);
+		passLabel2.setTextFill(Color.WHITE);
 		error.setVisible(false);
-
+		
+		
+		
 		TextField username = new TextField();
+		username.setMaxWidth(300);
 		PasswordField password1 = new PasswordField();
 		PasswordField password2 = new PasswordField();
+		password1.setMaxWidth(300);
+		password2.setMaxWidth(300);
 		username.setPadding(new Insets(5, 5, 5, 5));
 		password1.setPadding(new Insets(5, 5, 5, 5));
 		password2.setPadding(new Insets(5, 5, 5, 5));
@@ -129,7 +148,7 @@ public class LoginController implements Initializable {
 			if (username.getText().contains(" ") || !(username.getText().matches("[a-zA-Z0-9\\_]*"))) {
 				error.setText("Username must not contain spaces");
 				error.setVisible(true);
-			} else if (password1.getText().equals(password2.getText())) {
+			} else if (password1.getText().equals(password2.getText()) && (password1.getText().trim().length()>3)) {
 				if (Authentication.newAccount(username.getText(), password1.getText())) {
 					stage.close();
 				} else {
@@ -137,7 +156,7 @@ public class LoginController implements Initializable {
 					error.setVisible(true);
 				}
 			} else {
-				error.setText("Passwords must match");
+				error.setText("Passwords must match and be longer than 3 characters");
 				error.setVisible(true);
 			}
 		});
@@ -154,7 +173,11 @@ public class LoginController implements Initializable {
 		VBox vBox = new VBox(5);
 		vBox.getChildren().addAll(usernameLabel, username, passLabel, password1, passLabel2, password2, error, hBox1);
 		vBox.setAlignment(Pos.CENTER);
-		Scene scene = new Scene(vBox, 200, 400);
+		StackPane root = new StackPane(vBox);
+		root.setStyle("-fx-background-image: url('" + "/image/signUpBackground.jpg" + "'); " +
+		           "-fx-background-position: center center; " +
+		           "-fx-background-repeat: repeat;");
+		Scene scene = new Scene(root, 200, 400);
 		stage.setScene(scene);
 		stage.showAndWait();
 

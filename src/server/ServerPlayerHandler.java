@@ -129,6 +129,7 @@ public class ServerPlayerHandler implements Runnable {
 				return;
 			}
 		}
+		active = false;
 		socketConnection.getOutput().println("Player " + ID + " finished");
 		System.out.println("Player " + ID + " finished");
 		finishedPlayers.playerFinished();
@@ -224,7 +225,7 @@ public class ServerPlayerHandler implements Runnable {
 			switch (barriers) {
 			case 0:
 				System.out.println("releasing");
-				if (!thread.isAlive())
+				if (active)
 					deckWait.release();
 			case 1:
 				dealersTurn.await();

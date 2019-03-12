@@ -337,6 +337,7 @@ public class Client implements Runnable {
 				table.clear();
 				inQueue.clear();
 				gameController.endChat();
+				gameController.showLeaveButton();
 			}
 		} catch (IOException e) {
 			System.out.println("Session not joinable");
