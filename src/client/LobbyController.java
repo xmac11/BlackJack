@@ -33,6 +33,9 @@ public class LobbyController implements Initializable {
 
 	@FXML
 	private Button playButton;
+	
+	@FXML
+	private Button leaveButton;
 
 	@FXML
 	private ListView<String> queueView;
@@ -159,6 +162,7 @@ public class LobbyController implements Initializable {
 			public void run() {
 				playButton.setDisable(false);
 				joinButton.setDisable(true);
+				leaveButton.setDisable(false);
 			}
 		});
 	}
@@ -169,6 +173,7 @@ public class LobbyController implements Initializable {
 			public void run() {
 				playButton.setDisable(true);
 				joinButton.setDisable(false);
+				leaveButton.setDisable(true);
 			}
 		});
 	}
@@ -265,7 +270,6 @@ public class LobbyController implements Initializable {
 	}
 
 	public void leaveQueue() {
-		System.out.println("join queue pressed");
 		output.println("leaveQueue");
 	}
 
@@ -300,6 +304,7 @@ public class LobbyController implements Initializable {
 		table = new ArrayList<>();
 		client = new Client(table, waitForController, IP, this);
 		playButton.setDisable(true);
+		leaveButton.setDisable(true);
 		chatView.setCellFactory(param -> new ListCell<String>() {
 			@Override
 			protected void updateItem(String item, boolean empty) {
