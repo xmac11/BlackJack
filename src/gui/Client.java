@@ -8,7 +8,7 @@ import java.util.concurrent.Semaphore;
 
 import javax.security.auth.kerberos.KerberosKey;
 
-import com.sun.glass.ui.TouchInputSupport;
+//import com.sun.glass.ui.TouchInputSupport;
 
 import database.MatchHistory;
 import javafx.geometry.Pos;
