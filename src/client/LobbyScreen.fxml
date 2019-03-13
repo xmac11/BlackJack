@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Reflection?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -15,44 +16,25 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity"
-	minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0"
-	prefWidth="640.0" styleClass="lobbyScreen"
-	xmlns="http://javafx.com/javafx/8.0.171"
-	xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="client.LobbyController">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" styleClass="lobbyScreen" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.LobbyController">
 	<stylesheets>
 		<URL value="@style.css" />
 	</stylesheets>
 	<columnConstraints>
-		<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-			prefWidth="100.0" />
+		<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
 	</columnConstraints>
 	<rowConstraints>
-		<RowConstraints minHeight="10.0" prefHeight="30.0"
-			vgrow="SOMETIMES" />
+		<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 	</rowConstraints>
 	<children>
-		<BorderPane maxHeight="1080.0" maxWidth="1920.0"
-			prefHeight="600.0" prefWidth="800.0">
+		<BorderPane maxHeight="1080.0" maxWidth="1920.0" prefHeight="600.0" prefWidth="800.0">
 			<top>
-				<HBox maxHeight="26.4" maxWidth="1920.0" minHeight="-Infinity"
-					prefHeight="26.4" prefWidth="800.0"
-					style="-fx-background-color: #000000;"
-					BorderPane.alignment="CENTER">
+				<HBox maxHeight="26.4" maxWidth="1920.0" minHeight="-Infinity" prefHeight="26.4" prefWidth="800.0" style="-fx-background-color: #000000;" BorderPane.alignment="CENTER">
 					<children>
-						<Region minHeight="26.4" prefHeight="26.4"
-							HBox.hgrow="ALWAYS" />
-						<Label alignment="CENTER" contentDisplay="CENTER"
-							minHeight="-Infinity" prefHeight="26.4"
-							text="WELCOME TO GROUP21 LOBBY" textAlignment="JUSTIFY"
-							textFill="WHITE" />
-						<Region minHeight="-Infinity" prefHeight="26.4"
-							HBox.hgrow="ALWAYS" />
-						<Label alignment="CENTER" contentDisplay="CENTER"
-							minHeight="-Infinity" minWidth="130.0" onMouseClicked="#signOut"
-							prefHeight="26.0" prefWidth="130.0" text="Sign out"
-							textFill="RED" underline="true">
+						<Region minHeight="26.4" prefHeight="26.4" HBox.hgrow="ALWAYS" />
+						<Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" prefHeight="26.4" text="WELCOME TO GROUP21 LOBBY" textAlignment="JUSTIFY" textFill="WHITE" />
+						<Region minHeight="-Infinity" prefHeight="26.4" HBox.hgrow="ALWAYS" />
+						<Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" minWidth="130.0" onMouseClicked="#signOut" prefHeight="26.0" prefWidth="130.0" text="Sign out" textFill="RED" underline="true">
 							<cursor>
 								<Cursor fx:constant="HAND" />
 							</cursor>
@@ -61,63 +43,41 @@
 				</HBox>
 			</top>
 			<left>
-				<VBox alignment="TOP_CENTER" minWidth="178.0"
-					prefHeight="400.0" prefWidth="178.0"
-					BorderPane.alignment="TOP_CENTER">
+				<VBox alignment="TOP_CENTER" minWidth="178.0" prefHeight="400.0" prefWidth="178.0" BorderPane.alignment="TOP_CENTER">
 					<children>
-						<Label alignment="CENTER" contentDisplay="CENTER"
-							maxHeight="-Infinity" maxWidth="-Infinity" minHeight="18"
-							minWidth="178" prefHeight="18.0" prefWidth="178.0"
-							text="ONLINE PLAYERS" textAlignment="JUSTIFY" textFill="#ffffff" />
-						<ListView fx:id="onlineView" focusTraversable="false"
-							maxWidth="-Infinity" minWidth="178" mouseTransparent="true"
-							pickOnBounds="false" prefHeight="327.0" prefWidth="178.0"
-							styleClass="lobbyListView" VBox.vgrow="ALWAYS" />
-						<Label alignment="CENTER" contentDisplay="CENTER"
-							maxHeight="-Infinity" maxWidth="-Infinity" minHeight="18"
-							minWidth="178" prefHeight="18.0" prefWidth="165.0"
-							text="MATCH QUEUE" textAlignment="JUSTIFY" textFill="WHITE" />
-						<ListView fx:id="queueView" focusTraversable="false"
-							maxHeight="-Infinity" maxWidth="-Infinity" minHeight="75.0"
-							minWidth="178" mouseTransparent="true" pickOnBounds="false"
-							prefHeight="75.0" prefWidth="178.0" styleClass="lobbyListView" />
+						<Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="18" minWidth="178" prefHeight="18.0" prefWidth="178.0" text="ONLINE PLAYERS" textAlignment="JUSTIFY" textFill="#ffffff" />
+						<ListView fx:id="onlineView" focusTraversable="false" maxWidth="-Infinity" minWidth="178" mouseTransparent="true" pickOnBounds="false" prefHeight="327.0" prefWidth="178.0" styleClass="lobbyListView" VBox.vgrow="ALWAYS" />
+						<Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="18" minWidth="178" prefHeight="18.0" prefWidth="165.0" text="MATCH QUEUE" textAlignment="JUSTIFY" textFill="WHITE" />
+						<ListView fx:id="queueView" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="75.0" minWidth="178" mouseTransparent="true" pickOnBounds="false" prefHeight="75.0" prefWidth="178.0" styleClass="lobbyListView" />
 					</children>
 				</VBox>
 			</left>
 			<center>
-				<VBox alignment="TOP_CENTER" maxHeight="-Infinity"
-					minHeight="200.0" prefHeight="275.0" prefWidth="332.0"
-					BorderPane.alignment="TOP_CENTER">
+				<VBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="200.0" prefHeight="400.0" prefWidth="332.0" BorderPane.alignment="TOP_CENTER">
 					<children>
-						<Label alignment="CENTER" maxHeight="-Infinity"
-							minHeight="18" prefHeight="18.0" prefWidth="491.0" text="CHAT"
-							textFill="WHITE" />
-						<ListView fx:id="chatView" focusTraversable="false"
-							maxHeight="-Infinity" minHeight="220" prefHeight="220.0"
-							prefWidth="333.0" styleClass="lobbyListView" />
-						<TextField fx:id="chatField" alignment="CENTER"
-							maxHeight="-Infinity" minHeight="37" onAction="#sendChat"
-							prefHeight="30.0" prefWidth="354.0" promptText="chat here"
-							styleClass="lobbyChatField">
+						<Label alignment="CENTER" maxHeight="-Infinity" minHeight="18" prefHeight="18.0" prefWidth="491.0" text="CHAT" textFill="WHITE" />
+						<ListView fx:id="chatView" focusTraversable="false" maxHeight="-Infinity" minHeight="220" prefHeight="220.0" prefWidth="333.0" styleClass="lobbyListView" />
+						<TextField fx:id="chatField" alignment="CENTER" maxHeight="-Infinity" minHeight="37" onAction="#sendChat" prefHeight="30.0" prefWidth="354.0" promptText="chat here" styleClass="lobbyChatField">
 							<font>
 								<Font size="14.0" />
 							</font>
 						</TextField>
+                  <Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" prefHeight="68.0" prefWidth="298.0" text="\$GROUP21 BLACKJACK$" textAlignment="CENTER" textFill="#eb0000" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font name="Bauhaus 93" size="23.0" />
+                     </font>
+                     <effect>
+                        <Reflection />
+                     </effect>
+                  </Label>
 					</children>
 				</VBox>
 			</center>
 			<right>
-				<VBox alignment="TOP_CENTER" maxHeight="-Infinity"
-					minHeight="275.0" minWidth="130" prefHeight="312.0"
-					prefWidth="130.0" BorderPane.alignment="TOP_CENTER">
+				<VBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="275.0" minWidth="130" prefHeight="312.0" prefWidth="130.0" BorderPane.alignment="TOP_CENTER">
 					<children>
-						<Label alignment="CENTER" minHeight="18" prefHeight="18.0"
-							prefWidth="130.0" text="ACTIONS" textFill="WHITE" />
-						<Button fx:id="joinButton" maxHeight="-Infinity"
-							minHeight="80.0" minWidth="130.0" mnemonicParsing="false"
-							onAction="#joinQueue" prefHeight="80.0" prefWidth="130.0"
-							styleClass="lobbyButton" text="Join Queue"
-							textOverrun="CENTER_ELLIPSIS">
+						<Label alignment="CENTER" minHeight="18" prefHeight="18.0" prefWidth="130.0" text="ACTIONS" textFill="WHITE" />
+						<Button fx:id="joinButton" maxHeight="-Infinity" minHeight="80.0" minWidth="130.0" mnemonicParsing="false" onAction="#joinQueue" prefHeight="80.0" prefWidth="130.0" styleClass="lobbyButton" text="Join Queue" textOverrun="CENTER_ELLIPSIS">
 							<font>
 								<Font size="18.0" />
 							</font>
@@ -125,11 +85,7 @@
 								<Cursor fx:constant="HAND" />
 							</cursor>
 						</Button>
-						<Button fx:id="leaveButton" maxHeight="-Infinity"
-							minHeight="80" minWidth="130.0" mnemonicParsing="false"
-							onAction="#leaveQueue" prefHeight="80.0" prefWidth="130.0"
-							styleClass="lobbyButton" text="Leave Queue"
-							textAlignment="JUSTIFY">
+						<Button fx:id="leaveButton" maxHeight="-Infinity" minHeight="80" minWidth="130.0" mnemonicParsing="false" onAction="#leaveQueue" prefHeight="80.0" prefWidth="130.0" styleClass="lobbyButton" text="Leave Queue" textAlignment="JUSTIFY">
 							<font>
 								<Font size="18.0" />
 							</font>
@@ -137,11 +93,7 @@
 								<Cursor fx:constant="HAND" />
 							</cursor>
 						</Button>
-						<Button fx:id="playButton" maxHeight="-Infinity"
-							minHeight="97" minWidth="130.0" mnemonicParsing="false"
-							onAction="#startGame" prefHeight="83.2" prefWidth="130.0"
-							styleClass="lobbyButton" text="Play" textAlignment="JUSTIFY"
-							textFill="#09c205">
+						<Button fx:id="playButton" maxHeight="-Infinity" minHeight="97" minWidth="130.0" mnemonicParsing="false" onAction="#startGame" prefHeight="83.2" prefWidth="130.0" styleClass="lobbyButton" text="Play" textAlignment="JUSTIFY" textFill="#09c205">
 							<font>
 								<Font size="35.0" />
 							</font>
@@ -149,24 +101,16 @@
 								<Cursor fx:constant="HAND" />
 							</cursor>
 						</Button>
-						<Label fx:id="playedLabel" text="Games played: "
-							textFill="WHITE" />
+						<Label fx:id="playedLabel" text="Games played: " textFill="WHITE" />
 						<Label fx:id="wonLabel" text="Games won: " textFill="WHITE" />
 					</children>
 				</VBox>
 			</right>
 			<bottom>
-				<HBox maxHeight="33.6" maxWidth="1920.0" minHeight="33.6"
-					prefHeight="33.6" prefWidth="640.0"
-					style="-fx-background-color: #000000;"
-					BorderPane.alignment="CENTER">
+				<HBox maxHeight="33.6" maxWidth="1920.0" minHeight="33.6" prefHeight="33.6" prefWidth="640.0" style="-fx-background-color: #000000;" BorderPane.alignment="CENTER">
 					<children>
 						<Region maxHeight="33.6" HBox.hgrow="ALWAYS" />
-						<Label alignment="CENTER" contentDisplay="CENTER"
-							maxHeight="38.0" maxWidth="1920.0" minHeight="18.0"
-							prefHeight="38.0" prefWidth="298.0"
-							text="© 2019 Group21 All Rights Reserved" textAlignment="JUSTIFY"
-							textFill="WHITE" />
+						<Label alignment="CENTER" contentDisplay="CENTER" maxHeight="38.0" maxWidth="1920.0" minHeight="18.0" prefHeight="38.0" prefWidth="298.0" text="© 2019 Group21 All Rights Reserved" textAlignment="JUSTIFY" textFill="WHITE" />
 						<Region maxHeight="33.6" HBox.hgrow="ALWAYS" />
 					</children>
 				</HBox>
