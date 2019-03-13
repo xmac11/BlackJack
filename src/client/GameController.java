@@ -290,6 +290,7 @@ public class GameController implements Initializable {
 						smaller.setFitWidth(66);
 						smallerImages.add(smaller);
 					}
+					hBoxPlayer.getChildren().addAll(smallerImages);
 				}
 				if (hBoxPlayer.getChildren().size() > 3) {
 					switch (noPlayers) {

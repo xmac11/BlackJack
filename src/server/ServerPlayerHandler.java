@@ -43,6 +43,7 @@ public class ServerPlayerHandler implements Runnable {
 
 	@Override
 	public void run() {
+		Session.startSession(socketConnection.getUsername(), sessionID);
 		String hello = "Welcome player " + ID + " there is " + noPlayers
 				+ " player(s) in the current session, have fun";
 		socketConnection.getOutput().println(hello); // Sends greeting to client
@@ -54,7 +55,7 @@ public class ServerPlayerHandler implements Runnable {
 		 * Each connected client will have a thread running in this class, therefore any
 		 * variable access must be synchronised
 		 */
-
+		
 		synchronized (deck) {
 			socketConnection.getOutput().println("sessionID"+sessionID);
 			socketConnection.getOutput().println(table.get(0).get(0));

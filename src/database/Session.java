@@ -22,7 +22,7 @@ public class Session {
 
 
             try (Connection connection = DriverManager.getConnection(url, user, pass)) {
-            String newPoints = "INSERT INTO session(username, session_points, time_start, session_id) VALUES(?,0,?,?);";
+            String newPoints = "INSERT INTO session(username, session_points, time_start, session_id) VALUES(?,false,?,?);";
 
             PreparedStatement statement = connection.prepareStatement(newPoints);
             statement.setString(1,username);

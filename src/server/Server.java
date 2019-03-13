@@ -66,7 +66,6 @@ public class Server implements Runnable {
 			for (int i = 0; i < gameQueue.size(); i++) {
 				gameQueue.get(i).setInLobby(false);
 				gameQueue.get(i).getOutput().println("Game Starting");
-				Session.startSession(gameQueue.get(i).getUsername(), sessionID);
 			}
 			Deck deck = new Deck(); // Creates a deck
 			table.clear();

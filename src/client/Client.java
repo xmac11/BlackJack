@@ -153,7 +153,6 @@ public class Client implements Runnable {
 				gameFinished = false;
 				playerLeft = false;
 				sessionID = Integer.parseInt(input.readLine().replaceFirst("sessionID", ""));
-				Session.setSessionPoints(sessionID, username, false);
 				gameController.setOutput(output);
 				gameController.setUsername(username);
 				gameController.setID(ID);
@@ -181,6 +180,7 @@ public class Client implements Runnable {
 				MatchHistory.setGamesPlayed(username, 1); // the
 				// players hand
 				gameController.setTable(table);
+				pocketBlackJack = false;
 				if (Deck.total(table.get(ID)) == 21 && table.get(ID).size() == 2) {
 					System.out.println("Black Jack!");
 					gameController.setLabel("Black Jack!");
