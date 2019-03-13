@@ -1,9 +1,9 @@
 #loginScreen{
     -fx-background-image: url("../image/tileableStarsBackground.png");
     -fx-background-repeat: repeat;
-    -fx-background-size: 600 800;
+    -fx-background-size: 600.0 800.0;
     -fx-background-position: center center;
-    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
+    -fx-effect: dropshadow(three-pass-box, black, 30.0, 0.5, 0.0, 0.0);
 }
 
 .loginLabel{
@@ -14,29 +14,28 @@
 #pane {
     -fx-background-image: url("../image/background.jpg");
     -fx-background-repeat: repeat;
-    -fx-background-size: 450 450;
+    -fx-background-size: 450.0 450.0;
     -fx-background-position: center center;
-    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
+    -fx-effect: dropshadow(three-pass-box, black, 30.0, 0.5, 0.0, 0.0);
 }
 
 .lobbyListView{
 	-fx-background-color: #FFFFFF;
-    -fx-background-radius: 15;
-    -fx-border-radius: 15;
+    -fx-background-radius: 15.0;
+    -fx-border-radius: 15.0;
     -fx-border-color: #f75454;
-    -fx-padding: 5 0 5 0;
 }
 .lobbyChatField{
 	-fx-background-color: #FFFFFF;
-    -fx-background-radius: 15;
-    -fx-border-radius: 15;
+    -fx-background-radius: 15.0;
+    -fx-border-radius: 15.0;
     -fx-border-color: #f75454;
 }
 .list-cell {
     -fx-background-color: transparent;
 }
 
-.lobbyListView .viewport, .lobbyListView .content {
+.lobbyListView .viewport, .lobbyListView .content, .lobbyListView .scroll-pane .corner {
     -fx-background-color: transparent ;
 }
 
@@ -49,15 +48,15 @@
 }
 
 .lobbyListView .scroll-bar .thumb {
-    -fx-background-color:derive(black, 50%);
+    -fx-background-color:derive(black, 50.0%);
 }
 
 .lobbyListView .scroll-bar .thumb:hover {
-    -fx-background-color:derive(black, 70%);
+    -fx-background-color:derive(black, 70.0%);
 }
 
 .lobbyListView .increment-button ,.lobbyListView .decrement-button {
-    -fx-scale-x:0;
+    -fx-scale-x:0.0;
 }
 
 .lobbyListView .track  {
@@ -67,92 +66,92 @@
 .lobbyScreen{
     -fx-background-image: url("../image/lobbyBackground.png");
     -fx-background-repeat: repeat;
-    -fx-background-size: 864 324;
+    -fx-background-size: 864.0 324.0;
     -fx-background-position: top left;
-    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
+    -fx-effect: dropshadow(three-pass-box, black, 30.0, 0.5, 0.0, 0.0);
 }
 
 .gameLabel {
    -fx-font-family: "Arial Black";
    -fx-fill: #818181;
-   -fx-effect: innershadow( three-pass-box , rgba(0,0,0,0.7) , 6, 0.0 , 0 , 2 );
+   -fx-effect: innershadow( three-pass-box , rgba(0.0,0.0,0.0,0.7) , 6.0, 0.0 , 0.0 , 2.0 );
 }
 
 .GameButton {
     -fx-background-color: linear-gradient(#ffd65b, #e68400),
     linear-gradient(#ffef84, #f2ba44),
     linear-gradient(#ffea6a, #efaa22),
-    linear-gradient(#ffe657 0%, #f8c202 50%, #eea10b 100%),
-    linear-gradient(from 0% 0% to 15% 50%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
-    -fx-background-radius: 30;
-    -fx-background-insets: 0, 1, 2, 3, 0;
+    linear-gradient(#ffe657 0.0%, #f8c202 50.0%, #eea10b 100.0%),
+    linear-gradient(from 0.0% 0.0% to 15.0% 50.0%, rgba(255.0, 255.0, 255.0, 0.9), rgba(255.0, 255.0, 255.0, 0.0));
+    -fx-background-radius: 30.0;
+    -fx-background-insets: 0.0, 1.0, 2.0, 3.0, 0.0;
     -fx-text-fill: #654b00;
     -fx-font-weight: bold;
-    -fx-font-size: 30px;
-    -fx-padding: 15 30 15 30;
+    -fx-font-size: 30.0px;
+    -fx-padding: 15.0 30.0 15.0 30.0;
 }
 
 .GameButton:pressed{
 	 -fx-background-color: linear-gradient(#ffd65b, #e68400),
     linear-gradient(#ffef84, #f2ba44),
     linear-gradient(#ffea6a, #efaa22),
-    linear-gradient(#ffe657 100%, #f8c202 50%, #eea10b 0%),
-    linear-gradient(from 0% 0% to 15% 50%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
-    -fx-background-radius: 30;
-    -fx-background-insets: 0, 1, 2, 3, 0;
+    linear-gradient(#ffe657 100.0%, #f8c202 50.0%, #eea10b 0.0%),
+    linear-gradient(from 0.0% 0.0% to 15.0% 50.0%, rgba(255.0, 255.0, 255.0, 0.9), rgba(255.0, 255.0, 255.0, 0.0));
+    -fx-background-radius: 30.0;
+    -fx-background-insets: 0.0, 1.0, 2.0, 3.0, 0.0;
     -fx-text-fill: #FFFFFF;
     -fx-font-weight: bold;
-    -fx-font-size: 30px;
-    -fx-padding: 15 30 15 30;
+    -fx-font-size: 30.0px;
+    -fx-padding: 15.0 30.0 15.0 30.0;
 }
 
 .chatBox {
     -fx-background-color:#333333;
-    -fx-min-height:400px;
-    -fx-min-width:200px;
+    -fx-min-height:400.0px;
+    -fx-min-width:200.0px;
 }
 
 .joinButton {
-    -fx-background-color: linear-gradient(from 75% 75% to 100% 100%, #F6F6F6, #AAAAAA);
-    -fx-background-radius: 30;
-    -fx-background-insets: 0, 1, 2, 3, 0;
+    -fx-background-color: linear-gradient(from 75.0% 75.0% to 100.0% 100.0%, #F6F6F6, #AAAAAA);
+    -fx-background-radius: 30.0;
+    -fx-background-insets: 0.0, 1.0, 2.0, 3.0, 0.0;
     -fx-text-fill: #000000;
     -fx-font-weight: bold;
-    -fx-font-size: 15px;
+    -fx-font-size: 15.0px;
 }
 
 .joinButton:hover{
-	-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #AAAAAA, #F6F6F6);
-    -fx-background-radius: 30;
-    -fx-background-insets: 0, 1, 2, 3, 0;
+	-fx-background-color: linear-gradient(from 25.0% 25.0% to 100.0% 100.0%, #AAAAAA, #F6F6F6);
+    -fx-background-radius: 30.0;
+    -fx-background-insets: 0.0, 1.0, 2.0, 3.0, 0.0;
     -fx-text-fill: #FFFFFF;
     -fx-font-weight: bold;
-    -fx-font-size: 15px;
+    -fx-font-size: 15.0px;
 
 }
 
 .lobbyButton {
-    -fx-background-color: linear-gradient(from 75% 75% to 100% 100%, #F6F6F6, #AAAAAA);
-    -fx-background-insets: 0, 1, 2, 3, 0;
+    -fx-background-color: linear-gradient(from 75.0% 75.0% to 100.0% 100.0%, #F6F6F6, #AAAAAA);
+    -fx-background-insets: 0.0, 1.0, 2.0, 3.0, 0.0;
     -fx-border-color: #6f9bbc ;
-    -fx-border-width: 1 ; 
-    -fx-background-radius: 15;
-    -fx-border-radius: 15;
+    -fx-border-width: 1.0 ; 
+    -fx-background-radius: 15.0;
+    -fx-border-radius: 15.0;
     -fx-text-fill: #606060;
     -fx-font-weight: bold;
-    -fx-font-size: 15px;
+    -fx-font-size: 15.0px;
 }
 
 .lobbyButton:hover{
-	-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #AAAAAA, #F6F6F6);
-    -fx-background-insets: 0, 1, 2, 3, 0;
+	-fx-background-color: linear-gradient(from 25.0% 25.0% to 100.0% 100.0%, #AAAAAA, #F6F6F6);
+    -fx-background-insets: 0.0, 1.0, 2.0, 3.0, 0.0;
     -fx-border-color: #6f9bbc ;
-    -fx-border-width: 1 ;
-    -fx-background-radius: 15;
-    -fx-border-radius: 15;
+    -fx-border-width: 1.0 ;
+    -fx-background-radius: 15.0;
+    -fx-border-radius: 15.0;
     -fx-text-fill: #FFFFFF;
     -fx-font-weight: bold;
-    -fx-font-size: 15px;
+    -fx-font-size: 15.0px;
 
 }
 

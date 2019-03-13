@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.Semaphore;
 
+import database.MatchHistory;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -20,6 +21,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -49,6 +51,12 @@ public class LobbyController implements Initializable {
 	@FXML
 	private TextField chatField;
 
+	@FXML
+	private Label wonLabel;
+	
+	@FXML
+	private Label playedLabel;
+	
 	private String IP;
 	private Stage thisStage;
 	private Client client;
@@ -231,6 +239,16 @@ public class LobbyController implements Initializable {
 				joinButton.setDisable(false);
 				playButton.setDisable(true);
 				chatView.getItems().add("Game finished");
+				if(MatchHistory.getGamesPlayed(username)!=-1) {
+					playedLabel.setText(playedLabel.getText()+" "+MatchHistory.getGamesPlayed(username));
+				}else {
+					playedLabel.setText(playedLabel.getText()+" error");
+				}
+				if(MatchHistory.getGamesWon(username)!=-1) {
+					wonLabel.setText(wonLabel.getText()+" "+MatchHistory.getGamesWon(username));
+				}else {
+					wonLabel.setText(wonLabel.getText()+" error");
+				}
 			}
 		});
 	}
@@ -313,16 +331,22 @@ public class LobbyController implements Initializable {
 					setGraphic(null);
 					setText(null);
 				} else {
-					// set the width's
-					setMinWidth(param.getWidth() -20);
-					setMaxWidth(param.getWidth() -20);
-					setPrefWidth(param.getWidth()-20);
-					// allow wrapping
+					setPrefWidth(0);
 					setWrapText(true);
 					setText(item.toString());
 				}
 			}
 		});
+		if(MatchHistory.getGamesPlayed(username)!=-1) {
+			playedLabel.setText(playedLabel.getText()+" "+MatchHistory.getGamesPlayed(username));
+		}else {
+			playedLabel.setText(playedLabel.getText()+" error");
+		}
+		if(MatchHistory.getGamesWon(username)!=-1) {
+			wonLabel.setText(wonLabel.getText()+" "+MatchHistory.getGamesWon(username));
+		}else {
+			wonLabel.setText(wonLabel.getText()+" error");
+		}
 		Thread thread = new Thread(client);
 		thread.start();
 	}

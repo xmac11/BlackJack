@@ -59,9 +59,11 @@ public class MatchHistory {
 
         } catch (SQLException e) {
             System.out.println("Username does not exist");
+            return -1;
         }
         }catch (IOException e){
             System.out.println("No properties found");
+            return -1;
         }
         return points;
     }
@@ -117,9 +119,11 @@ public class MatchHistory {
 
         } catch (SQLException e) {
             System.out.println("Username does not exist");
+            return -1;
         }
         }catch (IOException e){
             System.out.println("No properties found");
+            return -1;
         }
         return points;
     }

@@ -50,6 +50,8 @@ public class LoginController implements Initializable {
 	@FXML
 	private Label errorLabel;
 
+	
+	
 	@FXML
 	private TextField passField;
 
@@ -132,10 +134,9 @@ public class LoginController implements Initializable {
 		usernameLabel.setTextFill(Color.WHITE);
 		passLabel.setTextFill(Color.WHITE);
 		passLabel2.setTextFill(Color.WHITE);
+		error.setTextFill(Color.RED);
 		error.setVisible(false);
-		
-		
-		
+
 		TextField username = new TextField();
 		username.setMaxWidth(300);
 		PasswordField password1 = new PasswordField();
@@ -150,10 +151,11 @@ public class LoginController implements Initializable {
 		Button signButton = new Button("Sign up");
 		signButton.setOnAction(e -> {
 			error.setVisible(false);
-			if (username.getText().contains(" ") || !(username.getText().matches("[a-zA-Z0-9\\_]*"))) {
-				error.setText("Username must not contain spaces");
+			if (username.getText().contains(" ") || !(username.getText().matches("[a-zA-Z0-9\\_]*")
+					|| (username.getText().trim().length() > 10) || (username.getText().trim().length() < 2))) {
+				error.setText("Username must not contain spaces and must be between 2-10 characters");
 				error.setVisible(true);
-			} else if (password1.getText().equals(password2.getText()) && (password1.getText().trim().length()>3)) {
+			} else if (password1.getText().equals(password2.getText()) && (password1.getText().trim().length() > 3)) {
 				if (Authentication.newAccount(username.getText(), password1.getText())) {
 					stage.close();
 				} else {
@@ -179,9 +181,8 @@ public class LoginController implements Initializable {
 		vBox.getChildren().addAll(usernameLabel, username, passLabel, password1, passLabel2, password2, error, hBox1);
 		vBox.setAlignment(Pos.CENTER);
 		StackPane root = new StackPane(vBox);
-		root.setStyle("-fx-background-image: url('" + "/image/signUpBackground.jpg" + "'); " +
-		           "-fx-background-position: center center; " +
-		           "-fx-background-repeat: repeat;");
+		root.setStyle("-fx-background-image: url('" + "/image/signUpBackground.jpg" + "'); "
+				+ "-fx-background-position: center center; " + "-fx-background-repeat: repeat;");
 		Scene scene = new Scene(root, 200, 400);
 		stage.setScene(scene);
 		stage.showAndWait();
