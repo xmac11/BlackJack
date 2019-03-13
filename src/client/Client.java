@@ -6,21 +6,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
-import javax.security.auth.kerberos.KerberosKey;
 
-//import com.sun.glass.ui.TouchInputSupport;
 
 import database.MatchHistory;
 import database.Session;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import server.Deck;
-import shareable.FinishedPlayers;
 
 import java.io.*;
 
@@ -160,6 +151,7 @@ public class Client implements Runnable {
 					e.printStackTrace();
 				}
 				gameFinished = false;
+				playerLeft = false;
 				sessionID = Integer.parseInt(input.readLine().replaceFirst("sessionID", ""));
 				Session.setSessionPoints(sessionID, username, false);
 				gameController.setOutput(output);
@@ -170,6 +162,12 @@ public class Client implements Runnable {
 				gameController.setNoPlayers(noPlayers);
 				System.out.println(noPlayers);
 				table.add(new ArrayList<>());
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				table.get(0).add(input.readLine());
 				table.get(0).add(input.readLine()); // Next messages are the dealers first hands
 				System.out.println(table.get(0) + " this is dealer");
@@ -312,7 +310,6 @@ public class Client implements Runnable {
 						}
 					}
 					if (in.contains("dealerCard")) {
-						// sleep thread for 1s in order to simulate the dealer picking cards one by one
 						try {
 							Thread.sleep(1000);
 						} catch (InterruptedException e) {
@@ -338,6 +335,7 @@ public class Client implements Runnable {
 				inQueue.clear();
 				gameController.endChat();
 				gameController.showLeaveButton();
+				lobbyController.updateData();
 			}
 		} catch (IOException e) {
 			System.out.println("Session not joinable");

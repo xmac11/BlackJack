@@ -1,11 +1,8 @@
 package client;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.Socket;
 import java.net.URL;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -13,12 +10,9 @@ import java.util.concurrent.Semaphore;
 
 import database.MatchHistory;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Cursor;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -35,7 +29,7 @@ public class LobbyController implements Initializable {
 
 	@FXML
 	private Button playButton;
-	
+
 	@FXML
 	private Button leaveButton;
 
@@ -53,10 +47,10 @@ public class LobbyController implements Initializable {
 
 	@FXML
 	private Label wonLabel;
-	
+
 	@FXML
 	private Label playedLabel;
-	
+
 	private String IP;
 	private Stage thisStage;
 	private Client client;
@@ -239,15 +233,25 @@ public class LobbyController implements Initializable {
 				joinButton.setDisable(false);
 				playButton.setDisable(true);
 				chatView.getItems().add("Game finished");
-				if(MatchHistory.getGamesPlayed(username)!=-1) {
-					playedLabel.setText(playedLabel.getText()+" "+MatchHistory.getGamesPlayed(username));
-				}else {
-					playedLabel.setText(playedLabel.getText()+" error");
+			}
+		});
+	}
+
+	public void updateData() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				if (MatchHistory.getGamesPlayed(username) != -1) {
+					playedLabel.setText("Games played: " + MatchHistory.getGamesPlayed(username));
+				} else {
+					playedLabel.setText("Games played: error");
+					connectionLost();
 				}
-				if(MatchHistory.getGamesWon(username)!=-1) {
-					wonLabel.setText(wonLabel.getText()+" "+MatchHistory.getGamesWon(username));
-				}else {
-					wonLabel.setText(wonLabel.getText()+" error");
+				if (MatchHistory.getGamesWon(username) != -1) {
+					wonLabel.setText("Games won: " + MatchHistory.getGamesWon(username));
+				} else {
+					wonLabel.setText("Games won: error");
+					connectionLost();
 				}
 			}
 		});
@@ -293,18 +297,13 @@ public class LobbyController implements Initializable {
 
 	public void startGame() throws IOException {
 		output.println("gameStart");
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
 	}
 
 	public void initData(String IP, String username, String password, Stage stage) {
 		this.IP = IP;
 		this.username = username;
 		thisStage = stage;
+		updateData();
 		waitForController.release();
 	}
 
@@ -337,16 +336,6 @@ public class LobbyController implements Initializable {
 				}
 			}
 		});
-		if(MatchHistory.getGamesPlayed(username)!=-1) {
-			playedLabel.setText(playedLabel.getText()+" "+MatchHistory.getGamesPlayed(username));
-		}else {
-			playedLabel.setText(playedLabel.getText()+" error");
-		}
-		if(MatchHistory.getGamesWon(username)!=-1) {
-			wonLabel.setText(wonLabel.getText()+" "+MatchHistory.getGamesWon(username));
-		}else {
-			wonLabel.setText(wonLabel.getText()+" error");
-		}
 		Thread thread = new Thread(client);
 		thread.start();
 	}

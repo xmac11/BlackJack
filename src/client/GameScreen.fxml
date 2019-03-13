@@ -15,9 +15,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane id="pane" minHeight="768.0" minWidth="1366.0"
-	prefHeight="900.0" prefWidth="1590.0" stylesheets="style.css"
-	xmlns="http://javafx.com/javafx/8.0.171"
+<StackPane minHeight="768.0" minWidth="1366.0"
+	prefHeight="900.0" prefWidth="1590.0" styleClass="gameBackground"
+	stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.171"
 	xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="client.GameController">
 	<children>

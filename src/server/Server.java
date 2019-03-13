@@ -1,12 +1,9 @@
 package server;
 
-import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Semaphore;
@@ -78,7 +75,7 @@ public class Server implements Runnable {
 			table.get(0).add(deck.drawCard());
 			System.out.println("This is Dealers cards: " + table.get(0)); // Prints the dealers hand to the server
 																			// console
-			deckWait = new Semaphore(1); // Creates a semaphore to allow 1 thread to access a critical section, this
+ 			deckWait = new Semaphore(1); // Creates a semaphore to allow 1 thread to access a critical section, this
 											// is used to control access to the deck
 			dealersTurn = new CyclicBarrier((gameQueue.size() + 1));
 			finishedPlayers = new FinishedPlayers();

@@ -39,9 +39,11 @@ public class Authentication {
         
         } catch (SQLException e) {
             System.out.println("Connection not successfull");
+            return false;
         }
         }catch (IOException e){
             System.out.println("No properties found");
+            return false;
         }
         return login;
     }
@@ -72,21 +74,13 @@ public class Authentication {
             success = true;
         } catch (SQLException e) {
             System.out.println("Username already exists");
-            success = false;
+            return false;
         }
         }catch (IOException e){
             System.out.println("No properties found");
+            return false;
         }
         return success;
-    }
-
-    public static void main(String[] args){
-       // newAccount("nxk828","password");
-        System.out.println(login("nxk828","password"));
-        //MatchHistory.setGamesWon("nxk827",2);
-        //System.out.println(MatchHistory.getGamesWon("nxk827"));
-        //MatchHistory.setGamesPlayed("nxk827",4);
-        //System.out.println(MatchHistory.getGamesPlayed("nxk827"));
     }
 
 }
