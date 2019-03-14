@@ -25,7 +25,7 @@ public class SocketConnection {
 		this.output = output;
 		this.setInLobby(inLobby);
 		this.setUsername(username);
-		this.points = MatchHistory.getGamesWon(username);
+		this.points = MatchHistory.getAmount(username);
 	}
 
 	public PrintWriter getOutput() {
