@@ -6,8 +6,15 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
+/**
+ * This class allows the application to manipulate the session table in the database
+ */
 public class Session {
-
+    /**
+     * Creates a new session for the user, which has the same session id, as the other users in the same game
+     * @param username username of the user
+     * @param id id of the session
+     */
     public static void startSession(String username, int id){
         String url;
         String user;
@@ -16,13 +23,13 @@ public class Session {
         try(FileInputStream input = new FileInputStream(new File("db.properties"))){
             Properties props = new Properties();
             props.load(input);
-            user = (String) props.getProperty("username");
-            pass = (String) props.getProperty("password");
-            url = (String) props.getProperty("URL");
+            user = props.getProperty("username");
+            pass = props.getProperty("password");
+            url = props.getProperty("URL");
 
 
             try (Connection connection = DriverManager.getConnection(url, user, pass)) {
-            String newPoints = "INSERT INTO session(username, session_points, time_start, session_id) VALUES(?,false,?,?);";
+            String newPoints = "INSERT INTO session(username, win, time_start, session_id, bet) VALUES(?,false,?,?,0);";
 
             PreparedStatement statement = connection.prepareStatement(newPoints);
             statement.setString(1,username);
@@ -37,6 +44,13 @@ public class Session {
             System.out.println("No properties found");
         }
     }
+
+    /**
+     * Sets whether the user has won or lost the session
+     * @param sessionID id of the session
+     * @param username username of the user
+     * @param points whether the user has won or lost the game
+     */
     public static void setSessionPoints(int sessionID, String username, boolean points){
         String url;
         String user;
@@ -44,12 +58,12 @@ public class Session {
         try(FileInputStream input = new FileInputStream(new File("db.properties"))){
             Properties props = new Properties();
             props.load(input);
-            user = (String) props.getProperty("username");
-            pass = (String) props.getProperty("password");
-            url = (String) props.getProperty("URL");
+            user = props.getProperty("username");
+            pass = props.getProperty("password");
+            url = props.getProperty("URL");
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
-            String newPoints = "UPDATE session SET session_points = ? WHERE username = ? and session_id = ?;";
+            String newPoints = "UPDATE session SET win = ? WHERE username = ? and session_id = ?;";
 
             PreparedStatement statement = connection.prepareStatement(newPoints);
             statement.setBoolean(1,points);
@@ -65,7 +79,13 @@ public class Session {
         }
     }
 
-    public static boolean getSessionPoints(String username){
+    /**
+     * Gets, whether the user won or lost a game
+     * @param username username of the user
+     * @param sessionID id of the session
+     * @return whether the user won the session or not
+     */
+    public static boolean getWin(String username, int sessionID){
         boolean points = false;
         String url;
         String user;
@@ -73,15 +93,16 @@ public class Session {
         try(FileInputStream input = new FileInputStream(new File("db.properties"))){
             Properties props = new Properties();
             props.load(input);
-            user = (String) props.getProperty("username");
-            pass = (String) props.getProperty("password");
-            url = (String) props.getProperty("URL");
+            user = props.getProperty("username");
+            pass = props.getProperty("password");
+            url = props.getProperty("URL");
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
-            String getPoints = "SELECT session_points FROM session WHERE username = ?;";
+            String getPoints = "SELECT win FROM session WHERE username = ? and session_id = ?;";
 
             PreparedStatement statement = connection.prepareStatement(getPoints);
             statement.setString(1,username);
+            statement.setInt(2, sessionID);
             ResultSet rs = statement.executeQuery();
             while(rs.next()){
                 points = rs.getBoolean(1);
@@ -96,6 +117,84 @@ public class Session {
         return points;
     }
 
+    /**
+     * Allows the application to set the amount of money won or lost during a session
+     * @param sessionID id of the session
+     * @param username username of the user
+     * @param bet amount of money won or lost
+     */
+    public static void setBet(int sessionID, String username, int bet){
+        String url;
+        String user;
+        String pass;
+        try(FileInputStream input = new FileInputStream(new File("db.properties"))){
+            Properties props = new Properties();
+            props.load(input);
+            user = props.getProperty("username");
+            pass = props.getProperty("password");
+            url = props.getProperty("URL");
+
+            try (Connection connection = DriverManager.getConnection(url, user, pass)) {
+                String newPoints = "UPDATE session SET bet = ? WHERE username = ? and session_id = ?;";
+
+                PreparedStatement statement = connection.prepareStatement(newPoints);
+                statement.setInt(1,bet);
+                statement.setString(2,username);
+                statement.setInt(3,sessionID);
+                statement.executeUpdate();
+
+            } catch (SQLException e) {
+                System.out.println("Username does not exist");
+            }
+        }catch (IOException e){
+            System.out.println("No properties found");
+        }
+    }
+
+
+    /**
+     * Allows the application to get the amount of money won or lost in a given session of a certain user
+     * @param username username of the user
+     * @param sessionID id of the session
+     * @return funds won or lost
+     */
+    public static int getBet(String username, int sessionID){
+        int points = 0;
+        String url;
+        String user;
+        String pass;
+        try(FileInputStream input = new FileInputStream(new File("db.properties"))){
+            Properties props = new Properties();
+            props.load(input);
+            user = props.getProperty("username");
+            pass = props.getProperty("password");
+            url = props.getProperty("URL");
+
+            try (Connection connection = DriverManager.getConnection(url, user, pass)) {
+                String getPoints = "SELECT bet FROM session WHERE username = ? and session_id = ?;";
+
+                PreparedStatement statement = connection.prepareStatement(getPoints);
+                statement.setString(1,username);
+                statement.setInt(2, sessionID);
+                ResultSet rs = statement.executeQuery();
+                while(rs.next()){
+                    points = rs.getInt(1);
+                }
+
+            } catch (SQLException e) {
+                System.out.println("Username does not exist");
+            }
+        }catch (IOException e){
+            System.out.println("No properties found");
+        }
+        return points;
+    }
+
+    /**
+     * Allows the application to close started session, by adding timestamp of game's end
+     * @param username username of the user
+     * @param sessionID session to be ended
+     */
     public static void setSessionend(String username, int sessionID){
         String url;
         String user;
@@ -104,9 +203,9 @@ public class Session {
         try(FileInputStream input = new FileInputStream(new File("db.properties"))){
             Properties props = new Properties();
             props.load(input);
-            user = (String) props.getProperty("username");
-            pass = (String) props.getProperty("password");
-            url = (String) props.getProperty("URL");
+            user = props.getProperty("username");
+            pass = props.getProperty("password");
+            url = props.getProperty("URL");
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             String newPoints = "UPDATE session SET time_end = ? WHERE username = ? and session_id = ?;";
@@ -138,9 +237,9 @@ public class Session {
         try(FileInputStream input = new FileInputStream(new File("db.properties"))){
             Properties props = new Properties();
             props.load(input);
-            user = (String) props.getProperty("username");
-            pass = (String) props.getProperty("password");
-            url = (String) props.getProperty("URL");
+            user = props.getProperty("username");
+            pass = props.getProperty("password");
+            url = props.getProperty("URL");
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             String getPoints = "SELECT MAX(session_id) from session;";
 

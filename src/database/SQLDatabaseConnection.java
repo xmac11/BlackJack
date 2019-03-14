@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
-
+/**
+ * This class, check whether the database for the application is in play and creates a new one, or adds missing tables
+ */
 public class SQLDatabaseConnection implements Runnable {
 
 
@@ -34,10 +36,11 @@ public class SQLDatabaseConnection implements Runnable {
 			statement.executeUpdate(query1);
 			String query2 = "CREATE TABLE IF NOT EXISTS Session (session_id serial," +
 					" username VARCHAR(50) references User_Info(username)," +
-					" session_points BOOLEAN, " +
-					"time_start TIMESTAMP NOT NULL ," +
-					" time_end TIMESTAMP, " +
-					"PRIMARY KEY(session_id, username));";
+					" win BOOLEAN," +
+					" time_start TIMESTAMP NOT NULL ," +
+					" time_end TIMESTAMP," +
+					" bet INT NOT NULL," +
+					" PRIMARY KEY(session_id, username));";
 			statement.executeUpdate(query2);
 			String query3 = "CREATE TABLE IF NOT EXISTS friend_list (" +
 					"username VARCHAR(50) references user_info(username)," +
