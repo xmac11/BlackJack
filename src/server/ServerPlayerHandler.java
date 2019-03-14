@@ -63,13 +63,12 @@ public class ServerPlayerHandler implements Runnable {
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				triggerBarrier();
 			}
 			try {
 				in = socketConnection.getInput().readLine();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				triggerBarrier();
 			}
 		}
 		System.out.println("Server waitingf");
