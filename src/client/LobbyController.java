@@ -49,6 +49,9 @@ public class LobbyController implements Initializable {
 	private Label wonLabel;
 
 	@FXML
+	private Label walletLabel;
+
+	@FXML
 	private Label playedLabel;
 
 	private String IP;
@@ -106,9 +109,6 @@ public class LobbyController implements Initializable {
 	}
 
 	public void signOut() {
-//		Platform.runLater(new Runnable() {
-//			@Override
-//			public void run() {
 		client.signOut();
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginScreen.fxml"));
 		Scene loginScene = null;
@@ -125,8 +125,6 @@ public class LobbyController implements Initializable {
 		thisStage.setHeight(600);
 		thisStage.setResizable(false);
 		thisStage.setOnCloseRequest(e -> System.exit(0));
-//			}
-//		});
 	}
 
 	public void connectionLost() {
@@ -253,6 +251,7 @@ public class LobbyController implements Initializable {
 					wonLabel.setText("Games won: error");
 					connectionLost();
 				}
+				walletLabel.setText("Wallet: " + MatchHistory.getAmount(username));
 			}
 		});
 	}

@@ -482,7 +482,7 @@ public class GameController implements Initializable {
 			}
 		});
 		betPane.setVisible(false);
-		betAmount.setText("5");
+		betAmount.setText(Integer.toString(MINBET));
 	}
 
 	public void showBetPane() {
@@ -527,7 +527,7 @@ public class GameController implements Initializable {
 		String betString = betAmount.getText();
 		int bet = Integer.parseInt(betString);
 		if (bet < fundsAvailable) {
-			betAmount.setText(Integer.toString(bet + 5));
+			betAmount.setText(Integer.toString(bet + MINBET));
 		}
 	}
 
@@ -540,20 +540,11 @@ public class GameController implements Initializable {
 		});
 	}
 
-//	public void showLabel() {
-//		Platform.runLater(new Runnable() {
-//			@Override
-//			public void run() {
-//				label.setVisible(false);
-//			}
-//		});
-//	}
-
 	public void decreaseBet() {
 		String betString = betAmount.getText();
 		int bet = Integer.parseInt(betString);
 		if (bet > MINBET) {
-			betAmount.setText(Integer.toString(bet - 5));
+			betAmount.setText(Integer.toString(bet - MINBET));
 		}
 	}
 

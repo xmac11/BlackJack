@@ -59,9 +59,9 @@
 						<Cursor fx:constant="HAND" />
 					</cursor>
 				</Button>
-				<HBox fx:id="hBoxDealer" alignment="BOTTOM_CENTER"
-					prefHeight="3.0" prefWidth="109.0" spacing="10.0"
-					GridPane.columnIndex="1" GridPane.valignment="CENTER" />
+				<HBox fx:id="hBoxDealer" alignment="CENTER" prefHeight="3.0"
+					prefWidth="109.0" spacing="10.0" GridPane.columnIndex="1"
+					GridPane.valignment="CENTER" />
 				<HBox fx:id="hBoxPlayer" alignment="CENTER" prefHeight="312.0"
 					prefWidth="530.0" spacing="10.0" GridPane.columnIndex="1"
 					GridPane.rowIndex="2" />

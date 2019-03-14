@@ -65,7 +65,7 @@
 				</VBox>
 			</center>
 			<right>
-				<VBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="275.0" minWidth="130" prefHeight="309.0" prefWidth="130.0" BorderPane.alignment="TOP_CENTER">
+				<VBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="275.0" minWidth="130" prefHeight="329.0" prefWidth="130.0" BorderPane.alignment="TOP_CENTER">
 					<children>
 						<Label alignment="CENTER" minHeight="18" prefHeight="18.0" prefWidth="130.0" text="ACTIONS" textFill="WHITE" />
 						<Button fx:id="joinButton" maxHeight="-Infinity" minHeight="80.0" minWidth="130.0" mnemonicParsing="false" onAction="#joinQueue" prefHeight="80.0" prefWidth="130.0" styleClass="lobbyButton" text="Join Queue" textOverrun="CENTER_ELLIPSIS">
@@ -94,6 +94,7 @@
 						</Button>
 						<Label fx:id="playedLabel" text="Games played: " textFill="WHITE" />
 						<Label fx:id="wonLabel" text="Games won: " textFill="WHITE" />
+                  <Label fx:id="walletLabel" text="Wallet: " textFill="WHITE" />
 					</children>
 				</VBox>
 			</right>
