@@ -64,6 +64,9 @@ public class ServerPlayerHandler implements Runnable {
 				Thread.sleep(1000);
 				in = socketConnection.getInput().readLine();
 			} catch (IOException | InterruptedException e) {
+				socketConnection.getOutput().println("playerLeftGame");
+				socketConnection.setInLobby(true);
+				socketConnection.getSessionWait().release();
 				triggerBarrier();
 				return;
 			}
@@ -72,6 +75,9 @@ public class ServerPlayerHandler implements Runnable {
 		try {
 			betWait.await();
 		} catch (InterruptedException | BrokenBarrierException e) {
+			socketConnection.getOutput().println("playerLeftGame");
+			socketConnection.setInLobby(true);
+			socketConnection.getSessionWait().release();
 			triggerBarrier();
 			return;
 		} 
