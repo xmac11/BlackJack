@@ -124,9 +124,9 @@ public class ServerPlayerHandler implements Runnable {
 				if (in.contains("betIs")) {
 					socketConnection.getOutput().println(in); // send the bet to client
 				}
-				if (in.equals("insufficientFunds")) {
-					socketConnection.getOutput().println("retryBet");
-				}
+//				if (in.equals("insufficientFunds")) {
+//					socketConnection.getOutput().println("retryBet");
+//				}
 				if (in.equals("betComplete")) {
 					socketConnection.getOutput().println("Make move");
 				}

@@ -187,7 +187,6 @@ public class Client implements Runnable {
 				gameController.setLabel("Your hand: " + Deck.total(table.get(ID)) + "\nWait for your turn");
 				System.out.println("Your Hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID))); // Prints
 				MatchHistory.setGamesPlayed(username, 1); // the
-				// players hand
 				gameController.setTable(table);
 				pocketBlackJack = false;
 				if (Deck.total(table.get(ID)) == 21) {
@@ -202,19 +201,12 @@ public class Client implements Runnable {
 					
 					if (in.equals("placeBet")) {
 						int pointsAvailable = MatchHistory.getAmount(username);
-						gameController.getBetField().setVisible(true);
-						gameController.setLabel("Place Bet" + "\nPoints: " + Deck.total(table.get(ID)));
+						gameController.showBetPane();
 						gameController.setPointsLabel("Funds available: " + String.valueOf(pointsAvailable));
-						gameController.getHitButton().setVisible(false);
-						gameController.getStandButton().setVisible(false);
-						Scanner s = new Scanner(System.in);					
-						s.close();
+						gameController.disableHit();
+						gameController.hideLabel();
+						gameController.disableStand();
 					}										 
-					if (in.equals("retryBet")) {
-						gameController.setLabel("Not enough funds, try again" + "\nPoints: " + Deck.total(table.get(ID)));
-						Scanner s = new Scanner(System.in);					
-						s.close();
-					}
 					if (in.contains("betIs")) {		
 						int pointsAvailable = MatchHistory.getAmount(username);
 						betAmount = Integer.parseInt(in.substring(6));
@@ -231,10 +223,7 @@ public class Client implements Runnable {
 							output.println("p");
 							gameController.disableHit();
 							gameController.disableStand();
-							// break;
 						} else {
-							gameController.getHitButton().setVisible(true);
-							gameController.getStandButton().setVisible(true);
 							gameController.enableHit();
 							gameController.enableStand();
 							System.out.println(in + ", h (hit) p (pass)");
@@ -387,14 +376,6 @@ public class Client implements Runnable {
 		}
 	}
 
-	public List<String> extractCards(String hand) {
-		List<String> cards = new ArrayList<>();
-		hand = hand.substring(1, hand.length() - 1); // String is in the form [card1, card2, ...]
-		String[] arr = hand.split(", ");
-		cards.addAll(Arrays.asList(arr));
-		return cards;
-	}
-	
 	public void signOut() {
 		output.println("thisPlayerSignedOut");
 	}
@@ -412,7 +393,6 @@ public class Client implements Runnable {
 			MatchHistory.increaseAmount(username, 2*betAmount); // this should be 1.5
 			Session.setSessionPoints(sessionID, username, true);
 			gameController.setLabel("Dealer bust! You Win!");
-			gameController.setPointsLabel("Funds available: " + String.valueOf(MatchHistory.getAmount(username)));
 		} else if (Deck.total(table.get(ID)) == Deck.total(table.get(0))) {
 			gameController.setLabel("Draw!");
 			MatchHistory.increaseAmount(username, betAmount); // take money back
@@ -421,10 +401,10 @@ public class Client implements Runnable {
 			MatchHistory.setGamesWon(username, 1);
 			MatchHistory.increaseAmount(username, 2*betAmount); // this should be 1.5
 			gameController.setLabel("You win!!");
-			gameController.setPointsLabel("Funds available: " + String.valueOf(MatchHistory.getAmount(username)));
 		} else {
 			gameController.setLabel("Dealer Wins!!");
 		}
+		gameController.setPointsLabel("Funds available: " + String.valueOf(MatchHistory.getAmount(username)));
 	}
 
 	public void closeGame(Stage window) {

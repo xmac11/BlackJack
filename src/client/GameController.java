@@ -17,6 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -55,7 +56,13 @@ public class GameController implements Initializable {
 
 	@FXML
 	private Button hitButton;
-	
+
+	@FXML
+	private GridPane betPane;
+
+	@FXML
+	private Label betAmount;
+
 	@FXML
 	private Button leaveButton;
 
@@ -67,10 +74,10 @@ public class GameController implements Initializable {
 
 	@FXML
 	private ListView<String> chatView;
-	
+
 	@FXML
 	private Label points;
-	
+
 	@FXML
 	private TextField betField;
 
@@ -80,6 +87,8 @@ public class GameController implements Initializable {
 	private int noPlayers;
 	private static boolean confirm;
 	private Stage stage;
+	private static final int MINBET = 5;
+	private int fundsAvailable;
 
 	/**
 	 * Action handlers for hit and stand buttons being clicked. If the user clicks
@@ -100,10 +109,6 @@ public class GameController implements Initializable {
 			}
 		});
 	}
-
-//	public void leaveGame() {
-//		System.exit(0);
-//	}
 
 	public void setID(int ID) {
 		this.ID = ID;
@@ -201,11 +206,11 @@ public class GameController implements Initializable {
 			}
 		});
 	}
-	
+
 	public void closeGameScreen() {
 		stage.close();
 	}
-	
+
 	public void setDealerLabel(String text) {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -215,7 +220,7 @@ public class GameController implements Initializable {
 			}
 		});
 	}
-	
+
 	public void setPointsLabel(String text) {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -270,7 +275,7 @@ public class GameController implements Initializable {
 			}
 		});
 	}
-	
+
 	public void showLeaveButton() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -298,7 +303,7 @@ public class GameController implements Initializable {
 				Image image = getImage(card);
 				cardImage.setImage(image);
 				hBoxPlayer.getChildren().add(cardImage);
-				if(hBoxPlayer.getChildren().size()>4) {
+				if (hBoxPlayer.getChildren().size() > 4) {
 					List<ImageView> smallerImages = new ArrayList<>();
 					for (int i = 0; i < hBoxPlayer.getChildren().size(); i++) {
 						ImageView smaller = (ImageView) hBoxPlayer.getChildren().remove(i);
@@ -321,7 +326,7 @@ public class GameController implements Initializable {
 							smallerImages.add(smaller);
 						}
 						hBoxPlayer3.getChildren().addAll(smallerImages);
-						
+
 					case 2:
 						smallerImages = new ArrayList<>();
 						for (int i = 0; i < hBoxPlayer2.getChildren().size(); i++) {
@@ -417,6 +422,7 @@ public class GameController implements Initializable {
 	}
 
 	public void setTable(List<List<String>> table) {
+		fundsAvailable = MatchHistory.getAmount(username);
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
@@ -457,7 +463,6 @@ public class GameController implements Initializable {
 		label.setVisible(false);
 		labelDealer.setVisible(false);
 		points.setVisible(false);
-		betField.setVisible(false);
 		chatView.setCellFactory(param -> new ListCell<String>() {
 			@Override
 			protected void updateItem(String item, boolean empty) {
@@ -467,13 +472,33 @@ public class GameController implements Initializable {
 					setText(null);
 				} else {
 					// set the width's
-					setMinWidth(param.getWidth() -20);
-					setMaxWidth(param.getWidth() -20);
-					setPrefWidth(param.getWidth()-20);
+					setMinWidth(param.getWidth() - 20);
+					setMaxWidth(param.getWidth() - 20);
+					setPrefWidth(param.getWidth() - 20);
 					// allow wrapping
 					setWrapText(true);
 					setText(item.toString());
 				}
+			}
+		});
+		betPane.setVisible(false);
+		betAmount.setText("5");
+	}
+
+	public void showBetPane() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				betPane.setVisible(true);
+			}
+		});
+	}
+
+	public void hideBetPane() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				betPane.setVisible(false);
 			}
 		});
 	}
@@ -497,33 +522,47 @@ public class GameController implements Initializable {
 	public void setStage(Stage stage) {
 		this.stage = stage;
 	}
-	
-	public Button getStandButton() {
-		return standButton;
-	}
 
-	public Button getHitButton() {
-		return hitButton;
-	}
-
-	public TextField getBetField() {
-		return betField;
-	}
-
-	public void placeBet() {		
-		String betString = betField.getText();
+	public void increaseBet() {
+		String betString = betAmount.getText();
 		int bet = Integer.parseInt(betString);
-		int fundsAvailable = MatchHistory.getAmount(username);
-		if(bet < fundsAvailable) {
-			MatchHistory.reduceAmount(username, bet);
-			betField.setVisible(false);
-			output.println("betIs " + bet);
+		if (bet < fundsAvailable) {
+			betAmount.setText(Integer.toString(bet + 5));
 		}
-		else {			
-			betField.setText("");
-			betField.setPromptText("Place your bet...");
-			output.println("insufficientFunds");
+	}
+
+	public void hideLabel() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				label.setVisible(false);
+			}
+		});
+	}
+
+//	public void showLabel() {
+//		Platform.runLater(new Runnable() {
+//			@Override
+//			public void run() {
+//				label.setVisible(false);
+//			}
+//		});
+//	}
+
+	public void decreaseBet() {
+		String betString = betAmount.getText();
+		int bet = Integer.parseInt(betString);
+		if (bet > MINBET) {
+			betAmount.setText(Integer.toString(bet - 5));
 		}
+	}
+
+	public void placeBet() {
+		String betString = betAmount.getText();
+		int bet = Integer.parseInt(betString);
+		MatchHistory.reduceAmount(username, bet);
+		output.println("betIs " + bet);
+		hideBetPane();
 	}
 
 }

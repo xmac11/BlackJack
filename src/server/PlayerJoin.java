@@ -33,7 +33,6 @@ public class PlayerJoin implements Runnable {
 
 	@Override
 	public void run() {
-
 		try {
 			serverSocket = new ServerSocket(9999);
 			InetAddress inetAddress = InetAddress.getLocalHost();
@@ -86,21 +85,5 @@ public class PlayerJoin implements Runnable {
 			}
 			sessionJoinable = true;
 		}
-		try {
-			serverSocket.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		System.out.println("Maximum number of players reached, joining ended");
 	}
-
-	public void closeConnection() {
-		sessionJoinable = false;
-		try {
-			serverSocket.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 }

@@ -18,17 +18,32 @@
     -fx-background-position: center center;
 }
 
+.betBackground{
+	-fx-background-color: linear-gradient(#ffd65b, #e68400),
+    linear-gradient(#ffef84, #f2ba44),
+    linear-gradient(#ffea6a, #efaa22),
+    linear-gradient(#ffe657 0.0%, #f8c202 50.0%, #eea10b 100.0%),
+    linear-gradient(from 0.0% 0.0% to 15.0% 50.0%, rgba(255.0, 255.0, 255.0, 0.9), rgba(255.0, 255.0, 255.0, 0.0));
+    -fx-background-radius: 30.0;
+    -fx-background-insets: 0.0, 1.0, 2.0, 3.0, 0.0;
+    -fx-text-fill: #654b00;
+    -fx-font-weight: bold;
+    -fx-font-size: 30.0px;
+}
+
 .lobbyListView{
 	-fx-background-color: #FFFFFF;
     -fx-background-radius: 15.0;
     -fx-border-radius: 15.0;
-    -fx-border-color: #f75454;
+    -fx-border-color: black;
+     /*-fx-border-color: #f75454;*/
 }
 .lobbyChatField{
 	-fx-background-color: #FFFFFF;
     -fx-background-radius: 15.0;
     -fx-border-radius: 15.0;
-    -fx-border-color: #f75454;
+    -fx-border-color: black;
+     /*-fx-border-color: #f75454;*/
 }
 .list-cell {
     -fx-background-color: transparent;
