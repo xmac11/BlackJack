@@ -6,8 +6,17 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
+/**
+ * This class provides methods to Authenticate the user into the system or create a new account with the use
+ * of the database
+ */
 public class Authentication {
-
+    /**
+     * Logs in the user using their credentials and matching them against the one in the database
+     * @param username username of the user
+     * @param password password from the user account
+     * @return true, if the credentials match, false otherwise
+     */
     public static boolean login(String username, String password){
         boolean login = false;
         String url;
@@ -36,7 +45,7 @@ public class Authentication {
                 login = true;
             }
         }
-        
+
         } catch (SQLException e) {
             System.out.println("Connection not successfull");
             return false;
@@ -47,6 +56,13 @@ public class Authentication {
         }
         return login;
     }
+
+    /**
+     * Allows the user ot create a new account, which is then recorded in the database
+     * @param username new username
+     * @param password new password
+     * @return true, if the username is unique and account is created, false if such username already exists
+     */
     public static boolean newAccount(String username, String password){
 
         String url;
@@ -75,11 +91,11 @@ public class Authentication {
             success = true;
         } catch (SQLException e) {
             System.out.println("Username already exists");
-            return false;
+            success = false;
         }
         }catch (IOException e){
             System.out.println("No properties found");
-            return false;
+            success = false;
         }
         return success;
     }

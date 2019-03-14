@@ -6,8 +6,16 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
+/**
+ * This class allows the application to add and retrieve information from the match_history table in the
+ * database
+ */
 public class MatchHistory {
-
+    /**
+     * Allows the application to set number of games the user has won
+     * @param username username of the user
+     * @param points number of games the user won after last update
+     */
     public static void setGamesWon(String username, int points){
         String url;
         String user;
@@ -34,7 +42,12 @@ public class MatchHistory {
             System.out.println("No properties found");
         }
     }
-    
+
+    /**
+     * Allows the application to get number of games won by the user
+     * @param username username of the user
+     * @return number of games won by the user
+     */
     public static int getGamesWon(String username){
         int points = 0;
         String url;
@@ -68,6 +81,11 @@ public class MatchHistory {
         return points;
     }
 
+    /**
+     * Allows to the add to the games played counter
+     * @param username username of the user
+     * @param points games played since last update
+     */
     public static void setGamesPlayed(String username, int points){
         String url;
         String user;
@@ -95,6 +113,11 @@ public class MatchHistory {
         }
     }
 
+    /**
+     * Allows to get the amount of games played by the user
+     * @param username username of the user
+     * @return number of games played
+     */
     public static int getGamesPlayed(String username){
         int points = 0;
         String url;
@@ -127,7 +150,12 @@ public class MatchHistory {
         }
         return points;
     }
-    
+
+    /**
+     * Allows to get the amount of funds the user has in their wallet
+     * @param username username of the user
+     * @return amount of funds available
+     */
     public static int getAmount(String username){
         int funds = 0;
         String url;
@@ -160,7 +188,12 @@ public class MatchHistory {
         }
         return funds;
     }
-    
+
+    /**
+     * Allows the application to reduce the amount of funds available to the user
+     * @param username username of the user
+     * @param amount amount of money taken away from the funds
+     */
     public static void reduceAmount(String username, int amount){
         String url;
         String user;
@@ -187,7 +220,12 @@ public class MatchHistory {
             System.out.println("No properties found");
         }
     }
-    
+
+    /**
+     * Allows the application to increase the amount of funds available to the user
+     * @param username username of the user
+     * @param amount amount to be added to available funds
+     */
     public static void increaseAmount(String username, int amount){
         String url;
         String user;
