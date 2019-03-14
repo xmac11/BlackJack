@@ -183,6 +183,7 @@ public class Client implements Runnable {
 					if (in.contains("betIs")) {
 						pointsAvailable = MatchHistory.getAmount(username);
 						betAmount = Integer.parseInt(in.substring(6));
+						Session.setBet(sessionID, username, betAmount);
 						gameController.setPointsLabel("Funds availlable: " + String.valueOf(pointsAvailable));
 						isBetPlaced = true; 
 						output.println("betComplete");
