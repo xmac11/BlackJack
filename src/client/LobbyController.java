@@ -47,6 +47,12 @@ public class LobbyController implements Initializable {
 
 	@FXML
 	private Label wonLabel;
+	
+	@FXML
+	private Label fundsLabel;
+
+	@FXML
+	private Button addFundsButton;
 
 	@FXML
 	private Label walletLabel;
@@ -66,6 +72,21 @@ public class LobbyController implements Initializable {
 		return client;
 	}
 
+	public void showAddFunds() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				fundsLabel.setVisible(true);
+				addFundsButton.setVisible(true);
+			}
+		});
+	}
+
+	public void addFunds() {
+		MatchHistory.increaseAmount(username, 200);
+		addFundsButton.setVisible(false);
+	}
+
 	public void gameBegin() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -82,7 +103,6 @@ public class LobbyController implements Initializable {
 				joinButton.setDisable(true);
 				gameScene.getStylesheets().addAll(getClass().getResource("style.css").toExternalForm());
 				Stage window = new Stage();
-
 				GameController gameController = loader.<GameController>getController();
 				client.setGameController(gameController);
 				waitForController.release();
@@ -287,6 +307,7 @@ public class LobbyController implements Initializable {
 
 	public void joinQueue() {
 		System.out.println("join queue pressed");
+		fundsLabel.setVisible(false);
 		output.println("joinQueue");
 	}
 
@@ -338,7 +359,6 @@ public class LobbyController implements Initializable {
 		Thread thread = new Thread(client);
 		thread.start();
 	}
-
 
 	public Stage getThisStage() {
 		return thisStage;
