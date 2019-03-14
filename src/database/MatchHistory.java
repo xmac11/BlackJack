@@ -23,9 +23,9 @@ public class MatchHistory {
         try(FileInputStream input = new FileInputStream(new File("db.properties"))){
             Properties props = new Properties();
             props.load(input);
-            user = (String) props.getProperty("username");
-            pass = (String) props.getProperty("password");
-            url = (String) props.getProperty("URL");
+            user = props.getProperty("username");
+            pass = props.getProperty("password");
+            url = props.getProperty("URL");
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             String newPoints = "UPDATE match_history SET games_won = games_won + ? WHERE username = ?;";
@@ -56,9 +56,9 @@ public class MatchHistory {
         try(FileInputStream input = new FileInputStream(new File("db.properties"))){
             Properties props = new Properties();
             props.load(input);
-            user = (String) props.getProperty("username");
-            pass = (String) props.getProperty("password");
-            url = (String) props.getProperty("URL");
+            user = props.getProperty("username");
+            pass = props.getProperty("password");
+            url = props.getProperty("URL");
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             String getPoints = "SELECT games_won FROM match_history WHERE username = ?;";
@@ -93,9 +93,9 @@ public class MatchHistory {
         try(FileInputStream input = new FileInputStream(new File("db.properties"))){
             Properties props = new Properties();
             props.load(input);
-            user = (String) props.getProperty("username");
-            pass = (String) props.getProperty("password");
-            url = (String) props.getProperty("URL");
+            user = props.getProperty("username");
+            pass = props.getProperty("password");
+            url = props.getProperty("URL");
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             String newPoints = "UPDATE match_history SET games_played = games_played + ? WHERE username = ?;";
@@ -126,9 +126,9 @@ public class MatchHistory {
         try(FileInputStream input = new FileInputStream(new File("db.properties"))){
             Properties props = new Properties();
             props.load(input);
-            user = (String) props.getProperty("username");
-            pass = (String) props.getProperty("password");
-            url = (String) props.getProperty("URL");
+            user = props.getProperty("username");
+            pass = props.getProperty("password");
+            url = props.getProperty("URL");
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             String getPoints = "SELECT games_played FROM match_history WHERE username = ?;";
@@ -164,9 +164,9 @@ public class MatchHistory {
         try(FileInputStream input = new FileInputStream(new File("db.properties"))){
             Properties props = new Properties();
             props.load(input);
-            user = (String) props.getProperty("username");
-            pass = (String) props.getProperty("password");
-            url = (String) props.getProperty("URL");
+            user = props.getProperty("username");
+            pass = props.getProperty("password");
+            url = props.getProperty("URL");
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             String getPoints = "SELECT funds FROM match_history WHERE username = ?;";
@@ -201,9 +201,9 @@ public class MatchHistory {
         try(FileInputStream input = new FileInputStream(new File("db.properties"))){
             Properties props = new Properties();
             props.load(input);
-            user = (String) props.getProperty("username");
-            pass = (String) props.getProperty("password");
-            url = (String) props.getProperty("URL");
+            user = props.getProperty("username");
+            pass = props.getProperty("password");
+            url = props.getProperty("URL");
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             String newPoints = "UPDATE match_history SET funds = funds - ? WHERE username = ?;";
@@ -233,9 +233,9 @@ public class MatchHistory {
         try(FileInputStream input = new FileInputStream(new File("db.properties"))){
             Properties props = new Properties();
             props.load(input);
-            user = (String) props.getProperty("username");
-            pass = (String) props.getProperty("password");
-            url = (String) props.getProperty("URL");
+            user = props.getProperty("username");
+            pass = props.getProperty("password");
+            url = props.getProperty("URL");
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             String newPoints = "UPDATE match_history SET funds = funds + ? WHERE username = ?;";

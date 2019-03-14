@@ -52,9 +52,7 @@ public class SQLDatabaseConnection implements Runnable {
 					" games_played INTEGER NOT NULL," +
 					" games_won INTEGER not null," + 
 					" funds INTEGER NOT NULL);";
-			statement.executeUpdate(query4);	
-			/*String query6 = "DROP table match_history;";
-			statement.execute(query6);*/
+			statement.executeUpdate(query4);
 			System.out.println("Connection established");
 
 
