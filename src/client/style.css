@@ -11,6 +11,15 @@
 
 }
 
+.loginTextField{
+    -fx-background-color: #effaff;
+    -fx-background-radius: 15.0;
+    -fx-border-radius: 15.0;
+    -fx-border-color: #000000;
+    -fx-text-fill: #000000;
+
+}
+
 .gameBackground{
     -fx-background-image: url("../image/background.jpg");
     -fx-background-repeat: repeat;

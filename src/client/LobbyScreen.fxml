@@ -66,12 +66,12 @@
 						</TextField>
 					</children>
                <padding>
-                  <Insets left="10.0" right="5.0" />
+                  <Insets left="12.0" right="5.0" />
                </padding>
 				</VBox>
 			</center>
 			<right>
-				<VBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="275.0" minWidth="130" prefHeight="323.0" prefWidth="136.0" BorderPane.alignment="TOP_CENTER">
+				<VBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="275.0" minWidth="130" prefHeight="295.0" prefWidth="144.0" BorderPane.alignment="TOP_CENTER">
 					<children>
 						<Label alignment="CENTER" minHeight="18" prefHeight="18.0" prefWidth="130.0" text="ACTIONS" textFill="WHITE" />
 						<Button fx:id="joinButton" maxHeight="-Infinity" minHeight="80.0" minWidth="130.0" mnemonicParsing="false" onAction="#joinQueue" prefHeight="80.0" prefWidth="130.0" styleClass="lobbyButton" text="Join Queue" textOverrun="CENTER_ELLIPSIS">
@@ -98,7 +98,7 @@
 								<Cursor fx:constant="HAND" />
 							</cursor>
 						</Button>
-						<Label fx:id="playedLabel" styleClass="lobbyLabel" text="Games played: "  />
+						<Label fx:id="playedLabel" styleClass="lobbyLabel" text="Games played: " />
 						<Label fx:id="wonLabel" styleClass="lobbyLabel" text="Games won: " />
                   <Label fx:id="walletLabel" styleClass="lobbyLabel" text="Wallet:" />
                   <Button fx:id="addFundsButton" mnemonicParsing="false" text="Add funds" visible="false" />
