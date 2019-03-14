@@ -70,12 +70,12 @@ public class LoginController implements Initializable {
 				LobbyController lobbyController = loader.<LobbyController>getController();
 				Stage thisStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 				lobbyController.initData(ipField.getText(), userField.getText(), passField.getText(), thisStage);
-				thisStage.setHeight(480);
-				thisStage.setWidth(640);
-				thisStage.setMinHeight(480);
-				thisStage.setMinWidth(640);
-				thisStage.setMaxHeight(1080);
-				thisStage.setMaxWidth(1920);
+				thisStage.setHeight(768);
+				thisStage.setWidth(1366);
+				thisStage.setMinHeight(768);
+				thisStage.setMinWidth(1366);
+				thisStage.setMaxHeight(768);
+				thisStage.setMaxWidth(1366);
 				thisStage.setResizable(true);
 				thisStage.setScene(lobbyScene);
 				thisStage.show();

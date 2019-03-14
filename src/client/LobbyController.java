@@ -339,6 +339,7 @@ public class LobbyController implements Initializable {
 		thread.start();
 	}
 
+
 	public Stage getThisStage() {
 		return thisStage;
 	}
