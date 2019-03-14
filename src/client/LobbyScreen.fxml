@@ -48,27 +48,30 @@
 				<VBox alignment="TOP_CENTER" minWidth="178.0" prefHeight="400.0" prefWidth="178.0" BorderPane.alignment="TOP_CENTER">
 					<children>
 						<Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="18" minWidth="178" prefHeight="18.0" prefWidth="178.0" text="ONLINE PLAYERS" textAlignment="JUSTIFY" textFill="#ffffff" />
-						<ListView fx:id="onlineView" focusTraversable="false" maxWidth="-Infinity" minWidth="178" mouseTransparent="true" pickOnBounds="false" prefHeight="327.0" prefWidth="178.0" styleClass="lobbyListView" VBox.vgrow="ALWAYS" />
+						<ListView fx:id="onlineView" focusTraversable="false" maxWidth="-Infinity" minWidth="178" mouseTransparent="true" opacity="0.8" pickOnBounds="false" prefHeight="327.0" prefWidth="219.0" styleClass="lobbyListView" VBox.vgrow="ALWAYS" />
 						<Label alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="18" minWidth="178" prefHeight="18.0" prefWidth="165.0" text="MATCH QUEUE" textAlignment="JUSTIFY" textFill="WHITE" />
-						<ListView fx:id="queueView" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="75.0" minWidth="178" mouseTransparent="true" pickOnBounds="false" prefHeight="75.0" prefWidth="178.0" styleClass="lobbyListView" />
+						<ListView fx:id="queueView" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="75.0" minWidth="178" mouseTransparent="true" opacity="0.8" pickOnBounds="false" prefHeight="75.0" prefWidth="178.0" styleClass="lobbyListView" />
 					</children>
 				</VBox>
 			</left>
 			<center>
-				<VBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="200.0" prefHeight="310.0" prefWidth="1058.0" BorderPane.alignment="TOP_CENTER">
+				<VBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="200.0" prefHeight="294.0" prefWidth="993.0" BorderPane.alignment="TOP_CENTER">
 					<children>
 						<Label alignment="CENTER" maxHeight="-Infinity" minHeight="18" prefHeight="18.0" prefWidth="491.0" text="CHAT" textFill="WHITE" />
-						<ListView fx:id="chatView" focusTraversable="false" maxHeight="-Infinity" minHeight="220" prefHeight="220.0" prefWidth="333.0" styleClass="lobbyListView" />
-						<TextField fx:id="chatField" alignment="CENTER" maxHeight="-Infinity" minHeight="37" onAction="#sendChat" prefHeight="30.0" prefWidth="354.0" promptText="chat here" styleClass="lobbyChatField">
+						<ListView fx:id="chatView" focusTraversable="false" maxHeight="-Infinity" minHeight="220" opacity="0.8" prefHeight="240.0" prefWidth="980.0" styleClass="lobbyListView" />
+						<TextField fx:id="chatField" alignment="CENTER" maxHeight="-Infinity" minHeight="37" onAction="#sendChat" opacity="0.8" prefHeight="30.0" prefWidth="354.0" promptText="chat here" styleClass="lobbyChatField">
 							<font>
 								<Font size="14.0" />
 							</font>
 						</TextField>
 					</children>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
 				</VBox>
 			</center>
 			<right>
-				<VBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="275.0" minWidth="130" prefHeight="312.0" prefWidth="130.0" BorderPane.alignment="TOP_CENTER">
+				<VBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="275.0" minWidth="130" prefHeight="295.0" prefWidth="183.0" BorderPane.alignment="TOP_CENTER">
 					<children>
 						<Label alignment="CENTER" minHeight="18" prefHeight="18.0" prefWidth="130.0" text="ACTIONS" textFill="WHITE" />
 						<Button fx:id="joinButton" maxHeight="-Infinity" minHeight="80.0" minWidth="130.0" mnemonicParsing="false" onAction="#joinQueue" prefHeight="80.0" prefWidth="130.0" styleClass="lobbyButton" text="Join Queue" textOverrun="CENTER_ELLIPSIS">
@@ -105,7 +108,7 @@
                <children>
                   <ImageView fitHeight="248.0" fitWidth="1366.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="false" HBox.hgrow="ALWAYS">
                      <image>
-                        <Image url="@../image/vegasBackDropWithLogoDup.png" />
+                        <Image url="@../image/vegasBackDropLogoCardsGlow.png" />
                      </image>
                      <HBox.margin>
                         <Insets top="-90.0" />

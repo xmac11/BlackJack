@@ -25,7 +25,7 @@
 .betArrow:hover{
 	-fx-background-color: #654b00;
 	-fx-border-color: black;
-	box-shadow: 10px 5px 5px red;
+
 }
 
 .betBackground{
@@ -42,27 +42,32 @@
 }
 
 .lobbyListView{
-	-fx-background-color: #FFFFFF;
+	-fx-background-color: #9aa3a8;
     -fx-background-radius: 15.0;
     -fx-border-radius: 15.0;
-    -fx-border-color: black;
+    -fx-border-color: #9aa3a8;
+    -fx-text-fill: #ffffff;
 }
 .lobbyChatField{
-	-fx-background-color: #FFFFFF;
+	-fx-background-color: #c6cfd4;
     -fx-background-radius: 15.0;
     -fx-border-radius: 15.0;
-    -fx-border-color: black;
+    -fx-border-color: #000000;
+    -fx-text-fill: #000000;
 }
 .list-cell {
     -fx-background-color: transparent;
+    -fx-text-fill: white;
 }
 
 .lobbyListView .viewport, .lobbyListView .content, .lobbyListView .scroll-pane .corner {
     -fx-background-color: transparent ;
+    -fx-text-fill: white;
 }
 
 .lobbyListView .scroll-bar {
     -fx-background-color:transparent;
+
 }
 
 .lobbyListView .scroll-bar:vertical {
@@ -70,11 +75,11 @@
 }
 
 .lobbyListView .scroll-bar .thumb {
-    -fx-background-color:derive(black, 50.0%);
+    -fx-background-color:derive(#5b5b5b, 50.0%);
 }
 
 .lobbyListView .scroll-bar .thumb:hover {
-    -fx-background-color:derive(black, 70.0%);
+    -fx-background-color:derive(#5b5b5b, 70.0%);
 }
 
 .lobbyListView .increment-button ,.lobbyListView .decrement-button {
@@ -83,14 +88,15 @@
 
 .lobbyListView .track  {
     -fx-background-color:transparent;
+    -fx-text-fill: white;
 }
 
 .lobbyScreen{
-    -fx-background-image: url("../image/rain.gif");
-    -fx-background-repeat: repeat;
-    -fx-background-size: 864.0 324.0;
-    -fx-background-position: top left;
-    -fx-effect: dropshadow(three-pass-box, black, 30.0, 0.5, 0.0, 0.0);
+    -fx-background-image: url("../image/rain1.gif");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 1366, 768.0  ;
+    -fx-background-position: center;
+
 }
 
 .gameLabel {
