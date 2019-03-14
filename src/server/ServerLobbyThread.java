@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
+import database.MatchHistory;
 import shareable.GameStart;
 
 public class ServerLobbyThread implements Runnable {
@@ -74,7 +75,7 @@ public class ServerLobbyThread implements Runnable {
 					}
 					if (in.equals("joinQueue")) {
 						synchronized (gameQueue) {
-							if (gameQueue.size() < 3 && socketConnection.getPoints() >= MINBET) {
+							if (gameQueue.size() < 3 && (MatchHistory.getAmount(socketConnection.getUsername())) >= MINBET) {
 								gameQueue.add(socketConnection);
 								System.out.println(gameQueue);
 								socketConnection.getOutput().println("queueJoined");

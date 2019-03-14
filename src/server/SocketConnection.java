@@ -16,7 +16,6 @@ public class SocketConnection {
 	private BufferedReader input;
 	private boolean inLobby;
 	private String username;
-	private int points;
 	
 	public SocketConnection(Socket socket, Semaphore sessionWait, PrintWriter output, BufferedReader input, boolean inLobby, String username) {
 		this.socket = socket;
@@ -25,7 +24,6 @@ public class SocketConnection {
 		this.output = output;
 		this.setInLobby(inLobby);
 		this.setUsername(username);
-		this.points = MatchHistory.getAmount(username);
 	}
 
 	public PrintWriter getOutput() {
@@ -80,12 +78,5 @@ public class SocketConnection {
 		this.username = username;
 	}
 
-	public int getPoints() {
-		return points;
-	}
-
-	public void setPoints(int points) {
-		this.points = points;
-	}
 
 }
