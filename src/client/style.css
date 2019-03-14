@@ -86,7 +86,7 @@
 }
 
 .lobbyScreen{
-    -fx-background-image: url("../image/lobbyBackground.png");
+    -fx-background-image: url("../image/rain.gif");
     -fx-background-repeat: repeat;
     -fx-background-size: 864.0 324.0;
     -fx-background-position: top left;
