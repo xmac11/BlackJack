@@ -99,6 +99,10 @@
 
 }
 
+.lobbyLabel{
+    -fx-text-fill: white;
+}
+
 .gameLabel {
    -fx-font-family: "Arial Black";
    -fx-fill: #818181;
