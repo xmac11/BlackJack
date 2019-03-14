@@ -63,7 +63,8 @@ public class Authentication {
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             String newEntry = "INSERT INTO User_Info (username, password_hash) VALUES (?,?);";
-            String newHistory = "INSERT INTO match_history (username, games_played, games_won) VALUES (?,0,0);";
+            String newHistory = "INSERT INTO match_history (username, games_played, games_won, funds) VALUES (?,0,0, 500);";
+
             PreparedStatement statement = connection.prepareStatement(newEntry);
             statement.setString(1, username);
             statement.setInt(2, passwordHash);

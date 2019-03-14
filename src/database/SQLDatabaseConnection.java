@@ -47,8 +47,11 @@ public class SQLDatabaseConnection implements Runnable {
 			String query4 = "CREATE TABLE IF NOT EXISTS match_history (" +
 					"username VARCHAR(50) references user_info(username) PRIMARY KEY," +
 					" games_played INTEGER NOT NULL," +
-					" games_won INTEGER not null);";
-			statement.executeUpdate(query4);
+					" games_won INTEGER not null," + 
+					" funds INTEGER NOT NULL);";
+			statement.executeUpdate(query4);	
+			/*String query6 = "DROP table match_history;";
+			statement.execute(query6);*/
 			System.out.println("Connection established");
 
 

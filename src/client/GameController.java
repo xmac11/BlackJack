@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import database.MatchHistory;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -66,6 +67,12 @@ public class GameController implements Initializable {
 
 	@FXML
 	private ListView<String> chatView;
+	
+	@FXML
+	private Label points;
+	
+	@FXML
+	private TextField betField;
 
 	private String username;
 	private int ID;
@@ -194,7 +201,7 @@ public class GameController implements Initializable {
 			}
 		});
 	}
-
+	
 	public void closeGameScreen() {
 		stage.close();
 	}
@@ -205,6 +212,16 @@ public class GameController implements Initializable {
 			public void run() {
 				labelDealer.setText(text);
 				labelDealer.setVisible(true);
+			}
+		});
+	}
+	
+	public void setPointsLabel(String text) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				points.setText(text);
+				points.setVisible(true);
 			}
 		});
 	}
@@ -439,6 +456,8 @@ public class GameController implements Initializable {
 		standButton.setDisable(true);
 		label.setVisible(false);
 		labelDealer.setVisible(false);
+		points.setVisible(false);
+		betField.setVisible(false);
 		chatView.setCellFactory(param -> new ListCell<String>() {
 			@Override
 			protected void updateItem(String item, boolean empty) {
@@ -477,6 +496,34 @@ public class GameController implements Initializable {
 
 	public void setStage(Stage stage) {
 		this.stage = stage;
+	}
+	
+	public Button getStandButton() {
+		return standButton;
+	}
+
+	public Button getHitButton() {
+		return hitButton;
+	}
+
+	public TextField getBetField() {
+		return betField;
+	}
+
+	public void placeBet() {		
+		String betString = betField.getText();
+		int bet = Integer.parseInt(betString);
+		int fundsAvailable = MatchHistory.getAmount(username);
+		if(bet < fundsAvailable) {
+			MatchHistory.reduceAmount(username, bet);
+			betField.setVisible(false);
+			output.println("betIs " + bet);
+		}
+		else {			
+			betField.setText("");
+			betField.setPromptText("Place your bet...");
+			output.println("insufficientFunds");
+		}
 	}
 
 }

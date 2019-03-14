@@ -4,6 +4,7 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.Semaphore;
 
 
@@ -45,6 +46,8 @@ public class Client implements Runnable {
 	private boolean inGame = false;
 	private boolean gameFinished;
 	private int sessionID;
+	private int betAmount;
+	private boolean isBetPlaced;
 
 	public Client(List<List<String>> table, Semaphore waitForController, String IP, LobbyController lobbyController) {
 		this.table = table;
@@ -55,6 +58,7 @@ public class Client implements Runnable {
 		gameController = null;
 		this.pocketBlackJack = false;
 		this.gameFinished = false;
+		this.isBetPlaced = false;
 	}
 
 	public void setGameController(GameController gameController) {
@@ -67,6 +71,10 @@ public class Client implements Runnable {
 
 	public boolean isGameFinished() {
 		return gameFinished;
+	}
+
+	public boolean isBetPlaced() {
+		return isBetPlaced;
 	}
 
 	@Override
@@ -152,6 +160,7 @@ public class Client implements Runnable {
 				}
 				gameFinished = false;
 				playerLeft = false;
+				isBetPlaced = false;
 				sessionID = Integer.parseInt(input.readLine().replaceFirst("sessionID", ""));
 				gameController.setOutput(output);
 				gameController.setUsername(username);
@@ -181,22 +190,51 @@ public class Client implements Runnable {
 				// players hand
 				gameController.setTable(table);
 				pocketBlackJack = false;
-				if (Deck.total(table.get(ID)) == 21 && table.get(ID).size() == 2) {
+				if (Deck.total(table.get(ID)) == 21) {
 					System.out.println("Black Jack!");
 					gameController.setLabel("Black Jack!");
 					System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
 					pocketBlackJack = true;
 				}
-				while (!gameFinished && !playerLeft) { // Loops this until it reaches a 'break;'
+				while (!gameFinished && !playerLeft) { // Loops this until it reaches a 'break;'					
 					in = input.readLine();
 					System.out.println("Client in: " + in);
+					
+					if (in.equals("placeBet")) {
+						int pointsAvailable = MatchHistory.getAmount(username);
+						gameController.getBetField().setVisible(true);
+						gameController.setLabel("Place Bet" + "\nPoints: " + Deck.total(table.get(ID)));
+						gameController.setPointsLabel("Funds available: " + String.valueOf(pointsAvailable));
+						gameController.getHitButton().setVisible(false);
+						gameController.getStandButton().setVisible(false);
+						Scanner s = new Scanner(System.in);					
+						s.close();
+					}										 
+					if (in.equals("retryBet")) {
+						gameController.setLabel("Not enough funds, try again" + "\nPoints: " + Deck.total(table.get(ID)));
+						Scanner s = new Scanner(System.in);					
+						s.close();
+					}
+					if (in.contains("betIs")) {		
+						int pointsAvailable = MatchHistory.getAmount(username);
+						betAmount = Integer.parseInt(in.substring(6));
+						gameController.setPointsLabel("Funds availlable: " + String.valueOf(pointsAvailable));
+						isBetPlaced = true;
+						output.println("betComplete");
+					}
+					
 					if (in.equals("Make move")) { // Reads the message received and responds accordingly
-						if (pocketBlackJack) {
+						if (!isBetPlaced) {
+							output.println("wantToBet");
+						}							
+						else if (pocketBlackJack) {
 							output.println("p");
 							gameController.disableHit();
 							gameController.disableStand();
 							// break;
 						} else {
+							gameController.getHitButton().setVisible(true);
+							gameController.getStandButton().setVisible(true);
 							gameController.enableHit();
 							gameController.enableStand();
 							System.out.println(in + ", h (hit) p (pass)");
@@ -246,7 +284,8 @@ public class Client implements Runnable {
 								gameController.disableHit();
 								gameController.disableStand();
 								// break;
-							} else {
+							} 
+							else {
 								output.println("move");
 								System.out.println(
 										"Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
@@ -370,14 +409,19 @@ public class Client implements Runnable {
 			gameController.setLabel("Bust!! You lose!");
 		} else if (Deck.total(table.get(0)) > 21) {
 			MatchHistory.setGamesWon(username, 1);
+			MatchHistory.increaseAmount(username, 2*betAmount); // this should be 1.5
 			Session.setSessionPoints(sessionID, username, true);
 			gameController.setLabel("Dealer bust! You Win!");
+			gameController.setPointsLabel("Funds available: " + String.valueOf(MatchHistory.getAmount(username)));
 		} else if (Deck.total(table.get(ID)) == Deck.total(table.get(0))) {
 			gameController.setLabel("Draw!");
+			MatchHistory.increaseAmount(username, betAmount); // take money back
 		} else if (Deck.total(table.get(ID)) > Deck.total(table.get(0))) {
 			Session.setSessionPoints(sessionID, username, true);
 			MatchHistory.setGamesWon(username, 1);
+			MatchHistory.increaseAmount(username, 2*betAmount); // this should be 1.5
 			gameController.setLabel("You win!!");
+			gameController.setPointsLabel("Funds available: " + String.valueOf(MatchHistory.getAmount(username)));
 		} else {
 			gameController.setLabel("Dealer Wins!!");
 		}

@@ -118,6 +118,18 @@ public class ServerPlayerHandler implements Runnable {
 				if (in.equals("move")) { // Client requests the Make move message
 					socketConnection.getOutput().println("Make move");
 				}
+				if (in.equals("wantToBet")) {
+					socketConnection.getOutput().println("placeBet");
+				}
+				if (in.contains("betIs")) {
+					socketConnection.getOutput().println(in); // send the bet to client
+				}
+				if (in.equals("insufficientFunds")) {
+					socketConnection.getOutput().println("retryBet");
+				}
+				if (in.equals("betComplete")) {
+					socketConnection.getOutput().println("Make move");
+				}
 			} catch (IOException e) {
 				System.out.println("Player disconnected");
 				socketConnection.setInLobby(true);

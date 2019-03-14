@@ -127,5 +127,92 @@ public class MatchHistory {
         }
         return points;
     }
+    
+    public static int getAmount(String username){
+        int funds = 0;
+        String url;
+        String user;
+        String pass;
+        try(FileInputStream input = new FileInputStream(new File("db.properties"))){
+            Properties props = new Properties();
+            props.load(input);
+            user = (String) props.getProperty("username");
+            pass = (String) props.getProperty("password");
+            url = (String) props.getProperty("URL");
 
+        try (Connection connection = DriverManager.getConnection(url, user, pass)) {
+            String getPoints = "SELECT funds FROM match_history WHERE username = ?;";
+
+            PreparedStatement statement = connection.prepareStatement(getPoints);
+            statement.setString(1,username);
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()){
+                funds = rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Username does not exist");
+            return -1;
+        }
+        }catch (IOException e){
+            System.out.println("No properties found");
+            return -1;
+        }
+        return funds;
+    }
+    
+    public static void reduceAmount(String username, int amount){
+        String url;
+        String user;
+        String pass;
+        try(FileInputStream input = new FileInputStream(new File("db.properties"))){
+            Properties props = new Properties();
+            props.load(input);
+            user = (String) props.getProperty("username");
+            pass = (String) props.getProperty("password");
+            url = (String) props.getProperty("URL");
+
+        try (Connection connection = DriverManager.getConnection(url, user, pass)) {
+            String newPoints = "UPDATE match_history SET funds = funds - ? WHERE username = ?;";
+
+            PreparedStatement statement = connection.prepareStatement(newPoints);
+            statement.setInt(1,amount);
+            statement.setString(2,username);
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("Username does not exist");
+        }
+        }catch (IOException e){
+            System.out.println("No properties found");
+        }
+    }
+    
+    public static void increaseAmount(String username, int amount){
+        String url;
+        String user;
+        String pass;
+        try(FileInputStream input = new FileInputStream(new File("db.properties"))){
+            Properties props = new Properties();
+            props.load(input);
+            user = (String) props.getProperty("username");
+            pass = (String) props.getProperty("password");
+            url = (String) props.getProperty("URL");
+
+        try (Connection connection = DriverManager.getConnection(url, user, pass)) {
+            String newPoints = "UPDATE match_history SET funds = funds + ? WHERE username = ?;";
+
+            PreparedStatement statement = connection.prepareStatement(newPoints);
+            statement.setInt(1,amount);
+            statement.setString(2,username);
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("Username does not exist");
+        }
+        }catch (IOException e){
+            System.out.println("No properties found");
+        }
+    }
+    
 }
