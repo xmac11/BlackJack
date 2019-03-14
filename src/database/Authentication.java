@@ -26,9 +26,9 @@ public class Authentication {
         try(FileInputStream input = new FileInputStream(new File("db.properties"))){
             Properties props = new Properties();
             props.load(input);
-            user = (String) props.getProperty("username");
-            pass = (String) props.getProperty("password");
-            url = (String) props.getProperty("URL");
+            user = props.getProperty("username");
+            pass = props.getProperty("password");
+            url = props.getProperty("URL");
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
 
@@ -47,7 +47,7 @@ public class Authentication {
         }
 
         } catch (SQLException e) {
-            System.out.println("Connection not successfull");
+            System.out.println("Connection not successful");
             return false;
         }
         }catch (IOException e){
@@ -69,13 +69,13 @@ public class Authentication {
         String user;
         String pass;
         int passwordHash = password.hashCode();
-        boolean success = false;
+        boolean success;
         try(FileInputStream input = new FileInputStream(new File("db.properties"))){
             Properties props = new Properties();
             props.load(input);
-            user = (String) props.getProperty("username");
-            pass = (String) props.getProperty("password");
-            url = (String) props.getProperty("URL");
+            user = props.getProperty("username");
+            pass = props.getProperty("password");
+            url = props.getProperty("URL");
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
             String newEntry = "INSERT INTO User_Info (username, password_hash) VALUES (?,?);";
