@@ -18,6 +18,16 @@
     -fx-background-position: center center;
 }
 
+.betArrow{
+	-fx-background-color: #654b00;
+	-fx-border-color: black;
+}
+.betArrow:hover{
+	-fx-background-color: #654b00;
+	-fx-border-color: black;
+	box-shadow: 10px 5px 5px red;
+}
+
 .betBackground{
 	-fx-background-color: linear-gradient(#ffd65b, #e68400),
     linear-gradient(#ffef84, #f2ba44),
@@ -36,14 +46,12 @@
     -fx-background-radius: 15.0;
     -fx-border-radius: 15.0;
     -fx-border-color: black;
-     /*-fx-border-color: #f75454;*/
 }
 .lobbyChatField{
 	-fx-background-color: #FFFFFF;
     -fx-background-radius: 15.0;
     -fx-border-radius: 15.0;
     -fx-border-color: black;
-     /*-fx-border-color: #f75454;*/
 }
 .list-cell {
     -fx-background-color: transparent;

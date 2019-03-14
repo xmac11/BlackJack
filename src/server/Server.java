@@ -17,6 +17,7 @@ public class Server implements Runnable {
 	Semaphore deckWait;
 	Semaphore gameBegin;
 	CyclicBarrier dealersTurn;
+	CyclicBarrier betWait;
 	private List<List<String>> table;
 	Boolean join;
 	private List<SocketConnection> joined;
@@ -77,6 +78,7 @@ public class Server implements Runnable {
  			deckWait = new Semaphore(1); // Creates a semaphore to allow 1 thread to access a critical section, this
 											// is used to control access to the deck
 			dealersTurn = new CyclicBarrier((gameQueue.size() + 1));
+			betWait = new CyclicBarrier(gameQueue.size());
 			finishedPlayers = new FinishedPlayers();
 			if (gameQueue.size() > 0) { // Ensures there are players in the session
 				System.out.println("Game Starting...");
@@ -84,7 +86,7 @@ public class Server implements Runnable {
 					ServerPlayerHandler serverThread = null;
 					table.add(new ArrayList<>());
 					serverThread = new ServerPlayerHandler(gameQueue.get(i), i + 1, deck, deckWait, gameQueue.size(),
-							dealersTurn, table, finishedPlayers, gameQueue, sessionID);
+							dealersTurn, table, finishedPlayers, gameQueue, sessionID, betWait);
 					System.out.println("Player " + (i + 1) + " added"); // For debugging
 					new Thread(serverThread).start(); // Sends thread
 				}

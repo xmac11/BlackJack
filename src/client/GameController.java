@@ -422,7 +422,6 @@ public class GameController implements Initializable {
 	}
 
 	public void setTable(List<List<String>> table) {
-		fundsAvailable = MatchHistory.getAmount(username);
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
@@ -486,6 +485,7 @@ public class GameController implements Initializable {
 	}
 
 	public void showBetPane() {
+		fundsAvailable = MatchHistory.getAmount(username);
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
@@ -499,6 +499,7 @@ public class GameController implements Initializable {
 			@Override
 			public void run() {
 				betPane.setVisible(false);
+				setLabel("Waiting for other\nplayers to bet");
 			}
 		});
 	}

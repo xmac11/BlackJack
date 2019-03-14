@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.Semaphore;
 
-
-
 import database.MatchHistory;
 import database.Session;
 import javafx.stage.Stage;
@@ -151,6 +149,7 @@ public class Client implements Runnable {
 
 				lobbyController.gameBegin();
 				String hello = input.readLine();
+				sessionID = Integer.parseInt(input.readLine().replaceFirst("sessionID", ""));
 				System.out.println(hello); // The first message received is the greeting message so just print this
 				ID = Integer.parseInt(hello.substring(15, 16));
 				try {
@@ -158,68 +157,58 @@ public class Client implements Runnable {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				System.out.println("passed wait");
 				gameFinished = false;
 				playerLeft = false;
 				isBetPlaced = false;
-				sessionID = Integer.parseInt(input.readLine().replaceFirst("sessionID", ""));
+				inGame = true;
+				int pointsAvailable = MatchHistory.getAmount(username);
 				gameController.setOutput(output);
 				gameController.setUsername(username);
 				gameController.setID(ID);
-				inGame = true;
 				noPlayers = Integer.parseInt(hello.substring(26, 27)); // Max of 3 players so reading one char is fine
 				gameController.setNoPlayers(noPlayers);
 				System.out.println(noPlayers);
-				table.add(new ArrayList<>());
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				table.get(0).add(input.readLine());
-				table.get(0).add(input.readLine()); // Next messages are the dealers first hands
-				System.out.println(table.get(0) + " this is dealer");
-				for (int i = 0; i < noPlayers; i++) {
-					table.add(new ArrayList<>());
-				}
-				table.get(ID).add(input.readLine());
-				table.get(ID).add(input.readLine()); // Player's first hands
-				gameController.setLabel("Your hand: " + Deck.total(table.get(ID)) + "\nWait for your turn");
-				System.out.println("Your Hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID))); // Prints
-				MatchHistory.setGamesPlayed(username, 1); // the
-				gameController.setTable(table);
-				pocketBlackJack = false;
-				if (Deck.total(table.get(ID)) == 21) {
-					System.out.println("Black Jack!");
-					gameController.setLabel("Black Jack!");
-					System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
-					pocketBlackJack = true;
-				}
-				while (!gameFinished && !playerLeft) { // Loops this until it reaches a 'break;'					
+				gameController.showBetPane();
+				gameController.setPointsLabel("Funds available: " + String.valueOf(pointsAvailable));
+				gameController.disableHit();
+				gameController.hideLabel();
+				gameController.disableStand();
+				while (!gameFinished && !playerLeft) { // Loops this until it reaches a 'break;'
 					in = input.readLine();
 					System.out.println("Client in: " + in);
-					
-					if (in.equals("placeBet")) {
-						int pointsAvailable = MatchHistory.getAmount(username);
-						gameController.showBetPane();
-						gameController.setPointsLabel("Funds available: " + String.valueOf(pointsAvailable));
-						gameController.disableHit();
-						gameController.hideLabel();
-						gameController.disableStand();
-					}										 
-					if (in.contains("betIs")) {		
-						int pointsAvailable = MatchHistory.getAmount(username);
+					if (in.contains("betIs")) {
+						pointsAvailable = MatchHistory.getAmount(username);
 						betAmount = Integer.parseInt(in.substring(6));
 						gameController.setPointsLabel("Funds availlable: " + String.valueOf(pointsAvailable));
-						isBetPlaced = true;
+						isBetPlaced = true; 
 						output.println("betComplete");
+						table.add(new ArrayList<>());
+						table.get(0).add(input.readLine());
+						table.get(0).add(input.readLine()); // Next messages are the dealers first hands
+						System.out.println(table.get(0) + " this is dealer");
+						for (int i = 0; i < noPlayers; i++) {
+							table.add(new ArrayList<>());
+						}
+						table.get(ID).add(input.readLine());
+						table.get(ID).add(input.readLine()); // Player's first hands
+						gameController.setLabel("Your hand: " + Deck.total(table.get(ID)) + "\nWait for your turn");
+						System.out.println("Your Hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID))); // Prints
+						MatchHistory.setGamesPlayed(username, 1); // the
+						gameController.setTable(table);
+						pocketBlackJack = false;
+						if (Deck.total(table.get(ID)) == 21) {
+							System.out.println("Black Jack!");
+							gameController.setLabel("Black Jack!");
+							System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
+							pocketBlackJack = true;
+						}
 					}
-					
+
 					if (in.equals("Make move")) { // Reads the message received and responds accordingly
 						if (!isBetPlaced) {
 							output.println("wantToBet");
-						}							
-						else if (pocketBlackJack) {
+						} else if (pocketBlackJack) {
 							output.println("p");
 							gameController.disableHit();
 							gameController.disableStand();
@@ -273,8 +262,7 @@ public class Client implements Runnable {
 								gameController.disableHit();
 								gameController.disableStand();
 								// break;
-							} 
-							else {
+							} else {
 								output.println("move");
 								System.out.println(
 										"Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
@@ -390,7 +378,7 @@ public class Client implements Runnable {
 			gameController.setLabel("Bust!! You lose!");
 		} else if (Deck.total(table.get(0)) > 21) {
 			MatchHistory.setGamesWon(username, 1);
-			MatchHistory.increaseAmount(username, 2*betAmount); // this should be 1.5
+			MatchHistory.increaseAmount(username, 2 * betAmount); // this should be 1.5
 			Session.setSessionPoints(sessionID, username, true);
 			gameController.setLabel("Dealer bust! You Win!");
 		} else if (Deck.total(table.get(ID)) == Deck.total(table.get(0))) {
@@ -399,7 +387,7 @@ public class Client implements Runnable {
 		} else if (Deck.total(table.get(ID)) > Deck.total(table.get(0))) {
 			Session.setSessionPoints(sessionID, username, true);
 			MatchHistory.setGamesWon(username, 1);
-			MatchHistory.increaseAmount(username, 2*betAmount); // this should be 1.5
+			MatchHistory.increaseAmount(username, 2 * betAmount); // this should be 1.5
 			gameController.setLabel("You win!!");
 		} else {
 			gameController.setLabel("Dealer Wins!!");

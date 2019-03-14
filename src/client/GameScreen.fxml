@@ -187,8 +187,8 @@
 						<Polygon fx:id="increaseBet" fill="#654b00"
 							onMouseClicked="#increaseBet"
 							points="-50.0, 40.0, -50.0, -29.0, 6.0, 3.0" stroke="BLACK"
-							strokeType="INSIDE" strokeWidth="2.0" GridPane.columnIndex="2"
-							GridPane.rowIndex="1">
+							strokeType="INSIDE" strokeWidth="2.0" styleClass="betArrow"
+							GridPane.columnIndex="2" GridPane.rowIndex="1">
 							<cursor>
 								<Cursor fx:constant="HAND" />
 							</cursor>
@@ -197,8 +197,8 @@
 							onMouseClicked="#decreaseBet"
 							points="-50.0, 40.0, -50.0, -29.0, 6.0, 3.0" rotate="180.0"
 							stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0"
-							GridPane.halignment="RIGHT" GridPane.rowIndex="1"
-							GridPane.valignment="CENTER">
+							styleClass="betArrow" GridPane.halignment="RIGHT"
+							GridPane.rowIndex="1" GridPane.valignment="CENTER">
 							<cursor>
 								<Cursor fx:constant="HAND" />
 							</cursor>
