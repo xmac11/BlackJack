@@ -62,13 +62,10 @@ public class ServerPlayerHandler implements Runnable {
 		while (!in.contains("betIs")) {
 			try {
 				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				triggerBarrier();
-			}
-			try {
 				in = socketConnection.getInput().readLine();
-			} catch (IOException e) {
+			} catch (IOException | InterruptedException e) {
 				triggerBarrier();
+				return;
 			}
 		}
 		System.out.println("Server waitingf");
@@ -76,6 +73,7 @@ public class ServerPlayerHandler implements Runnable {
 			betWait.await();
 		} catch (InterruptedException | BrokenBarrierException e) {
 			triggerBarrier();
+			return;
 		} 
 		System.out.println("Server passed bet");
 		socketConnection.getOutput().println(in);
