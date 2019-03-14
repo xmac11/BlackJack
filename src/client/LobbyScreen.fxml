@@ -105,7 +105,7 @@
                <children>
                   <ImageView fitHeight="248.0" fitWidth="1366.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="false" HBox.hgrow="ALWAYS">
                      <image>
-                        <Image url="@../image/vegasBackDropWithLogo.png" />
+                        <Image url="@../image/vegasBackDropWithLogoDup.png" />
                      </image>
                      <HBox.margin>
                         <Insets top="-90.0" />
