@@ -133,6 +133,9 @@ public class Client implements Runnable {
 							lobbyController.joinUnavailable();
 						}
 					}
+					if(in.equals("insufficientFunds")) {
+						lobbyController.showAddFunds();
+					}
 					if (in.equals("playerQueue")) {
 						in = input.readLine();
 						inQueue.clear();

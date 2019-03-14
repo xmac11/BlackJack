@@ -13,6 +13,7 @@ public class ServerLobbyThread implements Runnable {
 	private List<SocketConnection> joined;
 	Semaphore gameBegin;
 	private GameStart gameStart;
+	private static final int MINBET = 5;
 
 	public ServerLobbyThread(SocketConnection socketConnection, List<SocketConnection> gameQueue,
 			List<SocketConnection> joined, GameStart gameStart) {
@@ -24,7 +25,7 @@ public class ServerLobbyThread implements Runnable {
 
 	@Override
 	public void run() {
-		
+
 		String in = "";
 		socketConnection.getOutput().println("playerQueue");
 		for (int j = 0; j < gameQueue.size(); j++) {
@@ -73,7 +74,7 @@ public class ServerLobbyThread implements Runnable {
 					}
 					if (in.equals("joinQueue")) {
 						synchronized (gameQueue) {
-							if (gameQueue.size() < 3) {
+							if (gameQueue.size() < 3 && socketConnection.getPoints() >= MINBET) {
 								gameQueue.add(socketConnection);
 								System.out.println(gameQueue);
 								socketConnection.getOutput().println("queueJoined");
@@ -85,6 +86,8 @@ public class ServerLobbyThread implements Runnable {
 									}
 									joined.get(i).getOutput().println("queueUpdated");
 								}
+							} else {
+								socketConnection.getOutput().println("insufficientFunds");
 							}
 							if (gameQueue.size() == 3) {
 								gameStart.setGameStart(true);
@@ -108,6 +111,7 @@ public class ServerLobbyThread implements Runnable {
 							}
 						}
 					}
+
 				} catch (IOException e) {
 					System.out.println("lobby thread error");
 					gameQueue.remove(socketConnection);
