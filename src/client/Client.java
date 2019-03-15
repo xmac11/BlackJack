@@ -216,10 +216,8 @@ public class Client implements Runnable {
 						}
 						gameController.setTable(table);
 						for (int i = 1; i <= allUsernames.size(); i++) {
-							System.out.println("i is" + i);
 							if (i != ID) {
 								gameController.addLabelToOpposingPlayer(getOtherPlayerID(i), allUsernames.get(i-1));
-								System.out.println("This was pritn!!!!");
 							}
 						}
 						pocketBlackJack = false;
