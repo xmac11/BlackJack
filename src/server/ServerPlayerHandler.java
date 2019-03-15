@@ -51,7 +51,14 @@ public class ServerPlayerHandler implements Runnable {
 		System.out.println(hello);
 		System.out.println("Number of players in game " + noPlayers); // Prints the number of players in the game to the
 		String in = ""; // server thread
-
+		String card1 = "";
+		String card2 = "";
+		synchronized (deck) {
+			card1 = deck.drawCard();
+			card2 = deck.drawCard();
+		}
+		table.get(ID).add(card1);
+		table.get(ID).add(card2);
 		/*
 		 * Each connected client will have a thread running in this class, therefore any
 		 * variable access must be synchronised
@@ -121,16 +128,10 @@ public class ServerPlayerHandler implements Runnable {
 		System.out.println("Server passed bet");
 		socketConnection.getOutput().println(in);
 		barriers++;
-		synchronized (deck) {
-			socketConnection.getOutput().println(table.get(0).get(0));
-			socketConnection.getOutput().println(table.get(0).get(1)); // Sends the dealers hand to the client
-			String card1 = deck.drawCard();
-			String card2 = deck.drawCard();
-			socketConnection.getOutput().println(card1);
-			socketConnection.getOutput().println(card2); // Draws the clients hand
-			table.get(ID).add(card1);
-			table.get(ID).add(card2);
-		}
+		socketConnection.getOutput().println(table.get(0).get(0));
+		socketConnection.getOutput().println(table.get(0).get(1)); // Sends the dealers hand to the client
+		socketConnection.getOutput().println(card1);
+		socketConnection.getOutput().println(card2); // Draws the clients hand
 
 		Runnable r = new ServerMoveThread(socketConnection.getOutput(), deckWait);
 		Thread thread = new Thread(r);
