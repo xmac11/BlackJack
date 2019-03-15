@@ -76,8 +76,7 @@ public class LobbyController implements Initializable {
 	private PrintWriter output;
 	private String username;
 
-	public AudioClip lobbyScreenMusic = new AudioClip(getClass().getResource("/music/MainTheme.mp3").toExternalForm());
-	public AudioClip gameScreenMusic = new AudioClip(getClass().getResource("/music/TeaForTwo.mp3").toExternalForm());
+
 
 	public Client getClient() {
 		return client;
@@ -113,8 +112,7 @@ public class LobbyController implements Initializable {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				lobbyScreenMusic.stop();
-				gameScreenMusic.play();
+
 				playButton.setDisable(true);
 				joinButton.setDisable(true);
 				gameScene.getStylesheets().addAll(getClass().getResource("style.css").toExternalForm());
@@ -138,8 +136,7 @@ public class LobbyController implements Initializable {
 					if (!client.isGameFinished()) {
 						e.consume();
 						client.closeGame(window);
-						gameScreenMusic.stop();
-						lobbyScreenMusic.play();
+
 					}
 				});
 			}
@@ -376,13 +373,7 @@ public class LobbyController implements Initializable {
 		});
 		Thread thread = new Thread(client);
 		thread.start();
-//		new Thread(() -> {
-			int s = INDEFINITE;
-			lobbyScreenMusic.setVolume(0.5f);
-			lobbyScreenMusic.setCycleCount(s);
-			lobbyScreenMusic.play();
 
-//		}).start();
 	}
 
 	public Stage getThisStage() {

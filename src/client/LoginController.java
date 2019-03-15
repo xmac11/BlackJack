@@ -59,6 +59,7 @@ public class LoginController implements Initializable {
 		System.out.println("Server is down.");
 		errorLabel.setText("Error - Cannot connect to server");
 		errorLabel.setVisible(true);
+
 	}
 
 	public void joinPressed(ActionEvent event) throws IOException {

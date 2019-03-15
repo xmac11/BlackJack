@@ -14,6 +14,7 @@ import java.util.concurrent.Semaphore;
 import database.MatchHistory;
 import database.Session;
 import javafx.scene.image.Image;
+import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import server.Deck;
 
@@ -39,6 +40,9 @@ public class Client implements Runnable {
 	private int sessionID;
 	private int betAmount;
 	private boolean isBetPlaced;
+
+	public AudioClip lobbyScreenMusic = new AudioClip(getClass().getResource("/music/MainTheme.mp3").toExternalForm());
+	public AudioClip gameScreenMusic = new AudioClip(getClass().getResource("/music/TeaForTwo.mp3").toExternalForm());
 
 	public Client(List<List<String>> table, Semaphore waitForController, String IP, LobbyController lobbyController) {
 		this.table = table;
@@ -83,13 +87,19 @@ public class Client implements Runnable {
 			setUsername(lobbyController.getUsername());
 			System.out.println(username + " has joined");
 			output.println(username);
+			lobbyScreenMusic.setVolume(0.5);
+			lobbyScreenMusic.play();
 			while (true) {
 				inGame = false;
+
+
 				playerLeft = false;
 				String in = "";
 				lobbyController.setOutput(output);
 				System.out.println("Client back in lobby");
 				while (true) { // Loops this until it reaches a 'break;'
+
+
 					in = input.readLine();
 					System.out.println("Client in: " + in);
 					if (in.equals("accountAlreadyActive")) {
@@ -144,6 +154,10 @@ public class Client implements Runnable {
 				}
 
 				lobbyController.gameBegin();
+				lobbyScreenMusic.stop();
+				gameScreenMusic.play();
+
+
 				String hello = input.readLine();
 				sessionID = Integer.parseInt(input.readLine().replaceFirst("sessionID", ""));
 				System.out.println(hello); // The first message received is the greeting message so just print this
@@ -170,6 +184,7 @@ public class Client implements Runnable {
 				gameController.disableHit();
 				gameController.hideLabel();
 				gameController.disableStand();
+
 				while (!gameFinished && !playerLeft) { // Loops this until it reaches a 'break;'
 					in = input.readLine();
 					System.out.println("Client in: " + in);
@@ -194,6 +209,7 @@ public class Client implements Runnable {
 						MatchHistory.setGamesPlayed(username, 1); // the
 						gameController.setTable(table);
 						pocketBlackJack = false;
+
 						if (Deck.total(table.get(ID)) == 21) {
 							System.out.println("Black Jack!");
 							gameController.setLabel("Black Jack!");
@@ -320,6 +336,7 @@ public class Client implements Runnable {
 							gameController.setDealerLabel("Dealer: " + Deck.total(table.get(0)));
 						} else {
 							gameFinished = true;
+
 						}
 					}
 					if (in.contains("dealerCard")) {
@@ -335,6 +352,7 @@ public class Client implements Runnable {
 					}
 					if (in.contains("dealerDone")) {
 						gameFinished = true;
+
 					}
 					if (in.equals("Clear queue")) {
 						lobbyController.clearQueue();
@@ -395,7 +413,9 @@ public class Client implements Runnable {
 	public void closeGame(Stage window) {
 		boolean confirmation = GameController.displayConfirmBox("Warning", "Are you sure you want to exit?");
 		if (confirmation) {
+			gameScreenMusic.stop();
 			window.close();
+			lobbyScreenMusic.play();
 			gameController.playerLeft();
 		}
 	}

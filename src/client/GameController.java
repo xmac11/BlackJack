@@ -23,6 +23,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.media.AudioClip;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -94,6 +95,10 @@ public class GameController implements Initializable {
 	private static final int MINBET = 5;
 	private int fundsAvailable;
 
+
+    public AudioClip lobbyScreenMusic = new AudioClip(getClass().getResource("/music/MainTheme.mp3").toExternalForm());
+    public AudioClip gameScreenMusic = new AudioClip(getClass().getResource("/music/TeaForTwo.mp3").toExternalForm());
+
 	/**
 	 * Action handlers for hit and stand buttons being clicked. If the user clicks
 	 * hit and the card they are dealt is over 21, then they get the message -
@@ -163,6 +168,7 @@ public class GameController implements Initializable {
 		yesButton.setOnAction(e -> {
 			confirm = true;
 			stage.close();
+
 		});
 
 		// no button
@@ -213,6 +219,9 @@ public class GameController implements Initializable {
 
 	public void closeGameScreen() {
 		stage.close();
+		gameScreenMusic.stop();
+		lobbyScreenMusic.setVolume(0.5);
+		lobbyScreenMusic.play();
 	}
 
 	public void setDealerLabel(String text) {
@@ -285,6 +294,7 @@ public class GameController implements Initializable {
 			@Override
 			public void run() {
 				leaveButton.setVisible(true);
+
 			}
 		});
 	}
