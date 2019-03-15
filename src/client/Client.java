@@ -40,6 +40,7 @@ public class Client implements Runnable {
 	private int sessionID;
 	private int betAmount;
 	private boolean isBetPlaced;
+	private List<String> allUsernames;
 
 	public AudioClip lobbyScreenMusic = new AudioClip(getClass().getResource("/music/MainTheme.mp3").toExternalForm());
 	public AudioClip gameScreenMusic = new AudioClip(getClass().getResource("/music/TeaForTwo.mp3").toExternalForm());
@@ -209,7 +210,18 @@ public class Client implements Runnable {
 						gameController.setLabel("Your hand: " + Deck.total(table.get(ID)) + "\nWait for your turn");
 						System.out.println("Your Hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID))); // Prints
 						MatchHistory.setGamesPlayed(username, 1); // the
+						allUsernames = new ArrayList<>();
+						for(int i = 0; i < noPlayers; i++) {
+							allUsernames.add(input.readLine());
+						}
 						gameController.setTable(table);
+						for (int i = 1; i <= allUsernames.size(); i++) {
+							System.out.println("i is" + i);
+							if (i != ID) {
+								gameController.addLabelToOpposingPlayer(getOtherPlayerID(i), allUsernames.get(i-1));
+								System.out.println("This was pritn!!!!");
+							}
+						}
 						pocketBlackJack = false;
 
 						if (Deck.total(table.get(ID)) == 21) {

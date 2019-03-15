@@ -398,6 +398,22 @@ public class GameController implements Initializable {
 			}
 		});
 	}
+	
+	public void addLabelToOpposingPlayer(int player, String username) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {				
+				if (player == 2) {
+					player2Label.setText(username);
+					System.out.println("Yeyyy");
+				} else {
+					player3Label.setText(username);
+					System.out.println("Hahaha");
+				}
+			}
+		});
+	}
+
 
 	public void addCardToDealerHand(String card) {
 		Platform.runLater(new Runnable() {

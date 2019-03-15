@@ -134,6 +134,9 @@ public class ServerPlayerHandler implements Runnable {
 			socketConnection.getOutput().println(table.get(0).get(1)); // Sends the dealers hand to the client
 			socketConnection.getOutput().println(card1);
 			socketConnection.getOutput().println(card2); // Draws the clients hand
+			for(int i = 0; i < gameQueue.size(); i++) {
+				socketConnection.getOutput().println(gameQueue.get(i).getUsername());
+			}
 		}
 
 		Runnable r = new ServerMoveThread(socketConnection.getOutput(), deckWait);
