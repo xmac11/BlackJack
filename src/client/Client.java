@@ -215,6 +215,7 @@ public class Client implements Runnable {
 							allUsernames.add(input.readLine());
 						}
 						gameController.setTable(table);
+						gameController.setPlayer1Label(username);
 						for (int i = 1; i <= allUsernames.size(); i++) {
 							if (i != ID) {
 								gameController.addLabelToOpposingPlayer(getOtherPlayerID(i), allUsernames.get(i-1));
