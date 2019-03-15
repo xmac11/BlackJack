@@ -1,21 +1,25 @@
 package server;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static junit.framework.TestCase.assertEquals;
+//import static org.junit.jupiter.api.Assertions.*;
 
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
 class DeckTest {
 
+
 	@Test
-	void test1() {
+	void test1() { // Tests if the size of the deck is 52
 		Deck deck = new Deck();
 		assertEquals(deck.getDeck().size(), 52);
 	}
 	
 	@Test
-	void test2() {
+	void test2() { // Test if the .drawCard() works as intended
 		Deck deck = new Deck();
 		assertEquals(deck.getDeck().size(), 52);
 		deck.drawCard();
