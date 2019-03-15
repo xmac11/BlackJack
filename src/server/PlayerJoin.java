@@ -1,3 +1,7 @@
+/**
+ * Author: Group21 - Final version
+ * Class PlayerJoin: Accepts and handles client connections
+ */
 package server;
 
 import java.io.BufferedReader;
@@ -40,6 +44,7 @@ public class PlayerJoin implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		// infinite loop while waiting for players to join
 		while (true) {
 			try {
 				System.out.println("waiting for player...");
@@ -57,16 +62,17 @@ public class PlayerJoin implements Runnable {
 			PrintWriter output = null;
 			BufferedReader input = null;
 			String username = "Error";
+			// connection is made
 			try {
 				output = new PrintWriter(socket.getOutputStream(), true);
 				input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				username = input.readLine();
+				username = input.readLine();// client is asked for their username
 			} catch (IOException exception) {
 				System.out.println("Error when joining");
 				return;
 			}
 			for (int i = 0; i < joined.size(); i++) {
-				if (joined.get(i).getUsername().equals(username)) {
+				if (joined.get(i).getUsername().equals(username)) { // checks if account is already in use and close the socket
 					output.println("accountAlreadyActive");
 					try {
 						socket.close();
@@ -76,11 +82,12 @@ public class PlayerJoin implements Runnable {
 					sessionJoinable = false;
 				}
 			}
+			// socketConnection is instantiated with the relevant information and added to the ArrayList of connected users
 			if (sessionJoinable) {
 				SocketConnection socketConnection = new SocketConnection(socket, new Semaphore(0), output, input, true, username);
 				joined.add(socketConnection);
-				Runnable runnable = new ServerLobbyThread(socketConnection, gameQueue, joined, gameStart);
-				Thread thread = new Thread(runnable);
+				Runnable runnable = new ServerLobbyThread(socketConnection, gameQueue, joined, gameStart); // instance of ServerLobbyThread is created
+				Thread thread = new Thread(runnable); // thread starts and loops back to wait for another connection
 				thread.start();
 			}
 			sessionJoinable = true;

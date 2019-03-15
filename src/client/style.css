@@ -63,6 +63,7 @@
     -fx-border-radius: 15.0;
     -fx-border-color: #000000;
     -fx-text-fill: #000000;
+    -fx-prompt-text-fill: #a0a0a0;
 }
 .list-cell {
     -fx-background-color: transparent;

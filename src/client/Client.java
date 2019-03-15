@@ -9,24 +9,13 @@ import java.util.concurrent.Semaphore;
 
 import database.MatchHistory;
 import database.Session;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import server.Deck;
 
 import java.io.*;
 
 public class Client implements Runnable {
-
-	// This is a test comment to see if GIT works
-	// harris test
-
-	// This is a test comment to see if GIT works
-	// Nick test
-	// Eclipse test
-	// Hello World
-
-	// Lobby branch test
-
-	// Test to LobbyBranch
 
 	Semaphore waitForController;
 	GameController gameController;
@@ -183,6 +172,7 @@ public class Client implements Runnable {
 					if (in.contains("betIs")) {
 						pointsAvailable = MatchHistory.getAmount(username);
 						betAmount = Integer.parseInt(in.substring(6));
+						Session.setBet(sessionID, username, betAmount);
 						gameController.setPointsLabel("Funds availlable: " + String.valueOf(pointsAvailable));
 						isBetPlaced = true; 
 						output.println("betComplete");
