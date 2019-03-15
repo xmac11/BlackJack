@@ -1,8 +1,11 @@
+/**
+ * Author: Group21 - Final version
+ * Class Server: Main server-side class
+ */
 package server;
 
 import java.net.*;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
@@ -12,6 +15,9 @@ import database.SQLDatabaseConnection;
 import database.Session;
 import shareable.*;
 
+/**
+ * Class Server: server activates by running this class and deactivates by terminating it
+ */
 public class Server implements Runnable {
 
 	Semaphore deckWait;
@@ -26,11 +32,11 @@ public class Server implements Runnable {
 	private ServerSocket serverSocket;
 	private FinishedPlayers finishedPlayers;
 
-	public Server() {
+	public Server() { //server constructor
 		table = new ArrayList<>();
 		table.add(new ArrayList<>());
-		joined = new ArrayList<>();
-		gameQueue = new ArrayList<>();
+		joined = new ArrayList<>(); // stores connected users
+		gameQueue = new ArrayList<>(); // stores users that are in queue for a game
 	}
 
 	public static void main(String[] args) {
@@ -40,17 +46,21 @@ public class Server implements Runnable {
 	}
 
 	@Override
-	public void run() {
+	public void run() { // database connection
 		SQLDatabaseConnection sqlDatabaseConnection = new SQLDatabaseConnection();
 		Thread thread = new Thread(sqlDatabaseConnection);
 		thread.start();
 		serverSocket = null;
 		gameStart = new GameStart();
 		gameStart.setGameStart(false);
+
+		// PlayerJoin thread is created with a selection of variables that maintain synchronisation
 		PlayerJoin playerJoin = new PlayerJoin(joined, gameQueue, serverSocket, gameStart);
 		new Thread(playerJoin).start();
-		// Sends off a thread which waits on the socket to accept clients. The main
+
+		// Sends off a thread which waits on the socket to accept clients
 		while (true) {
+			// main thread check if game is on and if the players are 3
 			while (!gameStart.isGameStart() && !(gameQueue.size() == 3)) {
 				try {
 					Thread.sleep(1000);

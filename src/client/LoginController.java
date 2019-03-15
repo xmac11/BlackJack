@@ -31,6 +31,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+
 public class LoginController implements Initializable {
 
 	@FXML
@@ -70,6 +71,9 @@ public class LoginController implements Initializable {
 				LobbyController lobbyController = loader.<LobbyController>getController();
 				Stage thisStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 				lobbyController.initData(ipField.getText(), userField.getText(), passField.getText(), thisStage);
+
+
+
 				thisStage.setHeight(768);
 				thisStage.setWidth(1366);
 				thisStage.setMinHeight(768);

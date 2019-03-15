@@ -1,7 +1,8 @@
+/**
+ * Author: Group21 - Final version
+ * Class SocketConnection: Class to create objects holding the required information about a client/server pair
+ */
 package server;
-
-import database.MatchHistory;
-import database.Session;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
@@ -16,7 +17,7 @@ public class SocketConnection {
 	private BufferedReader input;
 	private boolean inLobby;
 	private String username;
-	
+
 	public SocketConnection(Socket socket, Semaphore sessionWait, PrintWriter output, BufferedReader input, boolean inLobby, String username) {
 		this.socket = socket;
 		this.sessionWait = sessionWait;
