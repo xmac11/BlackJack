@@ -89,6 +89,7 @@ public class ServerPlayerHandler implements Runnable {
 					return;
 				}
 			}
+			socketConnection.getOutput().println(in); // sends the betting amount
 			finishedPlayers.playerBet();
 			while (gameQueue.size() > finishedPlayers.getPlayersBet()) {
 				in = socketConnection.getInput().readLine();
