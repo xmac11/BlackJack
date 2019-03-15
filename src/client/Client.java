@@ -84,19 +84,15 @@ public class Client implements Runnable {
 			setUsername(lobbyController.getUsername());
 			System.out.println(username + " has joined");
 			output.println(username);
-			lobbyScreenMusic.setVolume(0.5);
-			lobbyScreenMusic.play();
 			while (true) {
 				inGame = false;
-
-
 				playerLeft = false;
 				String in = "";
 				lobbyController.setOutput(output);
 				System.out.println("Client back in lobby");
+				lobbyScreenMusic.setVolume(0.5);
+				lobbyScreenMusic.play();
 				while (true) { // Loops this until it reaches a 'break;'
-
-
 					in = input.readLine();
 					System.out.println("Client in: " + in);
 					if (in.equals("accountAlreadyActive")) {
@@ -149,12 +145,9 @@ public class Client implements Runnable {
 						lobbyController.addToChat(in.replaceFirst("lobbyChatMessage", ""));
 					}
 				}
-
 				lobbyController.gameBegin();
 				lobbyScreenMusic.stop();
 				gameScreenMusic.play();
-
-
 				String hello = input.readLine();
 				sessionID = Integer.parseInt(input.readLine().replaceFirst("sessionID", ""));
 				System.out.println(hello); // The first message received is the greeting message so just print this
@@ -367,6 +360,7 @@ public class Client implements Runnable {
 				gameController.endChat();
 				gameController.showLeaveButton();
 				lobbyController.updateData();
+				gameScreenMusic.stop();
 			}
 		} catch (IOException e) {
 			System.out.println("Session not joinable");
