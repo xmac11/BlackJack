@@ -1,14 +1,16 @@
+/**
+ * Author: Group21 - Final version
+ * Class LoginController: This is the Controller for the LoginScreen
+ */
 package client;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import database.Authentication;
 import database.SQLDatabaseConnection;
 import javafx.fxml.FXML;
@@ -43,8 +45,6 @@ public class LoginController implements Initializable {
 	@FXML
 	private Label errorLabel;
 
-	
-	
 	@FXML
 	private TextField passField;
 
@@ -55,7 +55,7 @@ public class LoginController implements Initializable {
 	private double passFieldX;
 	private double passFieldY;
 
-	public void serverDown() {
+	public void serverDown() { // shows error message if server is down
 		System.out.println("Server is down.");
 		errorLabel.setText("Error - Cannot connect to server");
 		errorLabel.setVisible(true);

@@ -1,3 +1,7 @@
+/**
+ * Author: Group21 - Final version
+ * Class Main: This is the main class of the game. Each can launch this and get in the game.
+ */
 package client;
 
 import javafx.application.Application;
@@ -14,9 +18,9 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		Parent root = FXMLLoader.load(getClass().getResource("LoginScreen.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("LoginScreen.fxml")); // login screen loads first
 		primaryStage.setTitle("Club21");
-		Scene scene = new Scene(root, WIDTH, HEIGHT);
+		Scene scene = new Scene(root, WIDTH, HEIGHT); // default resolution
 		primaryStage.setResizable(true);
 		primaryStage.setScene(scene);
 		primaryStage.getIcons().add(new Image("image/appIcon.png"));

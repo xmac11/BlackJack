@@ -1,3 +1,7 @@
+/**
+ * Author: Group21 - Final version
+ * Class FinishedPlayers: A selection class that contains simple instance variables
+ */
 package shareable;
 
 public class FinishedPlayers {

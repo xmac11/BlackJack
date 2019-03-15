@@ -19,173 +19,173 @@
 <?import javafx.scene.text.Font?>
 
 <GridPane maxHeight="768" maxWidth="1366" minHeight="480"
-	minWidth="640" prefHeight="480.0" prefWidth="640.0"
-	styleClass="lobbyScreen" xmlns="http://javafx.com/javafx/8.0.172-ea"
-	xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="client.LobbyController">
-	<stylesheets>
-		<URL value="@style.css" />
-	</stylesheets>
-	<columnConstraints>
-		<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-			prefWidth="100.0" />
-	</columnConstraints>
-	<rowConstraints>
-		<RowConstraints minHeight="10.0" prefHeight="30.0"
-			vgrow="SOMETIMES" />
-	</rowConstraints>
-	<children>
-		<BorderPane maxHeight="1080.0" maxWidth="1920.0"
-			prefHeight="600.0" prefWidth="800.0">
-			<top>
-				<HBox maxHeight="26.4" maxWidth="1920.0" minHeight="-Infinity"
-					prefHeight="26.4" prefWidth="800.0"
-					style="-fx-background-color: #000000;"
-					BorderPane.alignment="CENTER">
-					<children>
-						<Region minHeight="26.4" prefHeight="26.4"
-							HBox.hgrow="ALWAYS" />
-						<Label alignment="CENTER" contentDisplay="CENTER"
-							minHeight="-Infinity" prefHeight="26.4"
-							text="WELCOME TO GROUP21 LOBBY" textAlignment="JUSTIFY"
-							textFill="WHITE" />
-						<Region minHeight="-Infinity" prefHeight="26.4"
-							HBox.hgrow="ALWAYS" />
-						<Label alignment="CENTER" contentDisplay="CENTER"
-							minHeight="-Infinity" minWidth="130.0" onMouseClicked="#signOut"
-							prefHeight="26.0" prefWidth="130.0" text="Sign out"
-							textFill="RED" underline="true">
-							<cursor>
-								<Cursor fx:constant="HAND" />
-							</cursor>
-						</Label>
-					</children>
-				</HBox>
-			</top>
-			<left>
-				<VBox alignment="TOP_CENTER" minWidth="178.0"
-					prefHeight="400.0" prefWidth="178.0"
-					BorderPane.alignment="TOP_CENTER">
-					<children>
-						<Label alignment="CENTER" contentDisplay="CENTER"
-							maxHeight="-Infinity" maxWidth="-Infinity" minHeight="18"
-							minWidth="178" prefHeight="18.0" prefWidth="178.0"
-							text="ONLINE PLAYERS" textAlignment="JUSTIFY" textFill="#ffffff" />
-						<ListView fx:id="onlineView" focusTraversable="false"
-							maxWidth="-Infinity" minWidth="178" mouseTransparent="true"
-							opacity="0.8" pickOnBounds="false" prefHeight="327.0"
-							prefWidth="219.0" styleClass="lobbyListView" VBox.vgrow="ALWAYS" />
-						<Label alignment="CENTER" contentDisplay="CENTER"
-							maxHeight="-Infinity" maxWidth="-Infinity" minHeight="18"
-							minWidth="178" prefHeight="18.0" prefWidth="165.0"
-							text="MATCH QUEUE" textAlignment="JUSTIFY" textFill="WHITE" />
-						<ListView fx:id="queueView" focusTraversable="false"
-							maxHeight="-Infinity" maxWidth="-Infinity" minHeight="75.0"
-							minWidth="178" mouseTransparent="true" opacity="0.8"
-							pickOnBounds="false" prefHeight="75.0" prefWidth="178.0"
-							styleClass="lobbyListView" />
-					</children>
-				</VBox>
-			</left>
-			<center>
-				<VBox alignment="TOP_CENTER" maxHeight="-Infinity"
-					minHeight="200.0" prefHeight="294.0" prefWidth="993.0"
-					BorderPane.alignment="TOP_CENTER">
-					<children>
-						<Label alignment="CENTER" maxHeight="-Infinity"
-							minHeight="18" prefHeight="18.0" prefWidth="491.0" text="CHAT"
-							textFill="WHITE" />
-						<ListView fx:id="chatView" focusTraversable="false"
-							maxHeight="-Infinity" minHeight="220" opacity="0.8"
-							prefHeight="240.0" prefWidth="980.0" styleClass="lobbyListView" />
-						<TextField fx:id="chatField" alignment="CENTER"
-							maxHeight="-Infinity" minHeight="37" onAction="#sendChat"
-							opacity="0.8" prefHeight="30.0" prefWidth="354.0"
-							promptText="chat here" styleClass="lobbyChatField">
-							<font>
-								<Font size="14.0" />
-							</font>
-						</TextField>
-					</children>
-					<padding>
-						<Insets left="12.0" right="5.0" />
-					</padding>
-				</VBox>
-			</center>
-			<right>
-				<VBox alignment="TOP_CENTER" maxHeight="-Infinity"
-					minHeight="275.0" minWidth="130" prefHeight="295.0"
-					prefWidth="144.0" BorderPane.alignment="TOP_CENTER">
-					<children>
-						<Label alignment="CENTER" minHeight="18" prefHeight="18.0"
-							prefWidth="130.0" text="ACTIONS" textFill="WHITE" />
-						<Button fx:id="joinButton" maxHeight="-Infinity"
-							minHeight="80.0" minWidth="130.0" mnemonicParsing="false"
-							onAction="#joinQueue" prefHeight="80.0" prefWidth="130.0"
-							styleClass="lobbyButton" text="Join Queue"
-							textOverrun="CENTER_ELLIPSIS">
-							<font>
-								<Font size="18.0" />
-							</font>
-							<cursor>
-								<Cursor fx:constant="HAND" />
-							</cursor>
-						</Button>
-						<Button fx:id="leaveButton" maxHeight="-Infinity"
-							minHeight="80" minWidth="130.0" mnemonicParsing="false"
-							onAction="#leaveQueue" prefHeight="80.0" prefWidth="130.0"
-							styleClass="lobbyButton" text="Leave Queue"
-							textAlignment="JUSTIFY">
-							<font>
-								<Font size="18.0" />
-							</font>
-							<cursor>
-								<Cursor fx:constant="HAND" />
-							</cursor>
-						</Button>
-						<Button fx:id="playButton" maxHeight="-Infinity"
-							minHeight="97" minWidth="130.0" mnemonicParsing="false"
-							onAction="#startGame" prefHeight="83.2" prefWidth="130.0"
-							styleClass="lobbyButton" text="Play" textAlignment="JUSTIFY"
-							textFill="#09c205">
-							<font>
-								<Font size="35.0" />
-							</font>
-							<cursor>
-								<Cursor fx:constant="HAND" />
-							</cursor>
-						</Button>
-						<Label fx:id="playedLabel" styleClass="lobbyLabel"
-							text="Games played: " />
-						<Label fx:id="wonLabel" styleClass="lobbyLabel"
-							text="Games won: " />
-						<Label fx:id="walletLabel" styleClass="lobbyLabel"
-							text="Wallet:" />
-						<Button fx:id="addFundsButton" mnemonicParsing="false"
-							text="Add funds" visible="false" onAction="#addFunds"/>
-						<Label fx:id="fundsLabel" text="Insufficient funds"
-							visible="false" />
-					</children>
-				</VBox>
-			</right>
-			<bottom>
-				<HBox alignment="CENTER" maxHeight="158.0" maxWidth="1920.0"
-					minHeight="33.6" prefHeight="158.0" prefWidth="640.0"
-					BorderPane.alignment="CENTER">
-					<children>
-						<ImageView fitHeight="248.0" fitWidth="1366.0"
-							nodeOrientation="INHERIT" pickOnBounds="true"
-							preserveRatio="false" HBox.hgrow="ALWAYS">
-							<image>
-								<Image url="@../image/vegasBackDropLogoCardsGlow.png" />
-							</image>
-							<HBox.margin>
-								<Insets top="-90.0" />
-							</HBox.margin>
-						</ImageView>
-					</children>
-				</HBox>
-			</bottom>
-		</BorderPane>
-	</children>
+          minWidth="640" prefHeight="480.0" prefWidth="640.0"
+          styleClass="lobbyScreen" xmlns="http://javafx.com/javafx/8.0.172-ea"
+          xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="client.LobbyController">
+    <stylesheets>
+        <URL value="@style.css"/>
+    </stylesheets>
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+                           prefWidth="100.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="30.0"
+                        vgrow="SOMETIMES"/>
+    </rowConstraints>
+    <children>
+        <BorderPane maxHeight="1080.0" maxWidth="1920.0"
+                    prefHeight="600.0" prefWidth="800.0">
+            <top>
+                <HBox maxHeight="26.4" maxWidth="1920.0" minHeight="-Infinity"
+                      prefHeight="26.4" prefWidth="800.0"
+                      style="-fx-background-color: #000000;"
+                      BorderPane.alignment="CENTER">
+                    <children>
+                        <Region minHeight="26.4" prefHeight="26.4"
+                                HBox.hgrow="ALWAYS"/>
+                        <Label alignment="CENTER" contentDisplay="CENTER"
+                               minHeight="-Infinity" prefHeight="26.4"
+                               text="WELCOME TO GROUP21 LOBBY" textAlignment="JUSTIFY"
+                               textFill="WHITE"/>
+                        <Region minHeight="-Infinity" prefHeight="26.4"
+                                HBox.hgrow="ALWAYS"/>
+                        <Label alignment="CENTER" contentDisplay="CENTER"
+                               minHeight="-Infinity" minWidth="130.0" onMouseClicked="#signOut"
+                               prefHeight="26.0" prefWidth="130.0" text="Sign out"
+                               textFill="RED" underline="true">
+                            <cursor>
+                                <Cursor fx:constant="HAND"/>
+                            </cursor>
+                        </Label>
+                    </children>
+                </HBox>
+            </top>
+            <left>
+                <VBox alignment="TOP_CENTER" minWidth="178.0"
+                      prefHeight="400.0" prefWidth="178.0"
+                      BorderPane.alignment="TOP_CENTER">
+                    <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER"
+                               maxHeight="-Infinity" maxWidth="-Infinity" minHeight="18"
+                               minWidth="178" prefHeight="18.0" prefWidth="178.0"
+                               text="ONLINE PLAYERS" textAlignment="JUSTIFY" textFill="#ffffff"/>
+                        <ListView fx:id="onlineView" focusTraversable="false"
+                                  maxWidth="-Infinity" minWidth="178" mouseTransparent="true"
+                                  opacity="0.8" pickOnBounds="false" prefHeight="327.0"
+                                  prefWidth="219.0" styleClass="lobbyListView" VBox.vgrow="ALWAYS"/>
+                        <Label alignment="CENTER" contentDisplay="CENTER"
+                               maxHeight="-Infinity" maxWidth="-Infinity" minHeight="18"
+                               minWidth="178" prefHeight="18.0" prefWidth="165.0"
+                               text="MATCH QUEUE" textAlignment="JUSTIFY" textFill="WHITE"/>
+                        <ListView fx:id="queueView" focusTraversable="false"
+                                  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="75.0"
+                                  minWidth="178" mouseTransparent="true" opacity="0.8"
+                                  pickOnBounds="false" prefHeight="75.0" prefWidth="178.0"
+                                  styleClass="lobbyListView"/>
+                    </children>
+                </VBox>
+            </left>
+            <center>
+                <VBox alignment="TOP_CENTER" maxHeight="-Infinity"
+                      minHeight="200.0" prefHeight="294.0" prefWidth="993.0"
+                      BorderPane.alignment="TOP_CENTER">
+                    <children>
+                        <Label alignment="CENTER" maxHeight="-Infinity"
+                               minHeight="18" prefHeight="18.0" prefWidth="491.0" text="CHAT"
+                               textFill="WHITE"/>
+                        <ListView fx:id="chatView" focusTraversable="false"
+                                  maxHeight="-Infinity" minHeight="220" opacity="0.8"
+                                  prefHeight="240.0" prefWidth="980.0" styleClass="lobbyListView"/>
+                        <TextField fx:id="chatField" alignment="CENTER"
+                                   maxHeight="-Infinity" minHeight="37" onAction="#sendChat"
+                                   opacity="0.8" prefHeight="30.0" prefWidth="354.0"
+                                   promptText="chat here" styleClass="lobbyChatField">
+                            <font>
+                                <Font size="14.0"/>
+                            </font>
+                        </TextField>
+                    </children>
+                    <padding>
+                        <Insets left="12.0" right="5.0"/>
+                    </padding>
+                </VBox>
+            </center>
+            <right>
+                <VBox alignment="TOP_CENTER" maxHeight="-Infinity"
+                      minHeight="275.0" minWidth="130" prefHeight="295.0"
+                      prefWidth="144.0" BorderPane.alignment="TOP_CENTER">
+                    <children>
+                        <Label alignment="CENTER" minHeight="18" prefHeight="18.0"
+                               prefWidth="130.0" text="ACTIONS" textFill="WHITE"/>
+                        <Button fx:id="joinButton" maxHeight="-Infinity"
+                                minHeight="80.0" minWidth="130.0" mnemonicParsing="false"
+                                onAction="#joinQueue" prefHeight="80.0" prefWidth="130.0"
+                                styleClass="lobbyButton" text="Join Queue"
+                                textOverrun="CENTER_ELLIPSIS">
+                            <font>
+                                <Font size="18.0"/>
+                            </font>
+                            <cursor>
+                                <Cursor fx:constant="HAND"/>
+                            </cursor>
+                        </Button>
+                        <Button fx:id="leaveButton" maxHeight="-Infinity"
+                                minHeight="80" minWidth="130.0" mnemonicParsing="false"
+                                onAction="#leaveQueue" prefHeight="80.0" prefWidth="130.0"
+                                styleClass="lobbyButton" text="Leave Queue"
+                                textAlignment="JUSTIFY">
+                            <font>
+                                <Font size="18.0"/>
+                            </font>
+                            <cursor>
+                                <Cursor fx:constant="HAND"/>
+                            </cursor>
+                        </Button>
+                        <Button fx:id="playButton" maxHeight="-Infinity"
+                                minHeight="97" minWidth="130.0" mnemonicParsing="false"
+                                onAction="#startGame" prefHeight="83.2" prefWidth="130.0"
+                                styleClass="lobbyButton" text="Play" textAlignment="JUSTIFY"
+                                textFill="#09c205">
+                            <font>
+                                <Font size="35.0"/>
+                            </font>
+                            <cursor>
+                                <Cursor fx:constant="HAND"/>
+                            </cursor>
+                        </Button>
+                        <Label fx:id="playedLabel" styleClass="lobbyLabel"
+                               text="Games played: "/>
+                        <Label fx:id="wonLabel" styleClass="lobbyLabel"
+                               text="Games won: "/>
+                        <Label fx:id="walletLabel" styleClass="lobbyLabel"
+                               text="Wallet:"/>
+                        <Button fx:id="addFundsButton" mnemonicParsing="false"
+                                text="Add funds" visible="false" onAction="#addFunds"/>
+                        <Label fx:id="fundsLabel" text="Insufficient funds"
+                               visible="false"/>
+                    </children>
+                </VBox>
+            </right>
+            <bottom>
+                <HBox alignment="CENTER" maxHeight="158.0" maxWidth="1920.0"
+                      minHeight="33.6" prefHeight="158.0" prefWidth="640.0"
+                      BorderPane.alignment="CENTER">
+                    <children>
+                        <ImageView fitHeight="248.0" fitWidth="1366.0"
+                                   nodeOrientation="INHERIT" pickOnBounds="true"
+                                   preserveRatio="false" HBox.hgrow="ALWAYS">
+                            <image>
+                                <Image url="@../image/vegasBackDropLogoCardsGlow.png"/>
+                            </image>
+                            <HBox.margin>
+                                <Insets top="-90.0"/>
+                            </HBox.margin>
+                        </ImageView>
+                    </children>
+                </HBox>
+            </bottom>
+        </BorderPane>
+    </children>
 </GridPane>

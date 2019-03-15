@@ -1,3 +1,7 @@
+/**
+ * Author: Group21 - Final version
+ * Class Deck: Creates the game deck to be used
+ */
 package server;
 
 import java.util.ArrayList;
@@ -8,7 +12,7 @@ public class Deck {
 
 	List<String> cards;
 
-	public Deck() {
+	public Deck() { // constructs a randomized ArrayList of 52 Strings in the format Rank Suit for example "4 Clubs"
 		String[] rank =  { "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K" };
 		String[] suit =  { "Hearts", "Spades", "Diamonds", "Clubs"};
 		cards = new ArrayList<>();
@@ -17,7 +21,7 @@ public class Deck {
 				cards.add(rank[j]+" "+suit[i]);
 			}
 		}
-		Collections.shuffle(cards);
+		Collections.shuffle(cards); // shuffling the deck
 	}
 
 	public String drawCard() {
