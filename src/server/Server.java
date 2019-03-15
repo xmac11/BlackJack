@@ -118,7 +118,9 @@ public class Server implements Runnable {
 					}
 				}
 				for (int i = 0; i < gameQueue.size(); i++) {
-					gameQueue.get(i).getOutput().println("breakFromLoop");
+					synchronized (gameQueue.get(i).getOutput()) {
+						gameQueue.get(i).getOutput().println("breakFromBetLoop");
+					}
 				}
 				while (gameQueue.size() > finishedPlayers.getFinishedPlayers()) {
 					try {

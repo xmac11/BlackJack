@@ -184,7 +184,8 @@ public class Client implements Runnable {
 				gameController.disableHit();
 				gameController.hideLabel();
 				gameController.disableStand();
-
+				table = new ArrayList<>();
+				table.add(new ArrayList<>());
 				while (!gameFinished && !playerLeft) { // Loops this until it reaches a 'break;'
 					in = input.readLine();
 					System.out.println("Client in: " + in);
@@ -196,6 +197,8 @@ public class Client implements Runnable {
 						isBetPlaced = true; 
 						output.println("betComplete");
 						table.add(new ArrayList<>());
+					}
+					if(in.equals("startCards")) {
 						table.get(0).add(input.readLine());
 						table.get(0).add(input.readLine()); // Next messages are the dealers first hands
 						System.out.println(table.get(0) + " this is dealer");
@@ -217,11 +220,8 @@ public class Client implements Runnable {
 							pocketBlackJack = true;
 						}
 					}
-
 					if (in.equals("Make move")) { // Reads the message received and responds accordingly
-						if (!isBetPlaced) {
-							output.println("wantToBet");
-						} else if (pocketBlackJack) {
+						if (pocketBlackJack) {
 							output.println("p");
 							gameController.disableHit();
 							gameController.disableStand();
@@ -286,6 +286,9 @@ public class Client implements Runnable {
 					}
 					if (in.equals("breakFromLoop")) {
 						output.println("breakFromLoop");
+					}
+					if (in.equals("breakFromBetLoop")) {
+						output.println("breakFromBetLoop");
 					}
 					if (in.contains("finished")) { // Server tells the client its turn is over
 						System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
