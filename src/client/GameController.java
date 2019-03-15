@@ -1,3 +1,7 @@
+/**
+ * Author: Group21 - Final version
+ * Class GameController: This is the Controller for the GameScreen
+ */
 package client;
 
 import java.io.PrintWriter;

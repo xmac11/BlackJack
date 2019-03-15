@@ -1,3 +1,7 @@
+/**
+ * Author: Group21 - Final version
+ * Class Client: This class is used by each client
+ */
 package client;
 
 import java.net.*;

@@ -68,7 +68,7 @@ public class Server implements Runnable {
 					e1.printStackTrace();
 				}
 			}
-			gameStart.setGameStart(true);
+			gameStart.setGameStart(true); // game starts
 			int sessionID = Session.getMaxSessionID() + 1;
 			for (int i = 0; i < joined.size(); i++) {
 				joined.get(i).getOutput().println("Game in progress");
@@ -83,18 +83,18 @@ public class Server implements Runnable {
 			table.add(new ArrayList<>());
 			table.get(0).add(deck.drawCard());
 			table.get(0).add(deck.drawCard());
-			System.out.println("This is Dealers cards: " + table.get(0)); // Prints the dealers hand to the server
-																			// console
- 			deckWait = new Semaphore(1); // Creates a semaphore to allow 1 thread to access a critical section, this
-											// is used to control access to the deck
+			System.out.println("This is Dealers cards: " + table.get(0)); // Prints the dealers hand to the server console
+			/*Creates a semaphore to allow 1 thread to access a critical section, this is used to control access to the deck*/
+ 			deckWait = new Semaphore(1);
+			/*Creates a CyclicBarrier to the number of players in game + the dealer to simulate a dealer waiting for all players to finish*/
 			dealersTurn = new CyclicBarrier((gameQueue.size() + 1));
-			betWait = new CyclicBarrier(gameQueue.size());
-			finishedPlayers = new FinishedPlayers();
+			betWait = new CyclicBarrier(gameQueue.size()); // Creates a CyclicBarrier to wait for the bets of all the players
+			finishedPlayers = new FinishedPlayers(); // shareable class
 			if (gameQueue.size() > 0) { // Ensures there are players in the session
 				System.out.println("Game Starting...");
 				for (int i = 0; i < gameQueue.size(); i++) {
 					ServerPlayerHandler serverThread = null;
-					table.add(new ArrayList<>());
+					table.add(new ArrayList<>()); // creates structured ArrayLists representing players' hands
 					serverThread = new ServerPlayerHandler(gameQueue.get(i), i + 1, deck, deckWait, gameQueue.size(),
 							dealersTurn, table, finishedPlayers, gameQueue, sessionID, betWait);
 					System.out.println("Player " + (i + 1) + " added"); // For debugging

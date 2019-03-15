@@ -1,3 +1,7 @@
+/**
+ * Author: Group21 - Final version
+ * Class ServerPlayerHandler: Each player is given an instance of this class meaning there can be 1 to 3 active threads concurrently
+ */
 package server;
 
 import java.io.IOException;
@@ -59,6 +63,7 @@ public class ServerPlayerHandler implements Runnable {
 		 * variable access must be synchronised
 		 */
 
+		 // players must place a bet
 		while (!in.contains("betIs")) {
 			try {
 				Thread.sleep(1000);
@@ -71,9 +76,9 @@ public class ServerPlayerHandler implements Runnable {
 				return;
 			}
 		}
-		System.out.println("Server waitingf");
+		System.out.println("Server waiting");
 		try {
-			betWait.await();
+			betWait.await(); // waits for the best of all players
 		} catch (InterruptedException | BrokenBarrierException e) {
 			socketConnection.getOutput().println("playerLeftGame");
 			socketConnection.setInLobby(true);
@@ -84,7 +89,7 @@ public class ServerPlayerHandler implements Runnable {
 		System.out.println("Server passed bet");
 		socketConnection.getOutput().println(in);
 		barriers++;
-		synchronized (deck) {
+		synchronized (deck) { // synchronized statement to send player's card
 			socketConnection.getOutput().println(table.get(0).get(0));
 			socketConnection.getOutput().println(table.get(0).get(1)); // Sends the dealers hand to the client
 			String card1 = deck.drawCard();
@@ -95,6 +100,7 @@ public class ServerPlayerHandler implements Runnable {
 			table.get(ID).add(card2);
 		}
 
+		// an instance of ServerMoveThread initializes
 		Runnable r = new ServerMoveThread(socketConnection.getOutput(), deckWait);
 		Thread thread = new Thread(r);
 		thread.start();
