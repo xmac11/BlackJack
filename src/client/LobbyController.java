@@ -20,7 +20,10 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
+
+import static javafx.scene.media.AudioClip.INDEFINITE;
 
 public class LobbyController implements Initializable {
 
@@ -68,6 +71,9 @@ public class LobbyController implements Initializable {
 	private PrintWriter output;
 	private String username;
 
+	public AudioClip lobbyScreenMusic = new AudioClip(getClass().getResource("/music/MainTheme.mp3").toExternalForm());
+	public AudioClip gameScreenMusic = new AudioClip(getClass().getResource("/music/TeaForTwo.mp3").toExternalForm());
+
 	public Client getClient() {
 		return client;
 	}
@@ -88,6 +94,8 @@ public class LobbyController implements Initializable {
 		walletLabel.setText("Wallet: "+MatchHistory.getAmount(username));
 	}
 
+
+
 	public void gameBegin() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -100,6 +108,8 @@ public class LobbyController implements Initializable {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				lobbyScreenMusic.stop();
+				gameScreenMusic.play();
 				playButton.setDisable(true);
 				joinButton.setDisable(true);
 				gameScene.getStylesheets().addAll(getClass().getResource("style.css").toExternalForm());
@@ -123,6 +133,8 @@ public class LobbyController implements Initializable {
 					if (!client.isGameFinished()) {
 						e.consume();
 						client.closeGame(window);
+						gameScreenMusic.stop();
+						lobbyScreenMusic.play();
 					}
 				});
 			}
@@ -359,6 +371,13 @@ public class LobbyController implements Initializable {
 		});
 		Thread thread = new Thread(client);
 		thread.start();
+//		new Thread(() -> {
+			int s = INDEFINITE;
+			lobbyScreenMusic.setVolume(0.5f);
+			lobbyScreenMusic.setCycleCount(s);
+			lobbyScreenMusic.play();
+
+//		}).start();
 	}
 
 	public Stage getThisStage() {
