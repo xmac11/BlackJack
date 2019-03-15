@@ -1,3 +1,7 @@
+/**
+ * Author: Group21 - Final version
+ * Class ServerMoveThread: Sends a message to client asking for their move
+ */
 package server;
 
 import java.io.PrintWriter;

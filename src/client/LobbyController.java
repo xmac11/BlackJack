@@ -1,3 +1,7 @@
+/**
+ * Author: Group21 - Final version
+ * Class LobbyController: This is the Controller for the LobbyScreen
+ */
 package client;
 
 import java.io.File;
