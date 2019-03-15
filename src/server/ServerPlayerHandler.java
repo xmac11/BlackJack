@@ -67,6 +67,20 @@ public class ServerPlayerHandler implements Runnable {
 						gameQueue.get(i).getOutput().println("gameChatMessage" + toSend);
 					}
 				}
+				if (in.equals("playerLeftGame")) {
+					socketConnection.getOutput().println("playerLeftGame");
+					socketConnection.setInLobby(true);
+					socketConnection.getSessionWait().release();
+					triggerBarrier();
+					return;
+				}
+				if (in.equals("thisPlayerLeft")) {
+					socketConnection.getOutput().println("playerLeftGame");
+					socketConnection.setInLobby(true);
+					socketConnection.getSessionWait().release();
+					triggerBarrier();
+					return;
+				}
 			}
 			finishedPlayers.playerBet();
 			while (gameQueue.size() > finishedPlayers.getPlayersBet()) {
@@ -81,6 +95,20 @@ public class ServerPlayerHandler implements Runnable {
 					for (int i = 0; i < gameQueue.size(); i++) {
 						gameQueue.get(i).getOutput().println("gameChatMessage" + toSend);
 					}
+				}
+				if (in.equals("playerLeftGame")) {
+					socketConnection.getOutput().println("playerLeftGame");
+					socketConnection.setInLobby(true);
+					socketConnection.getSessionWait().release();
+					triggerBarrier();
+					return;
+				}
+				if (in.equals("thisPlayerLeft")) {
+					socketConnection.getOutput().println("playerLeftGame");
+					socketConnection.setInLobby(true);
+					socketConnection.getSessionWait().release();
+					triggerBarrier();
+					return;
 				}
 			}
 		} catch (IOException e) {
