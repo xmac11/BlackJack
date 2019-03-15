@@ -89,6 +89,7 @@ public class ServerPlayerHandler implements Runnable {
 					return;
 				}
 			}
+			socketConnection.getOutput().println(in);
 			finishedPlayers.playerBet();
 			while (gameQueue.size() > finishedPlayers.getPlayersBet()) {
 				in = socketConnection.getInput().readLine();
@@ -96,8 +97,8 @@ public class ServerPlayerHandler implements Runnable {
 					break;
 				}
 				if (in.contains("gameChatMessage")) {
-					String toSend = socketConnection.getInput().readLine().substring(15) + " > "
-							+ socketConnection.getInput().readLine().substring(15);
+					String toSend = socketConnection.getInput().readLine().replaceFirst("gameChatMessage", "") + " > "
+							+ socketConnection.getInput().readLine().replaceFirst("gameChatMessage", "");
 					System.out.println("Sending chat message");
 					for (int i = 0; i < gameQueue.size(); i++) {
 						gameQueue.get(i).getOutput().println("gameChatMessage" + toSend);
@@ -126,7 +127,7 @@ public class ServerPlayerHandler implements Runnable {
 			return;
 		}
 		System.out.println("Server passed bet");
-//		socketConnection.getOutput().println(in);
+		//		socketConnection.getOutput().println(in);
 		barriers++;
 		synchronized (socketConnection.getOutput()) {
 			socketConnection.getOutput().println("startCards");
@@ -134,6 +135,9 @@ public class ServerPlayerHandler implements Runnable {
 			socketConnection.getOutput().println(table.get(0).get(1)); // Sends the dealers hand to the client
 			socketConnection.getOutput().println(card1);
 			socketConnection.getOutput().println(card2); // Draws the clients hand
+			for(int i = 0; i < gameQueue.size(); i++) {
+				socketConnection.getOutput().println(gameQueue.get(i).getUsername());
+			}
 		}
 
 		Runnable r = new ServerMoveThread(socketConnection.getOutput(), deckWait);
