@@ -92,10 +92,7 @@ public class Server implements Runnable {
 			/*Creates a CyclicBarrier to the number of players in game + the dealer to simulate a dealer waiting for all players to finish*/
 			dealersTurn = new CyclicBarrier((gameQueue.size() + 1));
 			betWait = new CyclicBarrier(gameQueue.size()); // Creates a CyclicBarrier to wait for the bets of all the players
-			finishedPlayers = new FinishedPlayers(); // shareable class
-			table.get(0).add(deck.drawCard()); //Draws two cards and places them at index 0, this is the dealers hand
-			System.out.println("This is Dealers cards: " + table.get(0)); // Prints the dealers hand to the server
-																			// console
+			finishedPlayers = new FinishedPlayers(); // shareable class			
 			deckWait = new Semaphore(1); // Creates a semaphore to allow 1 thread to access a critical section, this
 											// is used to control access to the deck
 			dealersTurn = new CyclicBarrier((gameQueue.size() + 1));

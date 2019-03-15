@@ -49,6 +49,9 @@ public class GameController implements Initializable {
 
 	@FXML
 	private Label labelDealer;
+	
+	@FXML
+	private Label player1Label;
 
 	@FXML
 	private Label player2Label;
@@ -213,6 +216,16 @@ public class GameController implements Initializable {
 			public void run() {
 				label.setText(text);
 				label.setVisible(true);
+			}
+		});
+	}
+	
+	public void setPlayer1Label(String text) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				player1Label.setText(text);
+				player1Label.setVisible(true);
 			}
 		});
 	}
@@ -398,6 +411,20 @@ public class GameController implements Initializable {
 			}
 		});
 	}
+	
+	public void addLabelToOpposingPlayer(int player, String username) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {				
+				if (player == 2) {
+					player2Label.setText(username);
+				} else {
+					player3Label.setText(username);
+				}
+			}
+		});
+	}
+
 
 	public void addCardToDealerHand(String card) {
 		Platform.runLater(new Runnable() {
