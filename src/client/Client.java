@@ -26,9 +26,12 @@ public class Client implements Runnable {
 	private int noPlayers;
 	private List<List<String>> table;
 	private PrintWriter output;
+	private BufferedReader input;
+	private Socket socket;
 	private List<String> onlinePlayers;
 	private String username;
 	private String IP;
+	private int port;
 	private List<String> inQueue;
 	private boolean playerLeft;
 	private boolean pocketBlackJack;
@@ -41,11 +44,10 @@ public class Client implements Runnable {
 	public AudioClip lobbyScreenMusic = new AudioClip(getClass().getResource("/music/MainTheme.mp3").toExternalForm());
 	public AudioClip gameScreenMusic = new AudioClip(getClass().getResource("/music/TeaForTwo.mp3").toExternalForm());
 
-	public Client(List<List<String>> table, Semaphore waitForController, String IP, LobbyController lobbyController) {
+	public Client(List<List<String>> table, Semaphore waitForController, LobbyController lobbyController) {
 		this.table = table;
 		this.waitForController = waitForController;
 		output = null;
-		this.IP = IP;
 		this.lobbyController = lobbyController;
 		gameController = null;
 		this.pocketBlackJack = false;
@@ -68,12 +70,16 @@ public class Client implements Runnable {
 	public boolean isBetPlaced() {
 		return isBetPlaced;
 	}
+	
+	public void setConnectionValues(String IP, int port, String username) {
+		this.IP = IP;
+		this.port = port;
+		this.username = username;
+	}
 
 	@Override
 	public void run() {
-		try (Socket socket = new Socket(IP, 9999);
-				BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));) {
-			output = new PrintWriter(socket.getOutputStream(), true);
+		try {
 			onlinePlayers = new ArrayList<>();
 			inQueue = new ArrayList<>();
 			try {
@@ -81,7 +87,9 @@ public class Client implements Runnable {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			setUsername(lobbyController.getUsername());
+			socket = new Socket(IP, port);
+			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			output = new PrintWriter(socket.getOutputStream(), true);
 			System.out.println(username + " has joined");
 			output.println(username);
 			while (true) {
@@ -117,6 +125,7 @@ public class Client implements Runnable {
 						lobbyController.gameInProgress(input.readLine());
 					}
 					if (in.contains("playerSignedOut")) {
+						lobbyScreenMusic.stop();
 						onlinePlayers.remove(in.replaceFirst("playerSignedOut", ""));
 						lobbyController.addOnline(onlinePlayers);
 					}
@@ -313,6 +322,7 @@ public class Client implements Runnable {
 					}
 
 					if (in.contains("playerSignedOut")) {
+						gameScreenMusic.stop();
 						onlinePlayers.remove(in.replaceFirst("playerSignedOut", ""));
 						lobbyController.addOnline(onlinePlayers);
 						if (in.replaceFirst("playerSignedOut", "").equals(username)) {
@@ -374,6 +384,8 @@ public class Client implements Runnable {
 	}
 
 	public void signOut() {
+		lobbyScreenMusic.stop();
+		gameScreenMusic.stop();
 		output.println("thisPlayerSignedOut");
 	}
 

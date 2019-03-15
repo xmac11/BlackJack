@@ -96,8 +96,8 @@ public class ServerPlayerHandler implements Runnable {
 					break;
 				}
 				if (in.contains("gameChatMessage")) {
-					String toSend = socketConnection.getInput().readLine().substring(15) + " > "
-							+ socketConnection.getInput().readLine().substring(15);
+					String toSend = socketConnection.getInput().readLine().replaceFirst("gameChatMessage", "") + " > "
+							+ socketConnection.getInput().readLine().replaceFirst("gameChatMessage", "");
 					System.out.println("Sending chat message");
 					for (int i = 0; i < gameQueue.size(); i++) {
 						gameQueue.get(i).getOutput().println("gameChatMessage" + toSend);
@@ -126,7 +126,7 @@ public class ServerPlayerHandler implements Runnable {
 			return;
 		}
 		System.out.println("Server passed bet");
-//		socketConnection.getOutput().println(in);
+		//		socketConnection.getOutput().println(in);
 		barriers++;
 		synchronized (socketConnection.getOutput()) {
 			socketConnection.getOutput().println("startCards");
