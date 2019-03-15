@@ -1,24 +1,21 @@
-/**
+/** 
  * Author: Group21 - Final version
  * Class Client: This class is used by each client
  */
+
 package client;
 
+import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.Semaphore;
 
 import database.MatchHistory;
 import database.Session;
-import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import server.Deck;
-
-import java.io.*;
 
 public class Client implements Runnable {
 
