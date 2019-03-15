@@ -97,6 +97,7 @@ public class LobbyController implements Initializable {
 		MatchHistory.increaseAmount(username, 200);
 		addFundsButton.setVisible(false);
 		walletLabel.setText("Wallet: "+MatchHistory.getAmount(username));
+		fundsLabel.setVisible(false);
 	}
 
 
