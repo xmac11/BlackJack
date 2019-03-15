@@ -1,4 +1,4 @@
 .classpath
-bin/**
-.idea/**
+bin/
+.idea/
 BlackJack2.iml
