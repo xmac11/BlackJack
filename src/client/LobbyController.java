@@ -18,6 +18,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -113,7 +114,6 @@ public class LobbyController implements Initializable {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-
 				playButton.setDisable(true);
 				joinButton.setDisable(true);
 				gameScene.getStylesheets().addAll(getClass().getResource("style.css").toExternalForm());
@@ -144,14 +144,13 @@ public class LobbyController implements Initializable {
 		});
 	}
 
-	public void signOut() {
+	public void signOut() throws Exception{
 		client.signOut();
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginScreen.fxml"));
 		Scene loginScene = null;
 		try {
 			loginScene = new Scene(loader.load());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		thisStage.setScene(loginScene);

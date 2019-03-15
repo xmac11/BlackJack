@@ -568,6 +568,7 @@ public class GameController implements Initializable {
 		int bet = Integer.parseInt(betString);
 		MatchHistory.reduceAmount(username, bet);
 		output.println("betIs " + bet);
+		setPointsLabel("Funds availlable: " + MatchHistory.getAmount(username));
 		hideBetPane();
 	}
 

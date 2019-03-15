@@ -191,11 +191,10 @@ public class Client implements Runnable {
 					if (in.contains("betIs")) {
 						pointsAvailable = MatchHistory.getAmount(username);
 						betAmount = Integer.parseInt(in.substring(6));
-						Session.setBet(sessionID, username, betAmount);
+						Session.setBet(sessionID, username, -1*betAmount);
 						gameController.setPointsLabel("Funds availlable: " + String.valueOf(pointsAvailable));
 						isBetPlaced = true; 
 						output.println("betComplete");
-						table.add(new ArrayList<>());
 					}
 					if(in.equals("startCards")) {
 						table.get(0).add(input.readLine());
@@ -399,15 +398,18 @@ public class Client implements Runnable {
 			gameController.setLabel("Bust!! You lose!");
 		} else if (Deck.total(table.get(0)) > 21) {
 			MatchHistory.setGamesWon(username, 1);
+			Session.setBet(sessionID, username, betAmount);
 			MatchHistory.increaseAmount(username, 2 * betAmount); // this should be 1.5
 			Session.setSessionPoints(sessionID, username, true);
 			gameController.setLabel("Dealer bust! You Win!");
 		} else if (Deck.total(table.get(ID)) == Deck.total(table.get(0))) {
 			gameController.setLabel("Draw!");
+			Session.setBet(sessionID, username, 0);
 			MatchHistory.increaseAmount(username, betAmount); // take money back
 		} else if (Deck.total(table.get(ID)) > Deck.total(table.get(0))) {
 			Session.setSessionPoints(sessionID, username, true);
 			MatchHistory.setGamesWon(username, 1);
+			Session.setBet(sessionID, username, betAmount);
 			MatchHistory.increaseAmount(username, 2 * betAmount); // this should be 1.5
 			gameController.setLabel("You win!!");
 		} else {
