@@ -8,10 +8,12 @@ public class FinishedPlayers {
 	
 	private int finishedPlayers;
 	private int bustedPlayers;
+	private int playersBet;
 	
 	public FinishedPlayers() {
 		finishedPlayers = 0;
 		bustedPlayers = 0;
+		playersBet = 0;
 	}
 	
 	public void playerFinished() {
@@ -32,5 +34,13 @@ public class FinishedPlayers {
 
 	public int getBustedPlayers() {
 		return bustedPlayers;
+	}
+
+	public int getPlayersBet() {
+		return playersBet;
+	}
+
+	public void playerBet() {
+		this.playersBet++;
 	}	
 }

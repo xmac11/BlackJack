@@ -103,7 +103,6 @@ public class LobbyController implements Initializable {
 				try {
 					gameScene = new Scene(loader.load());
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				playButton.setDisable(true);

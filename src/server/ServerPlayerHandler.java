@@ -1,7 +1,3 @@
-/**
- * Author: Group21 - Final version
- * Class ServerPlayerHandler: Each player is given an instance of this class meaning there can be 1 to 3 active threads concurrently
- */
 package server;
 
 import java.io.IOException;
@@ -21,7 +17,6 @@ public class ServerPlayerHandler implements Runnable {
 	private Deck deck;
 	private Semaphore deckWait;
 	CyclicBarrier dealersTurn;
-	CyclicBarrier betWait;
 	private int noPlayers;
 	private boolean active;
 	private int barriers;
@@ -31,7 +26,7 @@ public class ServerPlayerHandler implements Runnable {
 
 	public ServerPlayerHandler(SocketConnection socketConnection, int ID, Deck deck, Semaphore deckWait, int noPlayers,
 			CyclicBarrier dealersTurn, List<List<String>> table, FinishedPlayers finishedPlayers,
-			List<SocketConnection> gameQueue, int sessionID, CyclicBarrier betWait) {
+			List<SocketConnection> gameQueue, int sessionID) {
 		this.socketConnection = socketConnection;
 		this.ID = ID;
 		this.deck = deck;
@@ -44,7 +39,6 @@ public class ServerPlayerHandler implements Runnable {
 		this.finishedPlayers = finishedPlayers;
 		this.gameQueue = gameQueue;
 		this.sessionID = sessionID;
-		this.betWait = betWait;
 	}
 
 	@Override
@@ -62,34 +56,44 @@ public class ServerPlayerHandler implements Runnable {
 		 * Each connected client will have a thread running in this class, therefore any
 		 * variable access must be synchronised
 		 */
-
-		 // players must place a bet
-		while (!in.contains("betIs")) {
-			try {
-				Thread.sleep(1000);
-				in = socketConnection.getInput().readLine();
-			} catch (IOException | InterruptedException e) {
-				socketConnection.getOutput().println("playerLeftGame");
-				socketConnection.setInLobby(true);
-				socketConnection.getSessionWait().release();
-				triggerBarrier();
-				return;
-			}
-		}
-		System.out.println("Server waiting");
 		try {
-			betWait.await(); // waits for the best of all players
-		} catch (InterruptedException | BrokenBarrierException e) {
+			while (!in.contains("betIs")) {
+				in = socketConnection.getInput().readLine();
+				if (in.contains("gameChatMessage")) {
+					String toSend = socketConnection.getInput().readLine().substring(15) + " > "
+							+ socketConnection.getInput().readLine().substring(15);
+					System.out.println("Sending chat message");
+					for (int i = 0; i < gameQueue.size(); i++) {
+						gameQueue.get(i).getOutput().println("gameChatMessage" + toSend);
+					}
+				}
+			}
+			finishedPlayers.playerBet();
+			while (gameQueue.size() > finishedPlayers.getPlayersBet()) {
+				in = socketConnection.getInput().readLine();
+				if (in.equals("breakFromLoop")) {
+					break;
+				}
+				if (in.contains("gameChatMessage")) {
+					String toSend = socketConnection.getInput().readLine().substring(15) + " > "
+							+ socketConnection.getInput().readLine().substring(15);
+					System.out.println("Sending chat message");
+					for (int i = 0; i < gameQueue.size(); i++) {
+						gameQueue.get(i).getOutput().println("gameChatMessage" + toSend);
+					}
+				}
+			}
+		} catch (IOException e) {
 			socketConnection.getOutput().println("playerLeftGame");
 			socketConnection.setInLobby(true);
 			socketConnection.getSessionWait().release();
 			triggerBarrier();
 			return;
-		} 
+		}
 		System.out.println("Server passed bet");
 		socketConnection.getOutput().println(in);
 		barriers++;
-		synchronized (deck) { // synchronized statement to send player's card
+		synchronized (deck) {
 			socketConnection.getOutput().println(table.get(0).get(0));
 			socketConnection.getOutput().println(table.get(0).get(1)); // Sends the dealers hand to the client
 			String card1 = deck.drawCard();
@@ -100,7 +104,6 @@ public class ServerPlayerHandler implements Runnable {
 			table.get(ID).add(card2);
 		}
 
-		// an instance of ServerMoveThread initializes
 		Runnable r = new ServerMoveThread(socketConnection.getOutput(), deckWait);
 		Thread thread = new Thread(r);
 		thread.start();
@@ -252,7 +255,7 @@ public class ServerPlayerHandler implements Runnable {
 			Session.setSessionend(socketConnection.getUsername(), sessionID);
 			switch (barriers) {
 			case 0:
-				betWait.await();
+				finishedPlayers.playerBet();
 			case 1:
 				System.out.println("releasing");
 				if (active)

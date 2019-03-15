@@ -66,12 +66,11 @@ public class PlayerJoin implements Runnable {
 			try {
 				output = new PrintWriter(socket.getOutputStream(), true);
 				input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				username = input.readLine();
+				username = input.readLine();// client is asked for their username
 			} catch (IOException exception) {
 				System.out.println("Error when joining");
 				return;
 			}
-			// client is asked for his username
 			for (int i = 0; i < joined.size(); i++) {
 				if (joined.get(i).getUsername().equals(username)) { // checks if account is already in use and close the socket
 					output.println("accountAlreadyActive");
