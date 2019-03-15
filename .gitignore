@@ -1,4 +1,11 @@
-.classpath
-bin/
-.idea/
-BlackJack2.iml
+#.classpath
+#.idea/
+#.setting/
+#bin/
+#BlackJack2.iml
+#.project
+*
+!src/
+!.gitignore
+!db.properties
+!README.md
