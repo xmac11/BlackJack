@@ -11,7 +11,7 @@ import java.util.concurrent.Semaphore;
 
 public class SocketConnection {
 	
-	private Semaphore sessionWait;
+	private Semaphore sessionWait; // thread synchronization tool
 	private Socket socket;
 	private PrintWriter output;
 	private BufferedReader input;
