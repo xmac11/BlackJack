@@ -9,9 +9,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 
+import static javafx.scene.media.MediaPlayer.INDEFINITE;
+
 public class Main extends Application {
+	public AudioClip loginMusic = new AudioClip(getClass().getResource("/music/LoginMusic.wav").toExternalForm());
+	public AudioClip welcomeVoice = new AudioClip(getClass().getResource("/music/WelcomeToCLub21.wav").toExternalForm());
 
 	private static int WIDTH = 800;
 	private static int HEIGHT = 600;
@@ -19,8 +24,15 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("LoginScreen.fxml")); // login screen loads first
+
 		primaryStage.setTitle("Club21");
 		Scene scene = new Scene(root, WIDTH, HEIGHT); // default resolution
+		int forever = INDEFINITE;
+		loginMusic.setVolume(0.4);
+		loginMusic.setCycleCount(forever);
+		loginMusic.play();
+		welcomeVoice.play();
+		primaryStage.setResizable(true);
 		primaryStage.setScene(scene);
 		primaryStage.getIcons().add(new Image("image/appIcon.png"));
 		primaryStage.show();

@@ -18,7 +18,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -56,7 +55,7 @@ public class LobbyController implements Initializable {
 
 	@FXML
 	private Label wonLabel;
-	
+
 	@FXML
 	private Label fundsLabel;
 
@@ -70,7 +69,6 @@ public class LobbyController implements Initializable {
 	private Label playedLabel;
 
 	private String IP;
-	private String port;
 	private Stage thisStage;
 	private Client client;
 	private Semaphore waitForController;
@@ -114,6 +112,7 @@ public class LobbyController implements Initializable {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+
 				playButton.setDisable(true);
 				joinButton.setDisable(true);
 				gameScene.getStylesheets().addAll(getClass().getResource("style.css").toExternalForm());
@@ -144,21 +143,23 @@ public class LobbyController implements Initializable {
 		});
 	}
 
-	public void signOut() throws Exception{
+	public void signOut() {
 		client.signOut();
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginScreen.fxml"));
 		Scene loginScene = null;
 		try {
 			loginScene = new Scene(loader.load());
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		thisStage.setResizable(true);
 		thisStage.setScene(loginScene);
+		thisStage.show();
 		thisStage.setWidth(800);
 		thisStage.setHeight(600);
 		thisStage.setResizable(false);
 		thisStage.setOnCloseRequest(e -> System.exit(0));
-		thisStage.show();
 	}
 
 	public void connectionLost() {
@@ -333,13 +334,11 @@ public class LobbyController implements Initializable {
 		output.println("gameStart");
 	}
 
-	public void initData(String IP, String username, String password, Stage stage, String port) {
+	public void initData(String IP, String username, String password, Stage stage) {
 		this.IP = IP;
 		this.username = username;
 		thisStage = stage;
 		updateData();
-		this.port = port;
-		client.setConnectionValues(IP, Integer.parseInt(port), username);
 		waitForController.release();
 	}
 
@@ -355,7 +354,7 @@ public class LobbyController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		waitForController = new Semaphore(0);
 		table = new ArrayList<>();
-		client = new Client(table, waitForController, this);
+		client = new Client(table, waitForController, IP, this);
 		playButton.setDisable(true);
 		leaveButton.setDisable(true);
 		chatView.setCellFactory(param -> new ListCell<String>() {

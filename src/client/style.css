@@ -1,7 +1,7 @@
 #loginScreen{
-    -fx-background-image: url("../image/tileableStarsBackground.png");
+    -fx-background-image: url("../image/loginBackground.gif");
     -fx-background-repeat: repeat;
-    -fx-background-size: 600.0 800.0;
+    -fx-background-size: 800.0 600.0;
     -fx-background-position: center center;
     -fx-effect: dropshadow(three-pass-box, black, 30.0, 0.5, 0.0, 0.0);
 }
@@ -26,17 +26,17 @@
 }
 
 .betArrow{
-	-fx-background-color: #654b00;
-	-fx-border-color: black;
+    -fx-background-color: #654b00;
+    -fx-border-color: black;
 }
 
 .betArrow:hover{
-	-fx-background-color: #654b00;
-	-fx-border-color: black;
+    -fx-background-color: #654b00;
+    -fx-border-color: black;
 }
 
 .betBackground{
-	-fx-background-color: linear-gradient(#ffd65b, #e68400),
+    -fx-background-color: linear-gradient(#ffd65b, #e68400),
     linear-gradient(#ffef84, #f2ba44),
     linear-gradient(#ffea6a, #efaa22),
     linear-gradient(#ffe657 0.0%, #f8c202 50.0%, #eea10b 100.0%),
@@ -49,7 +49,7 @@
 }
 
 .lobbyListView{
-	-fx-background-color: #9aa3a8;
+    -fx-background-color: #9aa3a8;
     -fx-background-radius: 15.0;
     -fx-border-radius: 15.0;
     -fx-border-color: #9aa3a8;
@@ -57,7 +57,7 @@
 }
 
 .lobbyChatField{
-	-fx-background-color: #c6cfd4;
+    -fx-background-color: #c6cfd4;
     -fx-background-radius: 15.0;
     -fx-border-radius: 15.0;
     -fx-border-color: #000000;
@@ -112,9 +112,9 @@
 }
 
 .gameLabel {
-   -fx-font-family: "Arial Black";
-   -fx-fill: #818181;
-   -fx-effect: innershadow( three-pass-box , rgba(0.0,0.0,0.0,0.7) , 6.0, 0.0 , 0.0 , 2.0 );
+    -fx-font-family: "Arial Black";
+    -fx-fill: #818181;
+    -fx-effect: innershadow( three-pass-box , rgba(0.0,0.0,0.0,0.7) , 6.0, 0.0 , 0.0 , 2.0 );
 }
 
 .GameButton {
@@ -132,7 +132,7 @@
 }
 
 .GameButton:pressed{
-	 -fx-background-color: linear-gradient(#ffd65b, #e68400),
+    -fx-background-color: linear-gradient(#ffd65b, #e68400),
     linear-gradient(#ffef84, #f2ba44),
     linear-gradient(#ffea6a, #efaa22),
     linear-gradient(#ffe657 100.0%, #f8c202 50.0%, #eea10b 0.0%),
@@ -161,7 +161,7 @@
 }
 
 .joinButton:hover{
-	-fx-background-color: linear-gradient(from 25.0% 25.0% to 100.0% 100.0%, #AAAAAA, #F6F6F6);
+    -fx-background-color: linear-gradient(from 25.0% 25.0% to 100.0% 100.0%, #AAAAAA, #F6F6F6);
     -fx-background-radius: 30.0;
     -fx-background-insets: 0.0, 1.0, 2.0, 3.0, 0.0;
     -fx-text-fill: #FFFFFF;
@@ -173,7 +173,7 @@
     -fx-background-color: linear-gradient(from 75.0% 75.0% to 100.0% 100.0%, #F6F6F6, #AAAAAA);
     -fx-background-insets: 0.0, 1.0, 2.0, 3.0, 0.0;
     -fx-border-color: #6f9bbc ;
-    -fx-border-width: 1.0 ; 
+    -fx-border-width: 1.0 ;
     -fx-background-radius: 15.0;
     -fx-border-radius: 15.0;
     -fx-text-fill: #606060;
@@ -182,7 +182,7 @@
 }
 
 .lobbyButton:hover{
-	-fx-background-color: linear-gradient(from 25.0% 25.0% to 100.0% 100.0%, #AAAAAA, #F6F6F6);
+    -fx-background-color: linear-gradient(from 25.0% 25.0% to 100.0% 100.0%, #AAAAAA, #F6F6F6);
     -fx-background-insets: 0.0, 1.0, 2.0, 3.0, 0.0;
     -fx-border-color: #6f9bbc ;
     -fx-border-width: 1.0 ;

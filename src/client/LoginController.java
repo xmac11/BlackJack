@@ -7,8 +7,6 @@ package client;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import java.io.IOException;
 import java.net.URL;
@@ -30,6 +28,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -43,8 +42,6 @@ public class LoginController implements Initializable {
 
 	@FXML
 	private TextField userField;
-	@FXML
-	private TextField portField;
 
 	@FXML
 	private Label errorLabel;
@@ -58,6 +55,7 @@ public class LoginController implements Initializable {
 	private double ipFieldY;
 	private double passFieldX;
 	private double passFieldY;
+	public AudioClip loginMusic = new AudioClip(getClass().getResource("/music/LoginMusic.wav").toExternalForm());
 
 	public void serverDown() { // shows error message if server is down
 		System.out.println("Server is down.");
@@ -65,19 +63,18 @@ public class LoginController implements Initializable {
 		errorLabel.setVisible(true);
 
 	}
-	
-	
 
 	public void joinPressed(ActionEvent event) throws IOException {
 		if (ipField.getText().trim().length() > 0 && userField.getText().trim().length() > 0
-				&& passField.getText().trim().length() > 0 && portField.getText().trim().length() > 0) {
+				&& passField.getText().trim().length() > 0) {
 			if (Authentication.login(userField.getText(), passField.getText())) {
 				errorLabel.setVisible(false);
+				loginMusic.stop();
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("LobbyScreen.fxml"));
 				Scene lobbyScene = new Scene(loader.load());
 				LobbyController lobbyController = loader.<LobbyController>getController();
 				Stage thisStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-				lobbyController.initData(ipField.getText(), userField.getText(), passField.getText(), thisStage, portField.getText());
+				lobbyController.initData(ipField.getText(), userField.getText(), passField.getText(), thisStage);
 				thisStage.setHeight(768);
 				thisStage.setWidth(1366);
 				thisStage.setResizable(false);
@@ -188,7 +185,7 @@ public class LoginController implements Initializable {
 	public void wobbleField(TextField field, double X, double Y) {
 		Timeline timeline = new Timeline();
 		timeline.getKeyFrames().addAll(new KeyFrame(Duration.ZERO, // set start position at 0
-				new KeyValue(field.translateXProperty(), X + 5), new KeyValue(field.translateYProperty(), Y)),
+						new KeyValue(field.translateXProperty(), X + 5), new KeyValue(field.translateYProperty(), Y)),
 				new KeyFrame(new Duration(50), new KeyValue(field.translateXProperty(), X),
 						new KeyValue(field.translateYProperty(), Y)),
 				new KeyFrame(new Duration(50), // set start position at 0
@@ -213,15 +210,6 @@ public class LoginController implements Initializable {
 		SQLDatabaseConnection sqlDatabaseConnection = new SQLDatabaseConnection();
 		Thread thread = new Thread(sqlDatabaseConnection);
 		thread.start();
-		portField.textProperty().addListener(new ChangeListener<String>() {
-		    @Override
-		    public void changed(ObservableValue<? extends String> observable, String oldValue, 
-		        String newValue) {
-		        if (!newValue.matches("\\d*")) {
-		            portField.setText(newValue.replaceAll("[^\\d]", ""));
-		        }
-		    }
-		});
 	}
 
 }

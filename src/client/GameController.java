@@ -27,6 +27,8 @@ import javafx.scene.media.AudioClip;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import static javafx.scene.media.MediaPlayer.INDEFINITE;
+
 /**
  * Part of the application that handles user input.
  */
@@ -49,9 +51,6 @@ public class GameController implements Initializable {
 
 	@FXML
 	private Label labelDealer;
-	
-	@FXML
-	private Label player1Label;
 
 	@FXML
 	private Label player2Label;
@@ -99,8 +98,8 @@ public class GameController implements Initializable {
 	private int fundsAvailable;
 
 
-    public AudioClip lobbyScreenMusic = new AudioClip(getClass().getResource("/music/MainTheme.mp3").toExternalForm());
-    public AudioClip gameScreenMusic = new AudioClip(getClass().getResource("/music/TeaForTwo.mp3").toExternalForm());
+	public AudioClip lobbyScreenMusic = new AudioClip(getClass().getResource("/music/LobbyMusic.wav").toExternalForm());
+	public AudioClip gameScreenMusic = new AudioClip(getClass().getResource("/music/InGameMusic.mp3").toExternalForm());
 
 	/**
 	 * Action handlers for hit and stand buttons being clicked. If the user clicks
@@ -162,7 +161,7 @@ public class GameController implements Initializable {
 		Stage stage = new Stage();
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.setTitle(title);
-		stage.setWidth(400);
+		stage.setWidth(300);
 		stage.setHeight(150);
 		Label label = new Label(message);
 
@@ -219,22 +218,16 @@ public class GameController implements Initializable {
 			}
 		});
 	}
-	
-	public void setPlayer1Label(String text) {
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				player1Label.setText(text);
-				player1Label.setVisible(true);
-			}
-		});
-	}
 
 	public void closeGameScreen() {
 		stage.close();
 		gameScreenMusic.stop();
 		lobbyScreenMusic.setVolume(0.5);
+		int forever = INDEFINITE;
+		lobbyScreenMusic.setCycleCount(forever);
 		lobbyScreenMusic.play();
+
+
 	}
 
 	public void setDealerLabel(String text) {
@@ -343,29 +336,29 @@ public class GameController implements Initializable {
 				}
 				if (hBoxPlayer.getChildren().size() > 3) {
 					switch (noPlayers) {
-					case 3:
-						List<ImageView> smallerImages = new ArrayList<>();
-						for (int i = 0; i < hBoxPlayer3.getChildren().size(); i++) {
-							ImageView smaller = (ImageView) hBoxPlayer3.getChildren().remove(i);
-							i--;
-							smaller.setFitHeight(80);
-							smaller.setFitWidth(55);
-							smallerImages.add(smaller);
-						}
-						hBoxPlayer3.getChildren().addAll(smallerImages);
+						case 3:
+							List<ImageView> smallerImages = new ArrayList<>();
+							for (int i = 0; i < hBoxPlayer3.getChildren().size(); i++) {
+								ImageView smaller = (ImageView) hBoxPlayer3.getChildren().remove(i);
+								i--;
+								smaller.setFitHeight(80);
+								smaller.setFitWidth(55);
+								smallerImages.add(smaller);
+							}
+							hBoxPlayer3.getChildren().addAll(smallerImages);
 
-					case 2:
-						smallerImages = new ArrayList<>();
-						for (int i = 0; i < hBoxPlayer2.getChildren().size(); i++) {
-							ImageView smaller = (ImageView) hBoxPlayer2.getChildren().remove(i);
-							i--;
-							smaller.setFitHeight(80);
-							smaller.setFitWidth(55);
-							smallerImages.add(smaller);
-						}
-						hBoxPlayer2.getChildren().addAll(smallerImages);
-					default:
-						break;
+						case 2:
+							smallerImages = new ArrayList<>();
+							for (int i = 0; i < hBoxPlayer2.getChildren().size(); i++) {
+								ImageView smaller = (ImageView) hBoxPlayer2.getChildren().remove(i);
+								i--;
+								smaller.setFitHeight(80);
+								smaller.setFitWidth(55);
+								smallerImages.add(smaller);
+							}
+							hBoxPlayer2.getChildren().addAll(smallerImages);
+						default:
+							break;
 					}
 				}
 			}
@@ -411,20 +404,6 @@ public class GameController implements Initializable {
 			}
 		});
 	}
-	
-	public void addLabelToOpposingPlayer(int player, String username) {
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {				
-				if (player == 2) {
-					player2Label.setText(username);
-				} else {
-					player3Label.setText(username);
-				}
-			}
-		});
-	}
-
 
 	public void addCardToDealerHand(String card) {
 		Platform.runLater(new Runnable() {
@@ -492,7 +471,7 @@ public class GameController implements Initializable {
 	/**
 	 * Code inspired by :
 	 * https://stackoverflow.com/questions/53493111/javafx-wrapping-text-in-listview
-	 * 
+	 *
 	 * @param location
 	 * @param resources
 	 */
@@ -595,7 +574,6 @@ public class GameController implements Initializable {
 		int bet = Integer.parseInt(betString);
 		MatchHistory.reduceAmount(username, bet);
 		output.println("betIs " + bet);
-		setPointsLabel("Funds availlable: " + MatchHistory.getAmount(username));
 		hideBetPane();
 	}
 
