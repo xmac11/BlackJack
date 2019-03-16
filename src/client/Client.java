@@ -102,6 +102,7 @@ public class Client implements Runnable {
 				lobbyController.setOutput(output);
 				System.out.println("Client back in lobby");
 				lobbyScreenMusic.play(0.5);
+				lobbyController.enableChat();
 				while (true) { // Loops this until it reaches a 'break;'
 					in = input.readLine();
 					System.out.println("Client in: " + in);
@@ -169,6 +170,7 @@ public class Client implements Runnable {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				lobbyController.disableChat();
 				System.out.println("passed wait");
 				gameFinished = false;
 				playerLeft = false;

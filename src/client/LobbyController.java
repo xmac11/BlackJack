@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.Semaphore;
 
+import org.junit.validator.PublicClassValidator;
+
 import database.MatchHistory;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -88,6 +90,24 @@ public class LobbyController implements Initializable {
 			public void run() {
 				fundsLabel.setVisible(true);
 				addFundsButton.setVisible(true);
+			}
+		});
+	}
+	
+	public void disableChat() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				chatField.setDisable(true);
+			}
+		});
+	}
+	
+	public void enableChat() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				chatField.setDisable(false);
 			}
 		});
 	}
