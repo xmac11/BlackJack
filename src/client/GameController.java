@@ -162,7 +162,7 @@ public class GameController implements Initializable {
 		Stage stage = new Stage();
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.setTitle(title);
-		stage.setWidth(300);
+		stage.setWidth(400);
 		stage.setHeight(150);
 		Label label = new Label(message);
 
