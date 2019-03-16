@@ -8,6 +8,9 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
+
+import static javafx.scene.media.MediaPlayer.INDEFINITE;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -55,6 +58,7 @@ public class LoginController implements Initializable {
 	private double ipFieldY;
 	private double passFieldX;
 	private double passFieldY;
+	public AudioClip welcomeVoice = new AudioClip(getClass().getResource("/music/WelcomeToCLub21.wav").toExternalForm());
 	public AudioClip loginMusic = new AudioClip(getClass().getResource("/music/LoginMusic.wav").toExternalForm());
 
 	public void serverDown() { // shows error message if server is down
@@ -210,6 +214,11 @@ public class LoginController implements Initializable {
 		SQLDatabaseConnection sqlDatabaseConnection = new SQLDatabaseConnection();
 		Thread thread = new Thread(sqlDatabaseConnection);
 		thread.start();
+		int forever = INDEFINITE;
+		loginMusic.setVolume(0.4);
+		loginMusic.setCycleCount(forever);
+		loginMusic.play();
+		welcomeVoice.play();
 	}
 
 }

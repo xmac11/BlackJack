@@ -44,7 +44,7 @@ public class Client implements Runnable {
 	private boolean isBetPlaced;
 
 	public AudioClip lobbyScreenMusic = new AudioClip(getClass().getResource("/music/LobbyMusic.wav").toExternalForm());
-	public AudioClip gameScreenMusic = new AudioClip(getClass().getResource("/music/InGameMusic.mp3").toExternalForm());
+	public AudioClip gameScreenMusic = new AudioClip(getClass().getResource("/music/InGameMusic.wav").toExternalForm());
 	public AudioClip placeYourBets = new AudioClip(getClass().getResource("/music/PleasePlaceYourBets.wav").toExternalForm());
 	public AudioClip playerWins = new AudioClip(getClass().getResource("/music/PlayerWins.wav").toExternalForm());
 	public AudioClip dealerWins = new AudioClip(getClass().getResource("/music/DealerWins.wav").toExternalForm());
@@ -93,21 +93,16 @@ public class Client implements Runnable {
 			setUsername(lobbyController.getUsername());
 			System.out.println(username + " has joined");
 			output.println(username);
-			lobbyScreenMusic.setVolume(0.5);
 			int forever = INDEFINITE;
 			lobbyScreenMusic.setCycleCount(forever);
-			lobbyScreenMusic.play();
 			while (true) {
 				inGame = false;
-
-
 				playerLeft = false;
 				String in = "";
 				lobbyController.setOutput(output);
 				System.out.println("Client back in lobby");
+				lobbyScreenMusic.play(0.5);
 				while (true) { // Loops this until it reaches a 'break;'
-
-
 					in = input.readLine();
 					System.out.println("Client in: " + in);
 					if (in.equals("accountAlreadyActive")) {
@@ -160,18 +155,11 @@ public class Client implements Runnable {
 						lobbyController.addToChat(in.replaceFirst("lobbyChatMessage", ""));
 					}
 				}
-
 				lobbyController.gameBegin();
 				lobbyScreenMusic.stop();
-				int forever2 = INDEFINITE;
-				gameScreenMusic.setCycleCount(forever2);
-				gameScreenMusic.setVolume(0.5);
-				gameScreenMusic.play();
-				placeYourBets.setVolume(1.5);
-				placeYourBets.play();
-
-
-
+				gameScreenMusic.setCycleCount(forever);
+				gameScreenMusic.play(0.3);
+				placeYourBets.play(10);
 				String hello = input.readLine();
 				sessionID = Integer.parseInt(input.readLine().replaceFirst("sessionID", ""));
 				System.out.println(hello); // The first message received is the greeting message so just print this
@@ -210,7 +198,6 @@ public class Client implements Runnable {
 						gameController.setPointsLabel("Funds availlable: " + String.valueOf(pointsAvailable));
 						isBetPlaced = true;
 						output.println("betComplete");
-						table.add(new ArrayList<>());
 					}
 					if(in.equals("startCards")) {
 						table.get(0).add(input.readLine());
@@ -380,6 +367,7 @@ public class Client implements Runnable {
 				}
 				table.clear();
 				inQueue.clear();
+				gameScreenMusic.stop();
 				gameController.endChat();
 				gameController.showLeaveButton();
 				lobbyController.updateData();
@@ -396,6 +384,8 @@ public class Client implements Runnable {
 	}
 
 	public void signOut() {
+		lobbyScreenMusic.stop();
+		gameScreenMusic.stop();
 		output.println("thisPlayerSignedOut");
 	}
 
@@ -407,26 +397,26 @@ public class Client implements Runnable {
 		System.out.println("Dealers cards: " + table.get(0) + " total: " + Deck.total(table.get(0)));
 		if (Deck.total(table.get(ID)) > 21) {
 			gameController.setLabel("Bust!! You lose!");
-			dealerWins.play();
+			dealerWins.play(10);
 		} else if (Deck.total(table.get(0)) > 21) {
 			MatchHistory.setGamesWon(username, 1);
 			MatchHistory.increaseAmount(username, 2 * betAmount); // this should be 1.5
 			Session.setSessionPoints(sessionID, username, true);
 			gameController.setLabel("Dealer bust! You Win!");
-			playerWins.play();
+			playerWins.play(10);
 		} else if (Deck.total(table.get(ID)) == Deck.total(table.get(0))) {
 			gameController.setLabel("Draw!");
-			draw.play();
+			draw.play(10);
 			MatchHistory.increaseAmount(username, betAmount); // take money back
 		} else if (Deck.total(table.get(ID)) > Deck.total(table.get(0))) {
 			Session.setSessionPoints(sessionID, username, true);
 			MatchHistory.setGamesWon(username, 1);
 			MatchHistory.increaseAmount(username, 2 * betAmount); // this should be 1.5
 			gameController.setLabel("You win!!");
-			playerWins.play();
+			playerWins.play(10);
 		} else {
 			gameController.setLabel("Dealer Wins!!");
-			dealerWins.play();
+			dealerWins.play(10);
 		}
 		gameController.setPointsLabel("Funds available: " + String.valueOf(MatchHistory.getAmount(username)));
 	}

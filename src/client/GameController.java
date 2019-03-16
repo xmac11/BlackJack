@@ -98,8 +98,6 @@ public class GameController implements Initializable {
 	private int fundsAvailable;
 
 
-	public AudioClip lobbyScreenMusic = new AudioClip(getClass().getResource("/music/LobbyMusic.wav").toExternalForm());
-	public AudioClip gameScreenMusic = new AudioClip(getClass().getResource("/music/InGameMusic.mp3").toExternalForm());
 
 	/**
 	 * Action handlers for hit and stand buttons being clicked. If the user clicks
@@ -221,13 +219,6 @@ public class GameController implements Initializable {
 
 	public void closeGameScreen() {
 		stage.close();
-		gameScreenMusic.stop();
-		lobbyScreenMusic.setVolume(0.5);
-		int forever = INDEFINITE;
-		lobbyScreenMusic.setCycleCount(forever);
-		lobbyScreenMusic.play();
-
-
 	}
 
 	public void setDealerLabel(String text) {
