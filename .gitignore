@@ -4,8 +4,7 @@
 #BlackJack2.iml
 #.project
 *
-!src/
+!src/**
 !.gitignore
 !db.properties
 !README.md
-#!src/testing/
