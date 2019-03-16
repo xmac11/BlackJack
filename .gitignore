@@ -8,4 +8,4 @@
 !.gitignore
 !db.properties
 !README.md
-!src/testing/
+#!src/testing/
