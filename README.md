@@ -1,3 +1,3 @@
-# Project for Java
--------------
--   Always push gitignore -
+# Software Workshop 
+# $Blackjack$
+-   Always push gitignore 

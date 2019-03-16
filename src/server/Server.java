@@ -44,6 +44,29 @@ public class Server implements Runnable {
 		Server server = new Server();
 		Thread gameSession = new Thread(server);
 		gameSession.start(); // Sends off a thread that represents a game session
+
+
+	}
+
+	/* Boolean Method to use it in the testing class ServerOnTesting */
+	public static boolean serverListening(String host, int port)
+	{
+		Socket s = null;
+		try
+		{
+			s = new Socket(host, port);
+			return true;
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+		finally
+		{
+			if(s != null)
+				try {s.close();}
+				catch(Exception e){}
+		}
 	}
 
 	@Override
