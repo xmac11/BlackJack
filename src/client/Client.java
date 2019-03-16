@@ -335,7 +335,6 @@ public class Client implements Runnable {
 						table.get(playerID).add(input.readLine().replaceFirst("playerInitialCard", ""));
 						table.get(playerID).add(input.readLine().replaceFirst("playerInitialCard", ""));
 					}
-
 					if (in.contains("playerSignedOut")) {
 						onlinePlayers.remove(in.replaceFirst("playerSignedOut", ""));
 						lobbyController.addOnline(onlinePlayers);
