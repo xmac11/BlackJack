@@ -95,13 +95,13 @@ public class Client implements Runnable {
 			output.println(username);
 			int forever = INDEFINITE;
 			lobbyScreenMusic.setCycleCount(forever);
+			lobbyScreenMusic.play(0.5);
 			while (true) {
 				inGame = false;
 				playerLeft = false;
 				String in = "";
 				lobbyController.setOutput(output);
 				System.out.println("Client back in lobby");
-				lobbyScreenMusic.play(0.5);
 				lobbyController.enableChat();
 				while (true) { // Loops this until it reaches a 'break;'
 					in = input.readLine();
@@ -369,7 +369,6 @@ public class Client implements Runnable {
 				}
 				table.clear();
 				inQueue.clear();
-				gameScreenMusic.stop();
 				gameController.endChat();
 				gameController.showLeaveButton();
 				lobbyController.updateData();
@@ -426,11 +425,15 @@ public class Client implements Runnable {
 	public void closeGame(Stage window) {
 		boolean confirmation = GameController.displayConfirmBox("Warning", "Are you sure you want to exit?");
 		if (confirmation) {
-			gameScreenMusic.stop();
 			window.close();
-			lobbyScreenMusic.play();
+			stopGameMusic();
 			gameController.playerLeft();
 		}
+	}
+	
+	public void stopGameMusic() {
+		gameScreenMusic.stop();
+		lobbyScreenMusic.play();
 	}
 
 	public int getOtherPlayerID(int playerID) {
