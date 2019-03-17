@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import com.sun.jmx.remote.internal.ClientNotifForwarder;
+
 import database.MatchHistory;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -96,6 +98,7 @@ public class GameController implements Initializable {
 	private Stage stage;
 	private static final int MINBET = 5;
 	private int fundsAvailable;
+	private Client client;
 
 
 
@@ -107,6 +110,10 @@ public class GameController implements Initializable {
 	public void onHitButtonClicked() {
 		System.out.println("Player is dealt a new card from the deck.");
 		output.println("h");
+	}
+	
+	public void setClient(Client client) {
+		this.client = client;
 	}
 
 	public void endChat() {
@@ -159,7 +166,7 @@ public class GameController implements Initializable {
 		Stage stage = new Stage();
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.setTitle(title);
-		stage.setWidth(300);
+		stage.setWidth(400);
 		stage.setHeight(150);
 		Label label = new Label(message);
 
@@ -218,6 +225,7 @@ public class GameController implements Initializable {
 	}
 
 	public void closeGameScreen() {
+		client.stopGameMusic();
 		stage.close();
 	}
 

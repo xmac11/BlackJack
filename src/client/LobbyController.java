@@ -128,7 +128,6 @@ public class LobbyController implements Initializable {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-
 				playButton.setDisable(true);
 				joinButton.setDisable(true);
 				gameScene.getStylesheets().addAll(getClass().getResource("style.css").toExternalForm());
@@ -136,6 +135,7 @@ public class LobbyController implements Initializable {
 				GameController gameController = loader.<GameController>getController();
 				client.setGameController(gameController);
 				waitForController.release();
+				gameController.setClient(client);
 				window.setScene(gameScene);
 				window.setHeight(900);
 				window.setWidth(1600);
@@ -152,7 +152,6 @@ public class LobbyController implements Initializable {
 					if (!client.isGameFinished()) {
 						e.consume();
 						client.closeGame(window);
-
 					}
 				});
 			}
@@ -279,6 +278,7 @@ public class LobbyController implements Initializable {
 			@Override
 			public void run() {
 				queueView.getItems().clear();
+				leaveButton.setDisable(true);
 				joinButton.setDisable(false);
 				playButton.setDisable(true);
 				chatView.getItems().add("Game finished");
