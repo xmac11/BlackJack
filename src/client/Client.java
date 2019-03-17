@@ -398,25 +398,30 @@ public class Client implements Runnable {
 		System.out.println("Dealers cards: " + table.get(0) + " total: " + Deck.total(table.get(0)));
 		if (Deck.total(table.get(ID)) > 21) {
 			gameController.setLabel("Bust!! You lose!");
+			Session.setBet(sessionID, username, -1*betAmount);
 			dealerWins.play(10);
 		} else if (Deck.total(table.get(0)) > 21) {
 			MatchHistory.setGamesWon(username, 1);
 			MatchHistory.increaseAmount(username, 2 * betAmount); // this should be 1.5
 			Session.setSessionPoints(sessionID, username, true);
 			gameController.setLabel("Dealer bust! You Win!");
+			Session.setBet(sessionID, username, betAmount);
 			playerWins.play(10);
 		} else if (Deck.total(table.get(ID)) == Deck.total(table.get(0))) {
 			gameController.setLabel("Draw!");
 			draw.play(10);
+			Session.setBet(sessionID, username, 0);
 			MatchHistory.increaseAmount(username, betAmount); // take money back
 		} else if (Deck.total(table.get(ID)) > Deck.total(table.get(0))) {
 			Session.setSessionPoints(sessionID, username, true);
 			MatchHistory.setGamesWon(username, 1);
 			MatchHistory.increaseAmount(username, 2 * betAmount); // this should be 1.5
+			Session.setBet(sessionID, username, betAmount);
 			gameController.setLabel("You win!!");
 			playerWins.play(10);
 		} else {
 			gameController.setLabel("Dealer Wins!!");
+			Session.setBet(sessionID, username, -1*betAmount);
 			dealerWins.play(10);
 		}
 		gameController.setPointsLabel("Funds available: " + String.valueOf(MatchHistory.getAmount(username)));
