@@ -18,7 +18,7 @@
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.text.Font?>
 
-<StackPane minHeight="768.0" minWidth="1366.0" prefHeight="900.0" prefWidth="1590.0" styleClass="gameBackground" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.GameController">
+<StackPane minHeight="768.0" minWidth="1366.0" prefHeight="900.0" prefWidth="1590.0" styleClass="gameBackground" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.GameController">
 	<children>
 		<GridPane StackPane.alignment="CENTER">
 			<columnConstraints>
@@ -66,7 +66,10 @@
 						<ListView fx:id="chatView" maxHeight="252" maxWidth="530" prefHeight="252.0" prefWidth="530.0" style="-fx-background-color: #d7d7d7" />
 						<HBox maxHeight="59" maxWidth="530" prefHeight="59.0" prefWidth="530.0" style="-fx-padding: 1, 10, 12, 12; -fx-background-color: #5b5b5b;">
 							<children>
-								<TextField fx:id="textField" maxHeight="54" maxWidth="458" onAction="#sendChat" prefHeight="54.0" prefWidth="458.0" />
+								<TextField fx:id="textField" alignment="CENTER" maxHeight="54" maxWidth="458" onAction="#sendChat" prefHeight="54.0" prefWidth="458.0" promptText="chat here">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font></TextField>
 								<Button maxHeight="41" maxWidth="55" minHeight="41" minWidth="55" mnemonicParsing="false" onMouseClicked="#sendChat" prefHeight="41.0" prefWidth="55.0" styleClass="GameButton" stylesheets="@style.css">
 									<graphic>
 										<ImageView fitHeight="30.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
