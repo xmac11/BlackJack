@@ -25,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -38,6 +39,9 @@ public class LobbyController implements Initializable {
 
 	@FXML
 	private Button leaveButton;
+
+	@FXML
+	protected ToggleButton muteButton;
 
 	@FXML
 	private ListView<String> queueView;
@@ -66,16 +70,19 @@ public class LobbyController implements Initializable {
 	@FXML
 	private Label playedLabel;
 
-	private String IP;
 	private Stage thisStage;
 	private Client client;
 	private Semaphore waitForController;
 	private List<List<String>> table;
 	private PrintWriter output;
 	private String username;
-	private String port;
 
-
+	public void muteMusic() {
+		if (muteButton.isSelected())
+			client.lobbyScreenMusic.stop();
+		else
+			client.lobbyScreenMusic.play(0.1);
+	}
 
 	public Client getClient() {
 		return client;
@@ -90,7 +97,7 @@ public class LobbyController implements Initializable {
 			}
 		});
 	}
-	
+
 	public void disableChat() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -99,7 +106,7 @@ public class LobbyController implements Initializable {
 			}
 		});
 	}
-	
+
 	public void enableChat() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -112,11 +119,9 @@ public class LobbyController implements Initializable {
 	public void addFunds() {
 		MatchHistory.increaseAmount(username, 200);
 		addFundsButton.setVisible(false);
-		walletLabel.setText("Wallet: "+MatchHistory.getAmount(username));
+		walletLabel.setText("Wallet: " + MatchHistory.getAmount(username));
 		fundsLabel.setVisible(false);
 	}
-
-
 
 	public void gameBegin() {
 		Platform.runLater(new Runnable() {
@@ -352,7 +357,6 @@ public class LobbyController implements Initializable {
 	}
 
 	public void initData(String IP, String username, String port, Stage stage) {
-		this.IP = IP;
 		this.username = username;
 		thisStage = stage;
 		client.setInitialVariables(username, IP, Integer.parseInt(port));

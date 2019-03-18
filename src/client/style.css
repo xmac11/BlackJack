@@ -25,13 +25,29 @@
     -fx-background-position: center center;
 }
 
+.musicMute{
+    -fx-background-image: url("../image/mute.png");
+    -fx-background-color: transparent;
+    -fx-background-repeat: repeat;
+    -fx-background-size: 25.0 25.0;
+    -fx-background-position: center center;
+}
+.musicMute:selected{
+    -fx-background-image: url("../image/muted.png");
+    -fx-background-color: transparent;
+    -fx-background-repeat: repeat;
+    -fx-background-size: 25.0 25.0;
+    -fx-background-position: center center;
+}
+
+
 .betArrow{
     -fx-background-color: #654b00;
     -fx-border-color: black;
 }
 
 .betArrow:hover{
-    -fx-background-color: #654b00;
+    -fx-background-color: #8c6d13;
     -fx-border-color: black;
 }
 

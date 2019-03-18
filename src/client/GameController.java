@@ -37,6 +37,9 @@ public class GameController implements Initializable {
 	private HBox hBoxDealer;
 
 	@FXML
+	protected ToggleButton muteButton;
+
+	@FXML
 	private HBox hBoxPlayer;
 
 	@FXML
@@ -97,8 +100,6 @@ public class GameController implements Initializable {
 	private int fundsAvailable;
 	private Client client;
 
-
-
 	/**
 	 * Action handlers for hit and stand buttons being clicked. If the user clicks
 	 * hit and the card they are dealt is over 21, then they get the message -
@@ -108,7 +109,15 @@ public class GameController implements Initializable {
 		System.out.println("Player is dealt a new card from the deck.");
 		output.println("h");
 	}
-	
+
+	public void muteMusic() {
+		if (muteButton.isSelected())
+			client.gameScreenMusic.stop();
+		else
+			client.gameScreenMusic.play(0.1);
+
+	}
+
 	public void setClient(Client client) {
 		this.client = client;
 	}
@@ -332,29 +341,29 @@ public class GameController implements Initializable {
 				}
 				if (hBoxPlayer.getChildren().size() > 3) {
 					switch (noPlayers) {
-						case 3:
-							List<ImageView> smallerImages = new ArrayList<>();
-							for (int i = 0; i < hBoxPlayer3.getChildren().size(); i++) {
-								ImageView smaller = (ImageView) hBoxPlayer3.getChildren().remove(i);
-								i--;
-								smaller.setFitHeight(80);
-								smaller.setFitWidth(55);
-								smallerImages.add(smaller);
-							}
-							hBoxPlayer3.getChildren().addAll(smallerImages);
+					case 3:
+						List<ImageView> smallerImages = new ArrayList<>();
+						for (int i = 0; i < hBoxPlayer3.getChildren().size(); i++) {
+							ImageView smaller = (ImageView) hBoxPlayer3.getChildren().remove(i);
+							i--;
+							smaller.setFitHeight(80);
+							smaller.setFitWidth(55);
+							smallerImages.add(smaller);
+						}
+						hBoxPlayer3.getChildren().addAll(smallerImages);
 
-						case 2:
-							smallerImages = new ArrayList<>();
-							for (int i = 0; i < hBoxPlayer2.getChildren().size(); i++) {
-								ImageView smaller = (ImageView) hBoxPlayer2.getChildren().remove(i);
-								i--;
-								smaller.setFitHeight(80);
-								smaller.setFitWidth(55);
-								smallerImages.add(smaller);
-							}
-							hBoxPlayer2.getChildren().addAll(smallerImages);
-						default:
-							break;
+					case 2:
+						smallerImages = new ArrayList<>();
+						for (int i = 0; i < hBoxPlayer2.getChildren().size(); i++) {
+							ImageView smaller = (ImageView) hBoxPlayer2.getChildren().remove(i);
+							i--;
+							smaller.setFitHeight(80);
+							smaller.setFitWidth(55);
+							smallerImages.add(smaller);
+						}
+						hBoxPlayer2.getChildren().addAll(smallerImages);
+					default:
+						break;
 					}
 				}
 			}
