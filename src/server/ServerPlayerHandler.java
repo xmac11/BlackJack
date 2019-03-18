@@ -21,6 +21,7 @@ public class ServerPlayerHandler implements Runnable {
 	private boolean active;
 	private boolean myTurn;
 	private int barriers;
+	private boolean betPlaced;
 	private FinishedPlayers finishedPlayers;
 	private List<SocketConnection> gameQueue;
 	private int sessionID;
@@ -66,9 +67,10 @@ public class ServerPlayerHandler implements Runnable {
 		 * variable access must be synchronised
 		 */
 		try {
-			while (!in.contains("betIs")) {
+			betPlaced = false;
+			while (!in.startsWith("betIs")) {
 				in = socketConnection.getInput().readLine();
-				if (in.contains("gameChatMessage")) {
+				if (in.startsWith("gameChatMessage")) {
 					String toSend = socketConnection.getInput().readLine().substring(15) + " > "
 							+ socketConnection.getInput().readLine().substring(15);
 					System.out.println("Sending chat message");
@@ -91,6 +93,7 @@ public class ServerPlayerHandler implements Runnable {
 					return;
 				}
 			}
+			betPlaced = true;
 			socketConnection.getOutput().println(in);
 			finishedPlayers.playerBet();
 			while (gameQueue.size() > finishedPlayers.getPlayersBet()) {
@@ -98,7 +101,7 @@ public class ServerPlayerHandler implements Runnable {
 				if (in.equals("breakFromBetLoop")) {
 					break;
 				}
-				if (in.contains("gameChatMessage")) {
+				if (in.startsWith("gameChatMessage")) {
 					String toSend = socketConnection.getInput().readLine().replaceFirst("gameChatMessage", "") + " > "
 							+ socketConnection.getInput().readLine().replaceFirst("gameChatMessage", "");
 					System.out.println("Sending chat message");
@@ -129,7 +132,7 @@ public class ServerPlayerHandler implements Runnable {
 			return;
 		}
 		System.out.println("Server passed bet");
-		//		socketConnection.getOutput().println(in);
+		// socketConnection.getOutput().println(in);
 		barriers++;
 		synchronized (socketConnection.getOutput()) {
 			socketConnection.getOutput().println("startCards");
@@ -137,9 +140,9 @@ public class ServerPlayerHandler implements Runnable {
 			socketConnection.getOutput().println(table.get(0).get(1)); // Sends the dealers hand to the client
 			socketConnection.getOutput().println(card1);
 			socketConnection.getOutput().println(card2); // Draws the clients hand
-			for(int i = 0; i < gameQueue.size(); i++) {
-				socketConnection.getOutput().println(gameQueue.get(i).getUsername());
-			}
+//			for (int i = 0; i < gameQueue.size(); i++) {
+//				socketConnection.getOutput().println(gameQueue.get(i).getUsername());
+//			}
 		}
 
 		Runnable r = new ServerMoveThread(socketConnection, deckWait);
@@ -150,7 +153,7 @@ public class ServerPlayerHandler implements Runnable {
 			try {
 				in = socketConnection.getInput().readLine(); // Reads the message from the client
 				System.out.println("This is in: " + in);
-				if (in.contains("gameChatMessage")) {
+				if (in.startsWith("gameChatMessage")) {
 					String toSend = socketConnection.getInput().readLine().substring(15) + " > "
 							+ socketConnection.getInput().readLine().substring(15);
 					System.out.println("Sending chat message");
@@ -201,7 +204,7 @@ public class ServerPlayerHandler implements Runnable {
 				return;
 			}
 		}
-		myTurn =false;
+		myTurn = false;
 		active = false;
 		socketConnection.getOutput().println("Player " + ID + " finished");
 		System.out.println("Player " + ID + " finished");
@@ -229,7 +232,7 @@ public class ServerPlayerHandler implements Runnable {
 				if (in.equals("breakFromLoop")) {
 					break;
 				}
-				if (in.contains("gameChatMessage")) {
+				if (in.startsWith("gameChatMessage")) {
 					String toSend = socketConnection.getInput().readLine().substring(15) + " > "
 							+ socketConnection.getInput().readLine().substring(15);
 					System.out.println("Sending chat message");
@@ -297,9 +300,10 @@ public class ServerPlayerHandler implements Runnable {
 			Session.setSessionend(socketConnection.getUsername(), sessionID);
 			switch (barriers) {
 			case 0:
-//				finishedPlayers.playerBet();
+
 			case 1:
-				finishedPlayers.playerBetLeft();
+				if (betPlaced)
+					finishedPlayers.playerBetLeft();
 				System.out.println("releasing");
 				if (myTurn)
 					deckWait.release();
