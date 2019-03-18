@@ -48,7 +48,8 @@ public class Client implements Runnable {
 
 	public AudioClip lobbyScreenMusic = new AudioClip(getClass().getResource("/music/LobbyMusic.wav").toExternalForm());
 	public AudioClip gameScreenMusic = new AudioClip(getClass().getResource("/music/InGameMusic.wav").toExternalForm());
-	public AudioClip placeYourBets = new AudioClip(getClass().getResource("/music/PleasePlaceYourBets.wav").toExternalForm());
+	public AudioClip placeYourBets = new AudioClip(
+			getClass().getResource("/music/PleasePlaceYourBets.wav").toExternalForm());
 	public AudioClip playerWins = new AudioClip(getClass().getResource("/music/PlayerWins.wav").toExternalForm());
 	public AudioClip dealerWins = new AudioClip(getClass().getResource("/music/DealerWins.wav").toExternalForm());
 	public AudioClip draw = new AudioClip(getClass().getResource("/music/Draw.wav").toExternalForm());
@@ -82,11 +83,9 @@ public class Client implements Runnable {
 		return isBetPlaced;
 	}
 
-	
-	
 	@Override
 	public void run() {
-		try{
+		try {
 			onlinePlayers = new ArrayList<>();
 			inQueue = new ArrayList<>();
 			try {
@@ -101,7 +100,8 @@ public class Client implements Runnable {
 			output.println(username);
 			int forever = INDEFINITE;
 			lobbyScreenMusic.setCycleCount(forever);
-			lobbyScreenMusic.play(0.1);
+			if (!lobbyScreenMusic.isPlaying() && !lobbyController.muteButton.isSelected())
+				lobbyScreenMusic.play(0.1);
 			while (true) {
 				inGame = false;
 				playerLeft = false;
@@ -146,7 +146,7 @@ public class Client implements Runnable {
 							lobbyController.joinUnavailable();
 						}
 					}
-					if(in.equals("insufficientFunds")) {
+					if (in.equals("insufficientFunds")) {
 						lobbyController.showAddFunds();
 					}
 					if (in.equals("playerQueue")) {
@@ -163,9 +163,6 @@ public class Client implements Runnable {
 					}
 				}
 				lobbyController.gameBegin();
-				lobbyScreenMusic.stop();
-				gameScreenMusic.setCycleCount(forever);
-				gameScreenMusic.play(0.1);
 				placeYourBets.play(20);
 				String hello = input.readLine();
 				sessionID = Integer.parseInt(input.readLine().replaceFirst("sessionID", ""));
@@ -176,6 +173,10 @@ public class Client implements Runnable {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				lobbyScreenMusic.stop();
+				gameScreenMusic.setCycleCount(forever);
+				if (!gameScreenMusic.isPlaying() && !gameController.muteButton.isSelected())
+					gameScreenMusic.play(0.1);
 				lobbyController.disableChat();
 				System.out.println("passed wait");
 				gameFinished = false;
@@ -207,7 +208,7 @@ public class Client implements Runnable {
 						isBetPlaced = true;
 						output.println("betComplete");
 					}
-					if(in.equals("startCards")) {
+					if (in.equals("startCards")) {
 						table.get(0).add(input.readLine());
 						table.get(0).add(input.readLine()); // Next messages are the dealers first hands
 						System.out.println(table.get(0) + " this is dealer");
@@ -404,7 +405,7 @@ public class Client implements Runnable {
 		System.out.println("Dealers cards: " + table.get(0) + " total: " + Deck.total(table.get(0)));
 		if (Deck.total(table.get(ID)) > 21) {
 			gameController.setLabel("Bust!! You lose!");
-			Session.setBet(sessionID, username, -1*betAmount);
+			Session.setBet(sessionID, username, -1 * betAmount);
 			dealerWins.play(20);
 		} else if (Deck.total(table.get(0)) > 21) {
 			MatchHistory.setGamesWon(username, 1);
@@ -427,7 +428,7 @@ public class Client implements Runnable {
 			playerWins.play(20);
 		} else {
 			gameController.setLabel("Dealer Wins!!");
-			Session.setBet(sessionID, username, -1*betAmount);
+			Session.setBet(sessionID, username, -1 * betAmount);
 			dealerWins.play(20);
 		}
 		gameController.setPointsLabel("Funds available: " + String.valueOf(MatchHistory.getAmount(username)));
@@ -441,22 +442,23 @@ public class Client implements Runnable {
 			gameController.playerLeft();
 		}
 	}
-	
+
 	public void stopGameMusic() {
 		gameScreenMusic.stop();
-		lobbyScreenMusic.play(0.1);
+		if (!lobbyScreenMusic.isPlaying() && !lobbyController.muteButton.isSelected())
+			lobbyScreenMusic.play(0.1);
 	}
 
 	public int getOtherPlayerID(int playerID) {
 		switch (ID) {
-			case 1:
-				return playerID;
-			case 2:
-				return ((playerID % noPlayers) + (noPlayers - 1));
-			case 3:
-				return playerID + 1;
-			default:
-				return -1;
+		case 1:
+			return playerID;
+		case 2:
+			return ((playerID % noPlayers) + (noPlayers - 1));
+		case 3:
+			return playerID + 1;
+		default:
+			return -1;
 		}
 	}
 }
