@@ -142,7 +142,7 @@ public class ServerPlayerHandler implements Runnable {
 			}
 		}
 
-		Runnable r = new ServerMoveThread(socketConnection.getOutput(), deckWait);
+		Runnable r = new ServerMoveThread(socketConnection, deckWait);
 		Thread thread = new Thread(r);
 		thread.start();
 
