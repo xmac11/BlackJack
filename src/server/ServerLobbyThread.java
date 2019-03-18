@@ -54,7 +54,7 @@ public class ServerLobbyThread implements Runnable {
 					in = socketConnection.getInput().readLine(); // ensuring that loop can break by using readline() as blocking statement
 
 					System.out.println("lobby thread in: " + in);
-					if (in.contains("lobbyChatMessage")) {
+					if (in.startsWith("lobbyChatMessage")) {
 						String toSend = socketConnection.getInput().readLine().substring(16) + " > "
 								+ socketConnection.getInput().readLine().substring(16);
 						System.out.println("Sending chat message");

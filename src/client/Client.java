@@ -74,6 +74,10 @@ public class Client implements Runnable {
 		this.IP = IP;
 		this.port = port;
 	}
+	
+	public boolean isInGame() {
+		return inGame;
+	}
 
 	public boolean isGameFinished() {
 		return gameFinished;
@@ -133,15 +137,15 @@ public class Client implements Runnable {
 					if (in.equals("Game in progress")) {
 						lobbyController.gameInProgress(input.readLine());
 					}
-					if (in.contains("playerSignedOut")) {
+					if (in.startsWith("playerSignedOut")) {
 						onlinePlayers.remove(in.replaceFirst("playerSignedOut", ""));
 						lobbyController.addOnline(onlinePlayers);
 					}
-					if (in.contains("newPlayer")) {
+					if (in.startsWith("newPlayer")) {
 						onlinePlayers.add(in.replaceFirst("newPlayer", ""));
 						lobbyController.addOnline(onlinePlayers);
 					}
-					if (in.contains("activeGame")) {
+					if (in.startsWith("activeGame")) {
 						if (Boolean.parseBoolean(in.substring(10))) {
 							lobbyController.joinUnavailable();
 						}
@@ -158,16 +162,16 @@ public class Client implements Runnable {
 						}
 						lobbyController.addQueue(inQueue);
 					}
-					if (in.contains("lobbyChatMessage")) {
+					if (in.startsWith("lobbyChatMessage")) {
 						lobbyController.addToChat(in.replaceFirst("lobbyChatMessage", ""));
 					}
 				}
 				lobbyController.gameBegin();
 				placeYourBets.play(20);
-				String hello = input.readLine();
-				sessionID = Integer.parseInt(input.readLine().replaceFirst("sessionID", ""));
-				System.out.println(hello); // The first message received is the greeting message so just print this
-				ID = Integer.parseInt(hello.substring(15, 16));
+//				String hello = input.readLine();
+//				sessionID = Integer.parseInt(input.readLine().replaceFirst("sessionID", ""));
+//				System.out.println(hello); // The first message received is the greeting message so just print this
+//				ID = Integer.parseInt(hello.substring(15, 16));
 				try {
 					waitForController.acquire();
 				} catch (InterruptedException e) {
@@ -186,9 +190,7 @@ public class Client implements Runnable {
 				int pointsAvailable = MatchHistory.getAmount(username);
 				gameController.setOutput(output);
 				gameController.setUsername(username);
-				gameController.setID(ID);
-				noPlayers = Integer.parseInt(hello.substring(26, 27)); // Max of 3 players so reading one char is fine
-				gameController.setNoPlayers(noPlayers);
+				 // Max of 3 players so reading one char is fine
 				System.out.println(noPlayers);
 				gameController.showBetPane();
 				gameController.setPointsLabel("Funds available: " + String.valueOf(pointsAvailable));
@@ -200,7 +202,16 @@ public class Client implements Runnable {
 				while (!gameFinished && !playerLeft) { // Loops this until it reaches a 'break;'
 					in = input.readLine();
 					System.out.println("Client in: " + in);
-					if (in.contains("betIs")) {
+					if(in.startsWith("sessionID")) {
+						sessionID = Integer.parseInt(in.replaceFirst("sessionID", ""));
+					}
+					if(in.startsWith("Welcome player ")){
+						ID = Integer.parseInt(in.substring(15, 16));
+						noPlayers = Integer.parseInt(in.substring(26, 27));
+						gameController.setNoPlayers(noPlayers);
+						gameController.setID(ID);
+					}
+					if (in.startsWith("betIs")) {
 						pointsAvailable = MatchHistory.getAmount(username);
 						betAmount = Integer.parseInt(in.substring(6));
 						Session.setBet(sessionID, username, betAmount);
@@ -243,7 +254,7 @@ public class Client implements Runnable {
 							gameController.setLabel("Make Move: " + Deck.total(table.get(ID)));
 						}
 					}
-					if (in.contains("gameChatMessage")) {
+					if (in.startsWith("gameChatMessage")) {
 						gameController.addToChat(in.replaceFirst("gameChatMessage", ""));
 					}
 					if (in.equals("playerQueue")) {
@@ -261,7 +272,7 @@ public class Client implements Runnable {
 						gameController.disableStand();
 						// break;
 					}
-					if (in.contains("playerCard")) {
+					if (in.startsWith("playerCard")) {
 						int playerID = Integer.parseInt(in.replaceFirst("playerCard", ""));
 						String card = input.readLine().replaceFirst("playerCard", "");
 						table.get(playerID).add(card);
@@ -300,7 +311,7 @@ public class Client implements Runnable {
 					if (in.equals("breakFromBetLoop")) {
 						output.println("breakFromBetLoop");
 					}
-					if (in.contains("finished")) { // Server tells the client its turn is over
+					if (in.startsWith("finished")) { // Server tells the client its turn is over
 						System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
 						System.out.println(in + " turn... waiting for other players");
 						gameController.setLabel("Your hand: " + Deck.total(table.get(ID)) + "\nWaiting for others");
@@ -308,11 +319,11 @@ public class Client implements Runnable {
 						gameController.disableStand();
 						// break;
 					}
-					if (in.contains("newPlayer")) {
+					if (in.startsWith("newPlayer")) {
 						onlinePlayers.add(in.replaceFirst("newPlayer", ""));
 						lobbyController.addOnline(onlinePlayers);
 					}
-					if (in.contains("showPlayerCards")) {
+					if (in.startsWith("showPlayerCards")) {
 						System.out.println("displaying cards");
 						System.out.println(table);
 						for (int i = 1; i < table.size(); i++) {
@@ -325,13 +336,13 @@ public class Client implements Runnable {
 							}
 						}
 					}
-					if (in.contains("playerInitialCard")) {
+					if (in.startsWith("playerInitialCard")) {
 						int playerID = Integer.parseInt(in.replaceFirst("playerInitialCard", ""));
 						System.out.println("initial card received");
 						table.get(playerID).add(input.readLine().replaceFirst("playerInitialCard", ""));
 						table.get(playerID).add(input.readLine().replaceFirst("playerInitialCard", ""));
 					}
-					if (in.contains("playerSignedOut")) {
+					if (in.startsWith("playerSignedOut")) {
 						onlinePlayers.remove(in.replaceFirst("playerSignedOut", ""));
 						lobbyController.addOnline(onlinePlayers);
 						if (in.replaceFirst("playerSignedOut", "").equals(username)) {
@@ -339,7 +350,7 @@ public class Client implements Runnable {
 						}
 						return;
 					}
-					if (in.contains("playersFinished")) { // Server tells client what to display
+					if (in.startsWith("playersFinished")) { // Server tells client what to display
 						System.out.println("All players finished");
 						in = input.readLine();
 						if (!in.equals("skipDealer")) {
@@ -351,7 +362,7 @@ public class Client implements Runnable {
 
 						}
 					}
-					if (in.contains("dealerCard")) {
+					if (in.startsWith("dealerCard")) {
 						try {
 							Thread.sleep(1000);
 						} catch (InterruptedException e) {
@@ -362,7 +373,7 @@ public class Client implements Runnable {
 						gameController.addCardToDealerHand(dealerCard);
 						gameController.setDealerLabel("Dealer: " + Deck.total(table.get(0)));
 					}
-					if (in.contains("dealerDone")) {
+					if (in.startsWith("dealerDone")) {
 						gameFinished = true;
 
 					}

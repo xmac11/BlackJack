@@ -89,7 +89,8 @@ public class LoginController implements Initializable {
 				thisStage.setResizable(false);
 				thisStage.setScene(lobbyScene);
 				thisStage.show();
-				thisStage.setOnCloseRequest(e -> lobbyController.thisPlayerClosedLobby());
+				thisStage.setOnCloseRequest(e ->{
+					lobbyController.thisPlayerClosedLobby();});
 			} else {
 				errorLabel.setText("Error - Wrong log in credentials");
 				errorLabel.setVisible(true);
