@@ -43,4 +43,8 @@ public class FinishedPlayers {
 	public void playerBet() {
 		this.playersBet++;
 	}	
+	
+	public void playerBetLeft() {
+		this.playersBet--;
+	}	
 }

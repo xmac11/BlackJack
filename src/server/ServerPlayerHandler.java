@@ -19,6 +19,7 @@ public class ServerPlayerHandler implements Runnable {
 	CyclicBarrier dealersTurn;
 	private int noPlayers;
 	private boolean active;
+	private boolean myTurn;
 	private int barriers;
 	private FinishedPlayers finishedPlayers;
 	private List<SocketConnection> gameQueue;
@@ -57,6 +58,7 @@ public class ServerPlayerHandler implements Runnable {
 			card1 = deck.drawCard();
 			card2 = deck.drawCard();
 		}
+		myTurn = false;
 		table.get(ID).add(card1);
 		table.get(ID).add(card2);
 		/*
@@ -178,6 +180,9 @@ public class ServerPlayerHandler implements Runnable {
 						gameQueue.get(i).getOutput().println("playerCard" + card);
 					}
 				}
+				if (in.equals("myTurn")) { // If the client passed then set active to false to break from loop
+					myTurn = true;
+				}
 				if (in.equals("p")) { // If the client passed then set active to false to break from loop
 					active = false;
 				}
@@ -196,6 +201,7 @@ public class ServerPlayerHandler implements Runnable {
 				return;
 			}
 		}
+		myTurn =false;
 		active = false;
 		socketConnection.getOutput().println("Player " + ID + " finished");
 		System.out.println("Player " + ID + " finished");
@@ -293,8 +299,9 @@ public class ServerPlayerHandler implements Runnable {
 			case 0:
 //				finishedPlayers.playerBet();
 			case 1:
+				finishedPlayers.playerBetLeft();
 				System.out.println("releasing");
-				if (active)
+				if (myTurn)
 					deckWait.release();
 			case 2:
 				dealersTurn.await();

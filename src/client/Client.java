@@ -229,6 +229,7 @@ public class Client implements Runnable {
 						}
 					}
 					if (in.equals("Make move")) { // Reads the message received and responds accordingly
+						output.println("myTurn");
 						if (pocketBlackJack) {
 							output.println("p");
 							gameController.disableHit();
