@@ -31,6 +31,8 @@ public class Client implements Runnable {
 	private int noPlayers;
 	private List<List<String>> table;
 	private PrintWriter output;
+	private Socket socket;
+	private BufferedReader input;
 	private List<String> onlinePlayers;
 	private String username;
 	private String IP;
@@ -42,6 +44,7 @@ public class Client implements Runnable {
 	private int sessionID;
 	private int betAmount;
 	private boolean isBetPlaced;
+	private int port;
 
 	public AudioClip lobbyScreenMusic = new AudioClip(getClass().getResource("/music/LobbyMusic.wav").toExternalForm());
 	public AudioClip gameScreenMusic = new AudioClip(getClass().getResource("/music/InGameMusic.wav").toExternalForm());
@@ -50,11 +53,10 @@ public class Client implements Runnable {
 	public AudioClip dealerWins = new AudioClip(getClass().getResource("/music/DealerWins.wav").toExternalForm());
 	public AudioClip draw = new AudioClip(getClass().getResource("/music/Draw.wav").toExternalForm());
 
-	public Client(List<List<String>> table, Semaphore waitForController, String IP, LobbyController lobbyController) {
+	public Client(List<List<String>> table, Semaphore waitForController, LobbyController lobbyController) {
 		this.table = table;
 		this.waitForController = waitForController;
 		output = null;
-		this.IP = IP;
 		this.lobbyController = lobbyController;
 		gameController = null;
 		this.pocketBlackJack = false;
@@ -66,8 +68,10 @@ public class Client implements Runnable {
 		this.gameController = gameController;
 	}
 
-	public void setUsername(String username) {
+	public void setInitialVariables(String username, String IP, int port) {
 		this.username = username;
+		this.IP = IP;
+		this.port = port;
 	}
 
 	public boolean isGameFinished() {
@@ -78,11 +82,11 @@ public class Client implements Runnable {
 		return isBetPlaced;
 	}
 
+	
+	
 	@Override
 	public void run() {
-		try (Socket socket = new Socket(IP, 9999);
-			 BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));) {
-			output = new PrintWriter(socket.getOutputStream(), true);
+		try{
 			onlinePlayers = new ArrayList<>();
 			inQueue = new ArrayList<>();
 			try {
@@ -90,7 +94,9 @@ public class Client implements Runnable {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			setUsername(lobbyController.getUsername());
+			socket = new Socket(IP, port);
+			output = new PrintWriter(socket.getOutputStream(), true);
+			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			System.out.println(username + " has joined");
 			output.println(username);
 			int forever = INDEFINITE;

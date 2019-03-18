@@ -45,6 +45,9 @@ public class LoginController implements Initializable {
 
 	@FXML
 	private TextField userField;
+	
+	@FXML
+	private TextField portField;
 
 	@FXML
 	private Label errorLabel;
@@ -58,6 +61,8 @@ public class LoginController implements Initializable {
 	private double ipFieldY;
 	private double passFieldX;
 	private double passFieldY;
+	private double portFieldX;
+	private double portFieldY;
 	public AudioClip welcomeVoice = new AudioClip(getClass().getResource("/music/WelcomeToCLub21.wav").toExternalForm());
 	public AudioClip loginMusic = new AudioClip(getClass().getResource("/music/LoginMusic.wav").toExternalForm());
 
@@ -70,7 +75,7 @@ public class LoginController implements Initializable {
 
 	public void joinPressed(ActionEvent event) throws IOException {
 		if (ipField.getText().trim().length() > 0 && userField.getText().trim().length() > 0
-				&& passField.getText().trim().length() > 0) {
+				&& passField.getText().trim().length() > 0 && portField.getText().trim().length() > 0 && portField.getText().matches("[0-9]+")) {
 			if (Authentication.login(userField.getText(), passField.getText())) {
 				errorLabel.setVisible(false);
 				loginMusic.stop();
@@ -78,7 +83,7 @@ public class LoginController implements Initializable {
 				Scene lobbyScene = new Scene(loader.load());
 				LobbyController lobbyController = loader.<LobbyController>getController();
 				Stage thisStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-				lobbyController.initData(ipField.getText(), userField.getText(), passField.getText(), thisStage);
+				lobbyController.initData(ipField.getText(), userField.getText(), portField.getText(), thisStage);
 				thisStage.setHeight(768);
 				thisStage.setWidth(1366);
 				thisStage.setResizable(false);
@@ -100,7 +105,9 @@ public class LoginController implements Initializable {
 		if (!(passField.getText().trim().length() > 0)) {
 			wobbleField(passField, passFieldX, passFieldY);
 		}
-
+		if(!(portField.getText().trim().length() > 0) || !portField.getText().matches("[0-9]+")) {
+			wobbleField(portField, portFieldX, portFieldY);
+		}
 	}
 
 	public void moveToPassword(ActionEvent actionEvent) {
@@ -211,6 +218,8 @@ public class LoginController implements Initializable {
 		ipFieldY = ipField.getTranslateY();
 		passFieldX = passField.getTranslateX();
 		passFieldY = passField.getTranslateY();
+		portFieldX = portField.getTranslateX();
+		portFieldY = portField.getTranslateY();
 		SQLDatabaseConnection sqlDatabaseConnection = new SQLDatabaseConnection();
 		Thread thread = new Thread(sqlDatabaseConnection);
 		thread.start();
