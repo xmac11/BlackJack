@@ -28,6 +28,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.media.AudioClip;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import static javafx.scene.media.MediaPlayer.INDEFINITE;
 
@@ -177,6 +178,7 @@ public class GameController implements Initializable {
 		stage.setTitle(title);
 		stage.setWidth(400);
 		stage.setHeight(150);
+		stage.initStyle(StageStyle.UNDECORATED);
 		Label label = new Label(message);
 
 		// yes button
