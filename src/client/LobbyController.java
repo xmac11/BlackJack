@@ -315,6 +315,8 @@ public class LobbyController implements Initializable {
 
 	public void thisPlayerClosedLobby() {
 		System.out.println("leaving");
+		if(client.isInGame())
+			client.closeGame(thisStage);
 		output.println("thisPlayerSignedOut");
 		System.exit(0);
 	}
