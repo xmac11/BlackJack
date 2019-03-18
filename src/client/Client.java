@@ -347,8 +347,8 @@ public class Client implements Runnable {
 						lobbyController.addOnline(onlinePlayers);
 						if (in.replaceFirst("playerSignedOut", "").equals(username)) {
 							lobbyController.connectionLost();
+							return;
 						}
-						return;
 					}
 					if (in.startsWith("playersFinished")) { // Server tells client what to display
 						System.out.println("All players finished");
