@@ -36,6 +36,7 @@ public class Testing {
 	public void test1() {
 		Thread clientThread = new Thread(client);
 		clientThread.start();
+		assertTrue(clientThread.isAlive());
 		//assertTrue(lobbyController.getPlayButton().isDisable());
 	}
 }
