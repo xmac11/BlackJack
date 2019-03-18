@@ -117,7 +117,7 @@ public class GameController implements Initializable {
 		if (muteButton.isSelected())
 			client.gameScreenMusic.stop();
 		else
-			client.gameScreenMusic.play(0.1);
+			client.gameScreenMusic.play(0.100);
 
 	}
 

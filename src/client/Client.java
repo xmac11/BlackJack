@@ -105,7 +105,7 @@ public class Client implements Runnable {
 			int forever = INDEFINITE;
 			lobbyScreenMusic.setCycleCount(forever);
 			if (!lobbyScreenMusic.isPlaying() && !lobbyController.muteButton.isSelected())
-				lobbyScreenMusic.play(0.1);
+				lobbyScreenMusic.play(0.100);
 			while (true) {
 				inGame = false;
 				playerLeft = false;
@@ -180,7 +180,7 @@ public class Client implements Runnable {
 				lobbyScreenMusic.stop();
 				gameScreenMusic.setCycleCount(forever);
 				if (!gameScreenMusic.isPlaying() && !gameController.muteButton.isSelected())
-					gameScreenMusic.play(0.1);
+					gameScreenMusic.play(0.100);
 				lobbyController.disableChat();
 				System.out.println("passed wait");
 				gameFinished = false;
@@ -457,7 +457,7 @@ public class Client implements Runnable {
 	public void stopGameMusic() {
 		gameScreenMusic.stop();
 		if (!lobbyScreenMusic.isPlaying() && !lobbyController.muteButton.isSelected())
-			lobbyScreenMusic.play(0.1);
+			lobbyScreenMusic.play(0.100);
 	}
 
 	public int getOtherPlayerID(int playerID) {

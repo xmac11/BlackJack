@@ -23,10 +23,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -55,6 +52,9 @@ public class LoginController implements Initializable {
 	@FXML
 	private TextField passField;
 
+	@FXML
+	protected ToggleButton muteButton;
+
 	private double userFieldX;
 	private double userFieldY;
 	private double ipFieldX;
@@ -70,6 +70,13 @@ public class LoginController implements Initializable {
 		System.out.println("Server is down.");
 		errorLabel.setText("Error - Cannot connect to server");
 		errorLabel.setVisible(true);
+	}
+
+	public void muteMusic() {
+		if (muteButton.isSelected())
+			loginMusic.stop();
+		else
+			loginMusic.play(0.100);
 
 	}
 
@@ -84,8 +91,8 @@ public class LoginController implements Initializable {
 				LobbyController lobbyController = loader.<LobbyController>getController();
 				Stage thisStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 				lobbyController.initData(ipField.getText(), userField.getText(), portField.getText(), thisStage);
-				thisStage.setHeight(768);
-				thisStage.setWidth(1366);
+//				thisStage.setHeight(768); no need since we set em in fxml
+//				thisStage.setWidth(1366); no need since we set em in fxml
 				thisStage.setResizable(false);
 				thisStage.setScene(lobbyScene);
 				thisStage.show();

@@ -85,7 +85,7 @@ public class LobbyController implements Initializable {
 		if (muteButton.isSelected())
 			client.lobbyScreenMusic.stop();
 		else
-			client.lobbyScreenMusic.play(0.1);
+			client.lobbyScreenMusic.play(0.100);
 	}
 
 	public Client getClient() {
