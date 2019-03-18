@@ -251,10 +251,10 @@ public class ServerPlayerHandler implements Runnable {
 		System.out.println("players finished");
 		socketConnection.getOutput().println("playersFinished"); // Once all threads have reached playersTurnWait they
 
-		if (finishedPlayers.getBustedPlayers() == noPlayers) { // will all be allowed to
-			socketConnection.getOutput().println("skipDealer");
-		} else {
+		if (finishedPlayers.getBustedPlayers() < gameQueue.size()) { // will all be allowed to
 			socketConnection.getOutput().println("dealerPlays");
+		} else {
+			socketConnection.getOutput().println("skipDealer");
 		}
 
 		socketConnection.getOutput().println("showPlayerCards");
@@ -291,7 +291,7 @@ public class ServerPlayerHandler implements Runnable {
 			Session.setSessionend(socketConnection.getUsername(), sessionID);
 			switch (barriers) {
 			case 0:
-				finishedPlayers.playerBet();
+//				finishedPlayers.playerBet();
 			case 1:
 				System.out.println("releasing");
 				if (active)

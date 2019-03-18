@@ -33,9 +33,10 @@ public class Server implements Runnable {
 	private ServerSocket serverSocket;
 	private FinishedPlayers finishedPlayers;
 
-	public Server() { //server constructor
+	public Server() { // server constructor
 		table = new ArrayList<>();
-		table.add(new ArrayList<>()); //table holds all of the hands at a table, index 0 will always be the dealer's hand
+		table.add(new ArrayList<>()); // table holds all of the hands at a table, index 0 will always be the dealer's
+										// hand
 		joined = new ArrayList<>(); // stores connected users
 		gameQueue = new ArrayList<>(); // stores users that are in queue for a game
 	}
@@ -45,27 +46,22 @@ public class Server implements Runnable {
 		Thread gameSession = new Thread(server);
 		gameSession.start(); // Sends off a thread that represents a game session
 
-
 	}
 
 	/* Boolean Method to use it in the testing class ServerOnTesting */
-	public static boolean serverListening(String host, int port)
-	{
+	public static boolean serverListening(String host, int port) {
 		Socket s = null;
-		try
-		{
+		try {
 			s = new Socket(host, port);
 			return true;
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			return false;
-		}
-		finally
-		{
-			if(s != null)
-				try {s.close();}
-				catch(Exception e){}
+		} finally {
+			if (s != null)
+				try {
+					s.close();
+				} catch (Exception e) {
+				}
 		}
 	}
 
@@ -78,7 +74,8 @@ public class Server implements Runnable {
 		gameStart = new GameStart();
 		gameStart.setGameStart(false);
 
-		// PlayerJoin thread is created with a selection of variables that maintain synchronisation
+		// PlayerJoin thread is created with a selection of variables that maintain
+		// synchronisation
 		PlayerJoin playerJoin = new PlayerJoin(joined, gameQueue, serverSocket, gameStart);
 		new Thread(playerJoin).start();
 
@@ -87,7 +84,8 @@ public class Server implements Runnable {
 			// main thread check if game is on and if the players are 3
 			while (!gameStart.isGameStart() && !(gameQueue.size() == 3)) {
 				try {
-					Thread.sleep(500); //Sleep the thread in between checks so that it is not constantly polling the while condition
+					Thread.sleep(500); // Sleep the thread in between checks so that it is not constantly polling the
+										// while condition
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
 				}
@@ -109,13 +107,21 @@ public class Server implements Runnable {
 			table.add(new ArrayList<>());
 			table.get(0).add(deck.drawCard());
 			table.get(0).add(deck.drawCard());
-			System.out.println("This is Dealers cards: " + table.get(0)); // Prints the dealers hand to the server console
-			/*Creates a semaphore to allow 1 thread to access a critical section, this is used to control access to the deck*/
- 			deckWait = new Semaphore(1);
-			/*Creates a CyclicBarrier to the number of players in game + the dealer to simulate a dealer waiting for all players to finish*/
+			System.out.println("This is Dealers cards: " + table.get(0)); // Prints the dealers hand to the server
+																			// console
+			/*
+			 * Creates a semaphore to allow 1 thread to access a critical section, this is
+			 * used to control access to the deck
+			 */
+			deckWait = new Semaphore(1);
+			/*
+			 * Creates a CyclicBarrier to the number of players in game + the dealer to
+			 * simulate a dealer waiting for all players to finish
+			 */
 			dealersTurn = new CyclicBarrier((gameQueue.size() + 1));
-			betWait = new CyclicBarrier(gameQueue.size()); // Creates a CyclicBarrier to wait for the bets of all the players
-			finishedPlayers = new FinishedPlayers(); // shareable class			
+			betWait = new CyclicBarrier(gameQueue.size()); // Creates a CyclicBarrier to wait for the bets of all the
+															// players
+			finishedPlayers = new FinishedPlayers(); // shareable class
 			if (gameQueue.size() > 0) { // Ensures there are players in the session
 				System.out.println("Game Starting...");
 				for (int i = 0; i < gameQueue.size(); i++) {
@@ -126,7 +132,7 @@ public class Server implements Runnable {
 					System.out.println("Player " + (i + 1) + " added"); // For debugging
 					new Thread(serverThread).start(); // Sends thread
 				}
-				while(gameQueue.size()>finishedPlayers.getPlayersBet()) {
+				while (gameQueue.size() > finishedPlayers.getPlayersBet()) {
 					try {
 						Thread.sleep(500);
 					} catch (InterruptedException e1) {
@@ -156,7 +162,8 @@ public class Server implements Runnable {
 																					// continues...
 				while (Deck.total(table.get(0)) < 17) {
 					table.get(0).add(deck.drawCard()); // Logic to make the dealer pick their cards, since the
-														// table variable passed to the threads all player handler threads will see the changes.
+														// table variable passed to the threads all player handler
+														// threads will see the changes.
 				}
 				try {
 					dealersTurn.await(); // Dealers turn is finished, all player threads waiting on this barrier in
