@@ -50,16 +50,16 @@ public class Server implements Runnable {
 
 	/* Boolean Method to use it in the testing class ServerOnTesting */
 	public static boolean serverListening(String host, int port) {
-		Socket s = null;
+		Socket socket = null;
 		try {
-			s = new Socket(host, port);
+			socket = new Socket(host, port);
 			return true;
 		} catch (Exception e) {
 			return false;
 		} finally {
-			if (s != null)
+			if (socket != null)
 				try {
-					s.close();
+					socket.close();
 				} catch (Exception e) {
 				}
 		}
