@@ -73,6 +73,7 @@ public class LobbyController implements Initializable {
 	private List<List<String>> table;
 	private PrintWriter output;
 	private String username;
+	private String port;
 
 
 
@@ -350,10 +351,11 @@ public class LobbyController implements Initializable {
 		output.println("gameStart");
 	}
 
-	public void initData(String IP, String username, String password, Stage stage) {
+	public void initData(String IP, String username, String port, Stage stage) {
 		this.IP = IP;
 		this.username = username;
 		thisStage = stage;
+		client.setInitialVariables(username, IP, Integer.parseInt(port));
 		updateData();
 		waitForController.release();
 	}
@@ -370,7 +372,7 @@ public class LobbyController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		waitForController = new Semaphore(0);
 		table = new ArrayList<>();
-		client = new Client(table, waitForController, IP, this);
+		client = new Client(table, waitForController, this);
 		playButton.setDisable(true);
 		leaveButton.setDisable(true);
 		chatView.setCellFactory(param -> new ListCell<String>() {
