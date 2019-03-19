@@ -32,7 +32,8 @@ public class SQLDatabaseConnection implements Runnable {
 
 			Statement statement = connection.createStatement();
 			String query1 = "CREATE TABLE IF NOT EXISTS User_Info (username VARCHAR(50) PRIMARY KEY," +
-					"password_hash INT NOT NULL);";
+					"password_hash VARCHAR(64) NOT NULL," + 
+					"salt VARCHAR(32) NOT NULL);";
 			statement.executeUpdate(query1);
 			String query2 = "CREATE TABLE IF NOT EXISTS Session (session_id serial," +
 					" username VARCHAR(50) references User_Info(username)," +
@@ -52,7 +53,7 @@ public class SQLDatabaseConnection implements Runnable {
 					" games_played INTEGER NOT NULL," +
 					" games_won INTEGER not null," + 
 					" funds INTEGER NOT NULL);";
-			statement.executeUpdate(query4);
+			statement.executeUpdate(query4);			
 			System.out.println("Connection established");
 
 
