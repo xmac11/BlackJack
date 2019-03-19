@@ -21,7 +21,6 @@ public class ServerPlayerHandler implements Runnable {
 	private boolean active;
 	private boolean myTurn;
 	private int barriers;
-	private int amountBet;
 	private boolean betPlaced;
 	private FinishedPlayers finishedPlayers;
 	private List<SocketConnection> gameQueue;

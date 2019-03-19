@@ -91,11 +91,11 @@ public class DatabaseTest {
         Authentication.newAccount(username4, password4);
         
         Session.startSession(username4, 1);
-        assertFalse(Session.getWin(username4, 1));
+        assertFalse(Session.getResult(username4, 1));
         assertEquals(0, Session.getWinnings(username4, 1));
 
         Session.setSessionResult(1, username4, true);
-        assertTrue(Session.getWin(username4, 1));
+        assertTrue(Session.getResult(username4, 1));
 
         Session.setWinnings(1, username4, 150);
         assertEquals(150, Session.getWinnings(username4, 1));

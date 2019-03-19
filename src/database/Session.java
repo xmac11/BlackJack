@@ -51,7 +51,7 @@ public class Session {
      * @param username username of the user
      * @param points whether the user has won or lost the game
      */
-    public static void setSessionResult(int sessionID, String username, boolean points){
+    public static void setSessionResult(int sessionID, String username, boolean result){
         String url;
         String user;
         String pass;
@@ -66,7 +66,7 @@ public class Session {
             String newPoints = "UPDATE session SET win = ? WHERE username = ? and session_id = ?;";
 
             PreparedStatement statement = connection.prepareStatement(newPoints);
-            statement.setBoolean(1,points);
+            statement.setBoolean(1,result);
             statement.setString(2,username);
             statement.setInt(3,sessionID);
             statement.executeUpdate();
@@ -85,8 +85,8 @@ public class Session {
      * @param sessionID id of the session
      * @return whether the user won the session or not
      */
-    public static boolean getWin(String username, int sessionID){
-        boolean points = false;
+    public static boolean getResult(String username, int sessionID){
+        boolean result = false;
         String url;
         String user;
         String pass;
@@ -105,7 +105,7 @@ public class Session {
             statement.setInt(2, sessionID);
             ResultSet rs = statement.executeQuery();
             while(rs.next()){
-                points = rs.getBoolean(1);
+                result = rs.getBoolean(1);
             }
 
         } catch (SQLException e) {
@@ -114,7 +114,7 @@ public class Session {
         }catch (IOException e){
             System.out.println("No properties found");
         }
-        return points;
+        return result;
     }
 
     /**
@@ -123,7 +123,7 @@ public class Session {
      * @param username username of the user
      * @param bet amount of money won or lost
      */
-    public static void setWinnings(int sessionID, String username, int bet){
+    public static void setWinnings(int sessionID, String username, int winnings){
         String url;
         String user;
         String pass;
@@ -138,7 +138,7 @@ public class Session {
                 String newPoints = "UPDATE session SET winnings = ? WHERE username = ? and session_id = ?;";
 
                 PreparedStatement statement = connection.prepareStatement(newPoints);
-                statement.setInt(1,bet);
+                statement.setInt(1,winnings);
                 statement.setString(2,username);
                 statement.setInt(3,sessionID);
                 statement.executeUpdate();
@@ -159,7 +159,7 @@ public class Session {
      * @return funds won or lost
      */
     public static int getWinnings(String username, int sessionID){
-        int points = 0;
+        int winnings = 0;
         String url;
         String user;
         String pass;
@@ -178,7 +178,7 @@ public class Session {
                 statement.setInt(2, sessionID);
                 ResultSet rs = statement.executeQuery();
                 while(rs.next()){
-                    points = rs.getInt(1);
+                    winnings = rs.getInt(1);
                 }
 
             } catch (SQLException e) {
@@ -187,7 +187,7 @@ public class Session {
         }catch (IOException e){
             System.out.println("No properties found");
         }
-        return points;
+        return winnings;
     }
 
     /**
