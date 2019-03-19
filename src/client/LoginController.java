@@ -165,9 +165,9 @@ public class LoginController implements Initializable {
 			error.setVisible(false);
 			if (username.getText().contains(" ") || (username.getText().trim().length() > 10) ||
 					(username.getText().trim().length() < 2) ||!(username.getText().matches("[a-zA-Z0-9\\_]*"))) {
-				error.setText("Username must contain only alphanumerics and be between 2-10 characters");
+				error.setText("Username must contain only alphanumerics and be 2-10 characters long");
 				error.setVisible(true);
-			} else if (password1.getText().equals(password2.getText()) && (password1.getText().trim().length() > 3)) {
+			} else if (password1.getText().equals(password2.getText()) && (password1.getText().trim().length() > 3) && !(password1.getText().trim().length()>10)) {
 				if (Authentication.newAccount(username.getText(), password1.getText())) {
 					stage.close();
 				} else {
@@ -175,7 +175,7 @@ public class LoginController implements Initializable {
 					error.setVisible(true);
 				}
 			} else {
-				error.setText("Passwords must match, contain only alphanumerics and be longer than 3 characters");
+				error.setText("Passwords must match, contain only alphanumerics and be 3-10 characters long");
 				error.setVisible(true);
 			}
 		});
