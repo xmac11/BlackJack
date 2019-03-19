@@ -99,6 +99,8 @@ public class Client implements Runnable {
 			}
 			socket = new Socket(IP, port);
 			output = new PrintWriter(socket.getOutputStream(), true);
+			lobbyController.setOutput(output);
+			lobbyController.joinButton.setDisable(false);
 			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			System.out.println(username + " has joined");
 			output.println(username);
@@ -110,7 +112,6 @@ public class Client implements Runnable {
 				inGame = false;
 				playerLeft = false;
 				String in = "";
-				lobbyController.setOutput(output);
 				System.out.println("Client back in lobby");
 				lobbyController.enableChat();
 				while (true) { // Loops this until it reaches a 'break;'

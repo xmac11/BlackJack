@@ -32,7 +32,7 @@ import javafx.stage.Stage;
 public class LobbyController implements Initializable {
 
 	@FXML
-	private Button joinButton;
+	protected Button joinButton;
 
 	@FXML
 	private Button playButton;
@@ -325,8 +325,6 @@ public class LobbyController implements Initializable {
 		String incomingText = chatField.getText();
 		if (incomingText.matches("[a-zA-Z\\s0-9\\-.,!@$%£^&?<>_+=()]*") && incomingText.trim().length() > 0) {
 			output.println("lobbyChatMessage\nlobbyChatMessage" + username +"\nlobbyChatMessage" + incomingText);
-//			output.println("lobbyChatMessage" + username);
-//			output.println("lobbyChatMessage" + incomingText);
 		} else {
 			addToChat("Error - Only letters and numbers allowed in chat");
 		}
@@ -381,6 +379,7 @@ public class LobbyController implements Initializable {
 		client = new Client(table, waitForController, this);
 		playButton.setDisable(true);
 		leaveButton.setDisable(true);
+		joinButton.setDisable(true);
 		chatView.setCellFactory(param -> new ListCell<String>() {
 			@Override
 			protected void updateItem(String item, boolean empty) {
