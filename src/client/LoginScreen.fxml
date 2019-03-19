@@ -82,6 +82,11 @@
 								<Insets bottom="40.0" top="90.0" />
 							</GridPane.margin>
 						</TextField>
+						<TextField fx:id="portField" alignment="CENTER" centerShape="true" layoutX="60.0" layoutY="153.0" maxHeight="27.0" maxWidth="167.0" minHeight="27.0" minWidth="167.0" onAction="#joinPressed" prefHeight="27.0" prefWidth="167.0" promptText="Pot" scaleShape="false" styleClass="loginTextField" text="9999" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+							<GridPane.margin>
+								<Insets bottom="5.0" />
+							</GridPane.margin>
+						</TextField>
 						<Label alignment="CENTER" centerShape="true" maxHeight="20.0" maxWidth="135.0" minHeight="20.0" minWidth="113.0" prefHeight="20.0" prefWidth="135.0" styleClass="loginLabel" text="Enter Password" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
 							<GridPane.margin>
 								<Insets bottom="120.0" />
@@ -95,11 +100,6 @@
 								<Cursor fx:constant="HAND" />
 							</cursor>
 						</Button>
-						<TextField fx:id="portField" alignment="CENTER" centerShape="true" layoutX="60.0" layoutY="153.0" maxHeight="27.0" maxWidth="167.0" minHeight="27.0" minWidth="167.0" onAction="#joinPressed" prefHeight="27.0" prefWidth="167.0" promptText="Pot" scaleShape="false" styleClass="loginTextField" text="9999" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-							<GridPane.margin>
-								<Insets bottom="5.0" />
-							</GridPane.margin>
-						</TextField>
 						<Label alignment="CENTER" centerShape="true" layoutX="114.0" layoutY="133.0" maxHeight="20.0" maxWidth="136.0" minHeight="20.0" minWidth="58.0" prefHeight="20.0" prefWidth="136.0" styleClass="loginLabel" text="Enter Port" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
 							<GridPane.margin>
 								<Insets top="100.0" />
