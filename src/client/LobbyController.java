@@ -171,15 +171,12 @@ public class LobbyController implements Initializable {
 		try {
 			loginScene = new Scene(loader.load());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		thisStage.setResizable(true);
+		thisStage.sizeToScene();
+		thisStage.setResizable(false);
 		thisStage.setScene(loginScene);
 		thisStage.show();
-		thisStage.setWidth(800);
-		thisStage.setHeight(600);
-		thisStage.setResizable(false);
 		thisStage.setOnCloseRequest(e -> System.exit(0));
 	}
 
@@ -187,22 +184,20 @@ public class LobbyController implements Initializable {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
+				client.lobbyScreenMusic.stop();
 				FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginScreen.fxml"));
 				Scene loginScene = null;
 				try {
 					loginScene = new Scene(loader.load());
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				LoginController loginController = loader.<LoginController>getController();
 				loginController.serverDown();
-				thisStage.setResizable(true);
+				thisStage.sizeToScene();
+				thisStage.setResizable(false);
 				thisStage.setScene(loginScene);
 				thisStage.show();
-				thisStage.setWidth(800);
-				thisStage.setHeight(600);
-				thisStage.setResizable(false);
 				thisStage.setOnCloseRequest(e -> System.exit(0));
 			}
 		});

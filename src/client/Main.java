@@ -24,7 +24,6 @@ public class Main extends Application {
 		Parent root = FXMLLoader.load(getClass().getResource("LoginScreen.fxml")); // login screen loads first
 		primaryStage.setTitle("Club21");
 		Scene scene = new Scene(root, WIDTH, HEIGHT); // default resolution
-		primaryStage.setResizable(true);
 		primaryStage.setScene(scene);
 		primaryStage.getIcons().add(new Image("image/appIcon.png"));
 		primaryStage.show();
