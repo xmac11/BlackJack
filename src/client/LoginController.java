@@ -73,9 +73,9 @@ public class LoginController implements Initializable {
 	}
 
 	public void muteMusic() {
-		if (muteButton.isSelected())
+		if (muteButton.isSelected()) {
 			loginMusic.stop();
-		else
+		} else
 			loginMusic.play(0.100);
 
 	}
@@ -136,7 +136,7 @@ public class LoginController implements Initializable {
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.getIcons().add(new Image("image/appIcon.png"));
 		stage.setTitle("Sign Up");
-		stage.setWidth(400);
+		stage.setWidth(600);
 		stage.setHeight(300);
 		stage.setResizable(false);
 		Label usernameLabel = new Label("Enter Username");
@@ -163,9 +163,9 @@ public class LoginController implements Initializable {
 		Button signButton = new Button("Sign up");
 		signButton.setOnAction(e -> {
 			error.setVisible(false);
-			if (username.getText().contains(" ") || !(username.getText().matches("[a-zA-Z0-9\\_]*")
-					|| (username.getText().trim().length() > 10) || (username.getText().trim().length() < 2))) {
-				error.setText("Username must not contain spaces and must be between 2-10 characters");
+			if (username.getText().contains(" ") || (username.getText().trim().length() > 10) ||
+					(username.getText().trim().length() < 2) ||!(username.getText().matches("[a-zA-Z0-9\\_]*"))) {
+				error.setText("Username must contain only alphanumerics and be between 2-10 characters");
 				error.setVisible(true);
 			} else if (password1.getText().equals(password2.getText()) && (password1.getText().trim().length() > 3)) {
 				if (Authentication.newAccount(username.getText(), password1.getText())) {
@@ -175,7 +175,7 @@ public class LoginController implements Initializable {
 					error.setVisible(true);
 				}
 			} else {
-				error.setText("Passwords must match and be longer than 3 characters");
+				error.setText("Passwords must match, contain only alphanumerics and be longer than 3 characters");
 				error.setVisible(true);
 			}
 		});
@@ -232,7 +232,7 @@ public class LoginController implements Initializable {
 		Thread thread = new Thread(sqlDatabaseConnection);
 		thread.start();
 		int forever = INDEFINITE;
-		loginMusic.setVolume(0.4);
+		loginMusic.setVolume(0.100);
 		loginMusic.setCycleCount(forever);
 		loginMusic.play();
 		welcomeVoice.play();
