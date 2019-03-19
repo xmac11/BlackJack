@@ -311,7 +311,7 @@ public class Client implements Runnable {
 					if (in.equals("breakFromBetLoop")) {
 						output.println("breakFromBetLoop");
 					}
-					if (in.startsWith("finished")) { // Server tells the client its turn is over
+					if (in.contains("finished")) { // Server tells the client its turn is over
 						System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
 						System.out.println(in + " turn... waiting for other players");
 						gameController.setLabel("Your hand: " + Deck.total(table.get(ID)) + "\nWaiting for others");
