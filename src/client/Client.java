@@ -419,7 +419,7 @@ public class Client implements Runnable {
 		} else if (Deck.total(table.get(0)) > 21) {
 			MatchHistory.setGamesWon(username, 1);
 			MatchHistory.increaseAmount(username, 2 * betAmount); // this should be 1.5
-			Session.setSessionPoints(sessionID, username, true);
+			Session.setSessionResult(sessionID, username, true);
 			gameController.setLabel("Dealer bust! You Win!");
 			Session.setBet(sessionID, username, betAmount);
 			if (!gameController.muteButton.isSelected())
@@ -431,7 +431,7 @@ public class Client implements Runnable {
 			Session.setBet(sessionID, username, 0);
 			MatchHistory.increaseAmount(username, betAmount); // take money back
 		} else if (Deck.total(table.get(ID)) > Deck.total(table.get(0))) {
-			Session.setSessionPoints(sessionID, username, true);
+			Session.setSessionResult(sessionID, username, true);
 			MatchHistory.setGamesWon(username, 1);
 			MatchHistory.increaseAmount(username, 2 * betAmount); // this should be 1.5
 			Session.setBet(sessionID, username, betAmount);

@@ -51,7 +51,7 @@ public class Session {
      * @param username username of the user
      * @param points whether the user has won or lost the game
      */
-    public static void setSessionPoints(int sessionID, String username, boolean points){
+    public static void setSessionResult(int sessionID, String username, boolean points){
         String url;
         String user;
         String pass;
