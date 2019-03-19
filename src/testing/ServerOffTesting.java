@@ -8,7 +8,7 @@ public class ServerOffTesting {
 
     @Test
     void test1() throws Exception { // Checks if the ip of the server is reachable
-        InetAddress server = InetAddress.getByName("147.188.201.15");
+        InetAddress server = InetAddress.getByName("localhost");
         assertTrue(server.isReachable(5000));
     }
 }

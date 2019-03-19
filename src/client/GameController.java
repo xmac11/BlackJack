@@ -176,7 +176,7 @@ public class GameController implements Initializable {
 		stage.setTitle(title);
 		stage.setWidth(400);
 		stage.setHeight(150);
-		stage.initStyle(StageStyle.UNDECORATED); // why undecorated?
+		stage.initStyle(StageStyle.UNDECORATED);
 		Label label = new Label(message);
 
 		// yes button
