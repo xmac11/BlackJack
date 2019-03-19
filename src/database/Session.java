@@ -29,7 +29,7 @@ public class Session {
 
 
             try (Connection connection = DriverManager.getConnection(url, user, pass)) {
-            String newPoints = "INSERT INTO session(username, win, time_start, session_id, bet) VALUES(?,false,?,?,0);";
+            String newPoints = "INSERT INTO session(username, win, time_start, session_id, winnings) VALUES(?,false,?,?,0);";
 
             PreparedStatement statement = connection.prepareStatement(newPoints);
             statement.setString(1,username);
@@ -135,7 +135,7 @@ public class Session {
             url = props.getProperty("URL");
 
             try (Connection connection = DriverManager.getConnection(url, user, pass)) {
-                String newPoints = "UPDATE session SET bet = ? WHERE username = ? and session_id = ?;";
+                String newPoints = "UPDATE session SET winnings = ? WHERE username = ? and session_id = ?;";
 
                 PreparedStatement statement = connection.prepareStatement(newPoints);
                 statement.setInt(1,bet);
@@ -171,7 +171,7 @@ public class Session {
             url = props.getProperty("URL");
 
             try (Connection connection = DriverManager.getConnection(url, user, pass)) {
-                String getPoints = "SELECT bet FROM session WHERE username = ? and session_id = ?;";
+                String getPoints = "SELECT winnings FROM session WHERE username = ? and session_id = ?;";
 
                 PreparedStatement statement = connection.prepareStatement(getPoints);
                 statement.setString(1,username);

@@ -40,7 +40,7 @@ public class SQLDatabaseConnection implements Runnable {
 					" win BOOLEAN," +
 					" time_start TIMESTAMP NOT NULL ," +
 					" time_end TIMESTAMP," +
-					" bet INT NOT NULL," +
+					" winnings INT NOT NULL," +
 					" PRIMARY KEY(session_id, username));";
 			statement.executeUpdate(query2);
 			String query3 = "CREATE TABLE IF NOT EXISTS friend_list (" +
