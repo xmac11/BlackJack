@@ -346,6 +346,7 @@ public class LobbyController implements Initializable {
 		System.out.println("join queue pressed");
 		fundsLabel.setVisible(false);
 		output.println("joinQueue");
+		joinButton.setDisable(true);
 	}
 
 	public void leaveQueue() {
