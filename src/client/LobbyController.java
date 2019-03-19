@@ -4,7 +4,6 @@
  */
 package client;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URL;
@@ -28,10 +27,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
-import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
-
-import static javafx.scene.media.AudioClip.INDEFINITE;
 
 public class LobbyController implements Initializable {
 
@@ -85,7 +81,7 @@ public class LobbyController implements Initializable {
 		if (muteButton.isSelected())
 			client.lobbyScreenMusic.stop();
 		else
-			client.lobbyScreenMusic.play(0.1);
+			client.lobbyScreenMusic.play(0.100);
 	}
 
 	public Client getClient() {

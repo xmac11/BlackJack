@@ -23,10 +23,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -55,6 +52,9 @@ public class LoginController implements Initializable {
 	@FXML
 	private TextField passField;
 
+	@FXML
+	protected ToggleButton muteButton;
+
 	private double userFieldX;
 	private double userFieldY;
 	private double ipFieldX;
@@ -70,6 +70,13 @@ public class LoginController implements Initializable {
 		System.out.println("Server is down.");
 		errorLabel.setText("Error - Cannot connect to server");
 		errorLabel.setVisible(true);
+	}
+
+	public void muteMusic() {
+		if (muteButton.isSelected()) {
+			loginMusic.stop();
+		} else
+			loginMusic.play(0.100);
 
 	}
 
@@ -84,8 +91,8 @@ public class LoginController implements Initializable {
 				LobbyController lobbyController = loader.<LobbyController>getController();
 				Stage thisStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 				lobbyController.initData(ipField.getText(), userField.getText(), portField.getText(), thisStage);
-				thisStage.setHeight(768);
-				thisStage.setWidth(1366);
+//				thisStage.setHeight(768); no need since we set em in fxml
+//				thisStage.setWidth(1366); no need since we set em in fxml
 				thisStage.setResizable(false);
 				thisStage.setScene(lobbyScene);
 				thisStage.show();
@@ -129,7 +136,7 @@ public class LoginController implements Initializable {
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.getIcons().add(new Image("image/appIcon.png"));
 		stage.setTitle("Sign Up");
-		stage.setWidth(400);
+		stage.setWidth(600);
 		stage.setHeight(300);
 		stage.setResizable(false);
 		Label usernameLabel = new Label("Enter Username");
@@ -156,11 +163,11 @@ public class LoginController implements Initializable {
 		Button signButton = new Button("Sign up");
 		signButton.setOnAction(e -> {
 			error.setVisible(false);
-			if (username.getText().contains(" ") || !(username.getText().matches("[a-zA-Z0-9\\_]*")
-					|| (username.getText().trim().length() > 10) || (username.getText().trim().length() < 2))) {
-				error.setText("Username must not contain spaces and must be between 2-10 characters");
+			if (username.getText().contains(" ") || (username.getText().trim().length() > 10) ||
+					(username.getText().trim().length() < 2) ||!(username.getText().matches("[a-zA-Z0-9\\_]*"))) {
+				error.setText("Username must contain only alphanumerics and be 2-10 characters long");
 				error.setVisible(true);
-			} else if (password1.getText().equals(password2.getText()) && (password1.getText().trim().length() > 3)) {
+			} else if (password1.getText().equals(password2.getText()) && (password1.getText().trim().length() > 3) && !(password1.getText().trim().length()>10)) {
 				if (Authentication.newAccount(username.getText(), password1.getText())) {
 					stage.close();
 				} else {
@@ -168,7 +175,7 @@ public class LoginController implements Initializable {
 					error.setVisible(true);
 				}
 			} else {
-				error.setText("Passwords must match and be longer than 3 characters");
+				error.setText("Passwords must match, contain only alphanumerics and be 3-10 characters long");
 				error.setVisible(true);
 			}
 		});
@@ -225,7 +232,7 @@ public class LoginController implements Initializable {
 		Thread thread = new Thread(sqlDatabaseConnection);
 		thread.start();
 		int forever = INDEFINITE;
-		loginMusic.setVolume(0.4);
+		loginMusic.setVolume(0.100);
 		loginMusic.setCycleCount(forever);
 		loginMusic.play();
 		welcomeVoice.play();
