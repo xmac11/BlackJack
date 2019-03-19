@@ -163,7 +163,7 @@ public class LoginController implements Initializable {
 					error.setVisible(true);
 				}
 			} else {
-				error.setText("Passwords must match, contain only alphanumerics and be 4-16 characters long");
+				error.setText("Passwords must match and be 4-16 characters long");
 				error.setVisible(true);
 			}
 		});
@@ -217,7 +217,7 @@ public class LoginController implements Initializable {
 		Thread thread = new Thread(sqlDatabaseConnection);
 		thread.start();
 		int forever = INDEFINITE;
-		loginMusic.setVolume(0.100);
+		loginMusic.setVolume(0.1);
 		loginMusic.setCycleCount(forever);
 		loginMusic.play();
 		welcomeVoice.play();
