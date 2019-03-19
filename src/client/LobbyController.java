@@ -323,7 +323,7 @@ public class LobbyController implements Initializable {
 
 	public void sendChat() {
 		String incomingText = chatField.getText();
-		if (incomingText.matches("[a-zA-Z\\s0-9\\s.,!@$%£^&?<>()]*") && incomingText.trim().length() > 0) {
+		if (incomingText.matches("[a-zA-Z\\s0-9\\-.,!@$%£^&?<>_+=()]*") && incomingText.trim().length() > 0) {
 			output.println("lobbyChatMessage\nlobbyChatMessage" + username +"\nlobbyChatMessage" + incomingText);
 //			output.println("lobbyChatMessage" + username);
 //			output.println("lobbyChatMessage" + incomingText);
