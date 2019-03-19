@@ -281,7 +281,7 @@ public class ServerPlayerHandler implements Runnable {
 		socketConnection.getOutput().println("dealerDone"); // Tells the client the dealer is finished
 		System.out.println("Dealer done");
 		socketConnection.setInLobby(true);
-		Session.setSessionend(socketConnection.getUsername(), sessionID);
+		Session.setSessionEnd(socketConnection.getUsername(), sessionID);
 		socketConnection.getSessionWait().release();
 		System.out.println("player released");
 	}
@@ -290,7 +290,7 @@ public class ServerPlayerHandler implements Runnable {
 		try {
 			System.out.println("entered trigger");
 			gameQueue.remove(socketConnection);
-			Session.setSessionend(socketConnection.getUsername(), sessionID);
+			Session.setSessionEnd(socketConnection.getUsername(), sessionID);
 			switch (barriers) {
 			case 0:
 

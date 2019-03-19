@@ -214,7 +214,7 @@ public class Client implements Runnable {
 					if (in.startsWith("betIs")) {
 						pointsAvailable = MatchHistory.getAmount(username);
 						betAmount = Integer.parseInt(in.substring(6));
-						Session.setBet(sessionID, username, -1*betAmount);
+						Session.setWinnings(sessionID, username, -1*betAmount);
 						gameController.setPointsLabel("Funds availlable: " + String.valueOf(pointsAvailable));
 						isBetPlaced = true;
 						output.println("betComplete");
@@ -413,7 +413,7 @@ public class Client implements Runnable {
 		System.out.println("Dealers cards: " + table.get(0) + " total: " + Deck.total(table.get(0)));
 		if (Deck.total(table.get(ID)) > 21) {
 			gameController.setLabel("Bust!! You lose!");
-			Session.setBet(sessionID, username, -1 * betAmount);
+			Session.setWinnings(sessionID, username, -1 * betAmount);
 			if (!gameController.muteButton.isSelected())
 				dealerWins.play(20);
 		} else if (Deck.total(table.get(0)) > 21) {
@@ -421,26 +421,26 @@ public class Client implements Runnable {
 			MatchHistory.increaseAmount(username, 2 * betAmount); // this should be 1.5
 			Session.setSessionResult(sessionID, username, true);
 			gameController.setLabel("Dealer bust! You Win!");
-			Session.setBet(sessionID, username, betAmount);
+			Session.setWinnings(sessionID, username, betAmount);
 			if (!gameController.muteButton.isSelected())
 				playerWins.play(20);
 		} else if (Deck.total(table.get(ID)) == Deck.total(table.get(0))) {
 			gameController.setLabel("Draw!");
 			if (!gameController.muteButton.isSelected())
 				draw.play(20);
-			Session.setBet(sessionID, username, 0);
+			Session.setWinnings(sessionID, username, 0);
 			MatchHistory.increaseAmount(username, betAmount); // take money back
 		} else if (Deck.total(table.get(ID)) > Deck.total(table.get(0))) {
 			Session.setSessionResult(sessionID, username, true);
 			MatchHistory.setGamesWon(username, 1);
 			MatchHistory.increaseAmount(username, 2 * betAmount); // this should be 1.5
-			Session.setBet(sessionID, username, betAmount);
+			Session.setWinnings(sessionID, username, betAmount);
 			gameController.setLabel("You win!!");
 			if (!gameController.muteButton.isSelected())
 				playerWins.play(20);
 		} else {
 			gameController.setLabel("Dealer Wins!!");
-			Session.setBet(sessionID, username, -1 * betAmount);
+			Session.setWinnings(sessionID, username, -1 * betAmount);
 			if (!gameController.muteButton.isSelected())
 				dealerWins.play(20);
 		}

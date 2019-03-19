@@ -123,7 +123,7 @@ public class Session {
      * @param username username of the user
      * @param bet amount of money won or lost
      */
-    public static void setBet(int sessionID, String username, int bet){
+    public static void setWinnings(int sessionID, String username, int bet){
         String url;
         String user;
         String pass;
@@ -158,7 +158,7 @@ public class Session {
      * @param sessionID id of the session
      * @return funds won or lost
      */
-    public static int getBet(String username, int sessionID){
+    public static int getWinnings(String username, int sessionID){
         int points = 0;
         String url;
         String user;
@@ -195,7 +195,7 @@ public class Session {
      * @param username username of the user
      * @param sessionID session to be ended
      */
-    public static void setSessionend(String username, int sessionID){
+    public static void setSessionEnd(String username, int sessionID){
         String url;
         String user;
         String pass;
