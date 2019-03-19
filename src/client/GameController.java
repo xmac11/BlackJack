@@ -6,31 +6,29 @@ package client;
 
 import java.io.PrintWriter;
 import java.net.URL;
-
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import com.sun.jmx.remote.internal.ClientNotifForwarder;
 
 import database.MatchHistory;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.media.AudioClip;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
-import static javafx.scene.media.MediaPlayer.INDEFINITE;
 
 /**
  * Part of the application that handles user input.
