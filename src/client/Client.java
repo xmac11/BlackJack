@@ -46,13 +46,13 @@ public class Client implements Runnable {
 	private boolean isBetPlaced;
 	private int port;
 
-	public AudioClip lobbyScreenMusic = new AudioClip(getClass().getResource("/music/LobbyMusic.wav").toExternalForm());
-	public AudioClip gameScreenMusic = new AudioClip(getClass().getResource("/music/InGameMusic.wav").toExternalForm());
-	public AudioClip placeYourBets = new AudioClip(
+	protected AudioClip lobbyScreenMusic = new AudioClip(getClass().getResource("/music/LobbyMusic.wav").toExternalForm());
+	protected AudioClip gameScreenMusic = new AudioClip(getClass().getResource("/music/InGameMusic.wav").toExternalForm());
+	protected AudioClip placeYourBets = new AudioClip(
 			getClass().getResource("/music/PleasePlaceYourBets.wav").toExternalForm());
-	public AudioClip playerWins = new AudioClip(getClass().getResource("/music/PlayerWins.wav").toExternalForm());
-	public AudioClip dealerWins = new AudioClip(getClass().getResource("/music/DealerWins.wav").toExternalForm());
-	public AudioClip draw = new AudioClip(getClass().getResource("/music/Draw.wav").toExternalForm());
+	protected AudioClip playerWins = new AudioClip(getClass().getResource("/music/PlayerWins.wav").toExternalForm());
+	protected AudioClip dealerWins = new AudioClip(getClass().getResource("/music/DealerWins.wav").toExternalForm());
+	protected AudioClip draw = new AudioClip(getClass().getResource("/music/Draw.wav").toExternalForm());
 
 	public Client(List<List<String>> table, Semaphore waitForController, LobbyController lobbyController) {
 		this.table = table;
@@ -74,7 +74,7 @@ public class Client implements Runnable {
 		this.IP = IP;
 		this.port = port;
 	}
-	
+
 	public boolean isInGame() {
 		return inGame;
 	}
@@ -153,15 +153,6 @@ public class Client implements Runnable {
 					if (in.equals("insufficientFunds")) {
 						lobbyController.showAddFunds();
 					}
-//					if (in.equals("playerQueue")) {
-//						in = input.readLine();
-//						inQueue.clear();
-//						while (!in.equals("queueUpdated")) {
-//							inQueue.add(in.replaceFirst("playerQueue", ""));
-//							in = input.readLine();
-//						}
-//						lobbyController.addQueue(inQueue);
-//					}
 					if (in.startsWith("playerJoinedQueue")) {
 						String player = in.replaceFirst("playerJoinedQueue", "");
 						inQueue.add(player);
@@ -176,13 +167,9 @@ public class Client implements Runnable {
 						lobbyController.addToChat(in.replaceFirst("lobbyChatMessage", ""));
 					}
 				}
-				
+
 				lobbyController.gameBegin();
-				placeYourBets.play(20);
-//				String hello = input.readLine();
-//				sessionID = Integer.parseInt(input.readLine().replaceFirst("sessionID", ""));
-//				System.out.println(hello); // The first message received is the greeting message so just print this
-//				ID = Integer.parseInt(hello.substring(15, 16));
+				
 				try {
 					waitForController.acquire();
 				} catch (InterruptedException e) {
@@ -190,8 +177,10 @@ public class Client implements Runnable {
 				}
 				lobbyScreenMusic.stop();
 				gameScreenMusic.setCycleCount(forever);
-				if (!gameScreenMusic.isPlaying() && !gameController.muteButton.isSelected())
+				if (!gameScreenMusic.isPlaying() && !gameController.muteButton.isSelected()) {
+					placeYourBets.play(20);
 					gameScreenMusic.play(0.100);
+				}
 				lobbyController.disableChat();
 				System.out.println("passed wait");
 				gameFinished = false;
@@ -201,7 +190,7 @@ public class Client implements Runnable {
 				int pointsAvailable = MatchHistory.getAmount(username);
 				gameController.setOutput(output);
 				gameController.setUsername(username);
-				 // Max of 3 players so reading one char is fine
+				// Max of 3 players so reading one char is fine
 				System.out.println(noPlayers);
 				gameController.showBetPane();
 				gameController.setPointsLabel("Funds available: " + String.valueOf(pointsAvailable));
@@ -210,14 +199,13 @@ public class Client implements Runnable {
 				gameController.disableStand();
 				table = new ArrayList<>();
 				table.add(new ArrayList<>());
-				
 				while (!gameFinished && !playerLeft) { // Loops this until it reaches a 'break;'
 					in = input.readLine();
 					System.out.println("Client in: " + in);
-					if(in.startsWith("sessionID")) {
+					if (in.startsWith("sessionID")) {
 						sessionID = Integer.parseInt(in.replaceFirst("sessionID", ""));
 					}
-					if(in.startsWith("Welcome player ")){
+					if (in.startsWith("Welcome player ")) {
 						ID = Integer.parseInt(in.substring(15, 16));
 						noPlayers = Integer.parseInt(in.substring(26, 27));
 						gameController.setNoPlayers(noPlayers);
@@ -226,7 +214,7 @@ public class Client implements Runnable {
 					if (in.startsWith("betIs")) {
 						pointsAvailable = MatchHistory.getAmount(username);
 						betAmount = Integer.parseInt(in.substring(6));
-						Session.setBet(sessionID, username, betAmount);
+						Session.setBet(sessionID, username, -1*betAmount);
 						gameController.setPointsLabel("Funds availlable: " + String.valueOf(pointsAvailable));
 						isBetPlaced = true;
 						output.println("betComplete");
@@ -269,15 +257,6 @@ public class Client implements Runnable {
 					if (in.startsWith("gameChatMessage")) {
 						gameController.addToChat(in.replaceFirst("gameChatMessage", ""));
 					}
-//					if (in.equals("playerQueue")) {
-//						in = input.readLine();
-//						inQueue.clear();
-//						while (!in.equals("queueUpdated")) {
-//							inQueue.add(in.replaceFirst("playerQueue", ""));
-//							in = input.readLine();
-//						}
-//						lobbyController.addQueue(inQueue);
-//					}
 					if (in.startsWith("playerJoinedQueue")) {
 						String player = in.replaceFirst("playerJoinedQueue", "");
 						inQueue.add(player);
@@ -330,7 +309,7 @@ public class Client implements Runnable {
 					if (in.equals("breakFromBetLoop")) {
 						output.println("breakFromBetLoop");
 					}
-					if (in.contains("finished")) { // Server tells the client its turn is over
+					if (in.equals("iHaveFinished")) { // Server tells the client its turn is over
 						System.out.println("Your hand: " + table.get(ID) + " total: " + Deck.total(table.get(ID)));
 						System.out.println(in + " turn... waiting for other players");
 						gameController.setLabel("Your hand: " + Deck.total(table.get(ID)) + "\nWaiting for others");
@@ -435,17 +414,20 @@ public class Client implements Runnable {
 		if (Deck.total(table.get(ID)) > 21) {
 			gameController.setLabel("Bust!! You lose!");
 			Session.setBet(sessionID, username, -1 * betAmount);
-			dealerWins.play(20);
+			if (!gameController.muteButton.isSelected())
+				dealerWins.play(20);
 		} else if (Deck.total(table.get(0)) > 21) {
 			MatchHistory.setGamesWon(username, 1);
 			MatchHistory.increaseAmount(username, 2 * betAmount); // this should be 1.5
 			Session.setSessionPoints(sessionID, username, true);
 			gameController.setLabel("Dealer bust! You Win!");
 			Session.setBet(sessionID, username, betAmount);
-			playerWins.play(20);
+			if (!gameController.muteButton.isSelected())
+				playerWins.play(20);
 		} else if (Deck.total(table.get(ID)) == Deck.total(table.get(0))) {
 			gameController.setLabel("Draw!");
-			draw.play(20);
+			if (!gameController.muteButton.isSelected())
+				draw.play(20);
 			Session.setBet(sessionID, username, 0);
 			MatchHistory.increaseAmount(username, betAmount); // take money back
 		} else if (Deck.total(table.get(ID)) > Deck.total(table.get(0))) {
@@ -454,11 +436,13 @@ public class Client implements Runnable {
 			MatchHistory.increaseAmount(username, 2 * betAmount); // this should be 1.5
 			Session.setBet(sessionID, username, betAmount);
 			gameController.setLabel("You win!!");
-			playerWins.play(20);
+			if (!gameController.muteButton.isSelected())
+				playerWins.play(20);
 		} else {
 			gameController.setLabel("Dealer Wins!!");
 			Session.setBet(sessionID, username, -1 * betAmount);
-			dealerWins.play(20);
+			if (!gameController.muteButton.isSelected())
+				dealerWins.play(20);
 		}
 		gameController.setPointsLabel("Funds available: " + String.valueOf(MatchHistory.getAmount(username)));
 	}

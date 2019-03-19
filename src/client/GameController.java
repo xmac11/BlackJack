@@ -113,9 +113,13 @@ public class GameController implements Initializable {
 	}
 
 	public void muteMusic() {
-		if (muteButton.isSelected())
+		if (muteButton.isSelected()) {
 			client.gameScreenMusic.stop();
-		else
+			client.dealerWins.stop();
+			client.draw.stop();
+			client.placeYourBets.stop();
+			client.playerWins.stop();
+		}else
 			client.gameScreenMusic.play(0.100);
 
 	}

@@ -21,6 +21,7 @@ public class ServerPlayerHandler implements Runnable {
 	private boolean active;
 	private boolean myTurn;
 	private int barriers;
+	private int amountBet;
 	private boolean betPlaced;
 	private FinishedPlayers finishedPlayers;
 	private List<SocketConnection> gameQueue;
@@ -132,17 +133,9 @@ public class ServerPlayerHandler implements Runnable {
 			return;
 		}
 		System.out.println("Server passed bet");
-		// socketConnection.getOutput().println(in);
 		barriers++;
 		synchronized (socketConnection.getOutput()) {
-			socketConnection.getOutput().println("startCards\n" + table.get(0).get(0) + "\n" + table.get(0).get(1) +"\n"+card1+"\n"+card2);
-			//			socketConnection.getOutput().println(table.get(0).get(0));
-			//			socketConnection.getOutput().println(table.get(0).get(1)); // Sends the dealers hand to the client
-			//			socketConnection.getOutput().println(card1);
-			//			socketConnection.getOutput().println(card2); // Draws the clients hand
-//			for (int i = 0; i < gameQueue.size(); i++) {
-//				socketConnection.getOutput().println(gameQueue.get(i).getUsername());
-//			}
+			socketConnection.getOutput().println("startCards\n" + table.get(0).get(0) + "\n" + table.get(0).get(1) + "\n" + card1 + "\n" + card2);
 		}
 
 		Runnable r = new ServerMoveThread(socketConnection, deckWait);
@@ -206,7 +199,7 @@ public class ServerPlayerHandler implements Runnable {
 		}
 		myTurn = false;
 		active = false;
-		socketConnection.getOutput().println("Player " + ID + " finished");
+		socketConnection.getOutput().println("iHaveFinished");
 		System.out.println("Player " + ID + " finished");
 		finishedPlayers.playerFinished();
 		deckWait.release();

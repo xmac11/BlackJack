@@ -75,8 +75,9 @@ public class LoginController implements Initializable {
 	public void muteMusic() {
 		if (muteButton.isSelected()) {
 			loginMusic.stop();
+			welcomeVoice.stop();
 		} else
-			loginMusic.play(0.100);
+			loginMusic.play(0.1);
 
 	}
 
@@ -91,8 +92,8 @@ public class LoginController implements Initializable {
 				LobbyController lobbyController = loader.<LobbyController>getController();
 				Stage thisStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 				lobbyController.initData(ipField.getText(), userField.getText(), portField.getText(), thisStage);
-//				thisStage.setHeight(768); no need since we set em in fxml
-//				thisStage.setWidth(1366); no need since we set em in fxml
+				thisStage.setHeight(768); 
+				thisStage.setWidth(1366); 
 				thisStage.setResizable(false);
 				thisStage.setScene(lobbyScene);
 				thisStage.show();
@@ -118,18 +119,6 @@ public class LoginController implements Initializable {
 		}
 	}
 
-	public void moveToPassword(ActionEvent actionEvent) {
-		if (userField.getText().trim().length() > 0) {
-			userField.setOnAction(e -> passField.requestFocus());
-		}
-	}
-
-	public void moveToIP(ActionEvent actionEvent) {
-		if (passField.getText().trim().length() > 0) {
-			passField.setOnAction(e -> ipField.requestFocus());
-		}
-
-	}
 
 	public void signUp() {
 		Stage stage = new Stage();
@@ -148,7 +137,6 @@ public class LoginController implements Initializable {
 		passLabel2.setTextFill(Color.WHITE);
 		error.setTextFill(Color.RED);
 		error.setVisible(false);
-
 		TextField username = new TextField();
 		username.setMaxWidth(300);
 		PasswordField password1 = new PasswordField();
@@ -214,9 +202,6 @@ public class LoginController implements Initializable {
 		timeline.play();
 	}
 
-	public void startIfFieldsFulfilled(ActionEvent actionEvent) throws IOException {
-		joinPressed(actionEvent);
-	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {

@@ -52,7 +52,6 @@ public class ServerLobbyThread implements Runnable {
 			while (socketConnection.isInLobby()) {
 				try {
 					in = socketConnection.getInput().readLine(); // ensuring that loop can break by using readline() as blocking statement
-
 					System.out.println("lobby thread in: " + in);
 					if (in.startsWith("lobbyChatMessage")) {
 						String toSend = socketConnection.getInput().readLine().substring(16) + " > "
@@ -84,6 +83,7 @@ public class ServerLobbyThread implements Runnable {
 								joined.get(i).getOutput().println("queueUpdated");
 							}
 						}
+						return;
 					}
 					if (in.equals("joinQueue")) {
 						/*client requests to join the game, thread accesses the ArrayList using a synchronized statement to ensure multiple threads
@@ -124,7 +124,6 @@ public class ServerLobbyThread implements Runnable {
 							}
 						}
 					}
-
 				} catch (IOException e) {
 					System.out.println("lobby thread error");
 					gameQueue.remove(socketConnection);
