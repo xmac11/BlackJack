@@ -94,7 +94,7 @@ public class DatabaseTest {
         assertFalse(Session.getWin(username4, 1));
         assertEquals(0, Session.getBet(username4, 1));
 
-        Session.setSessionPoints(1, username4, true);
+        Session.setSessionResult(1, username4, true);
         assertTrue(Session.getWin(username4, 1));
 
         Session.setBet(1, username4, 150);
