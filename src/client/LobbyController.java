@@ -315,7 +315,7 @@ public class LobbyController implements Initializable {
 
 	public void thisPlayerClosedLobby() {
 		System.out.println("leaving");
-		if(client.isInGame())
+		if (client.isInGame())
 			client.closeGame(thisStage);
 		output.println("thisPlayerSignedOut");
 		System.exit(0);
@@ -324,9 +324,9 @@ public class LobbyController implements Initializable {
 	public void sendChat() {
 		String incomingText = chatField.getText();
 		if (incomingText.matches("[a-zA-Z\\s0-9\\s.,!@$%£^&?<>()]*") && incomingText.trim().length() > 0) {
-			output.println("lobbyChatMessage");
-			output.println("lobbyChatMessage" + username);
-			output.println("lobbyChatMessage" + incomingText);
+			output.println("lobbyChatMessage\nlobbyChatMessage" + username +"\nlobbyChatMessage" + incomingText);
+//			output.println("lobbyChatMessage" + username);
+//			output.println("lobbyChatMessage" + incomingText);
 		} else {
 			addToChat("Error - Only letters and numbers allowed in chat");
 		}

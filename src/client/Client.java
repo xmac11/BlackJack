@@ -153,19 +153,30 @@ public class Client implements Runnable {
 					if (in.equals("insufficientFunds")) {
 						lobbyController.showAddFunds();
 					}
-					if (in.equals("playerQueue")) {
-						in = input.readLine();
-						inQueue.clear();
-						while (!in.equals("queueUpdated")) {
-							inQueue.add(in.replaceFirst("playerQueue", ""));
-							in = input.readLine();
-						}
+//					if (in.equals("playerQueue")) {
+//						in = input.readLine();
+//						inQueue.clear();
+//						while (!in.equals("queueUpdated")) {
+//							inQueue.add(in.replaceFirst("playerQueue", ""));
+//							in = input.readLine();
+//						}
+//						lobbyController.addQueue(inQueue);
+//					}
+					if (in.startsWith("playerJoinedQueue")) {
+						String player = in.replaceFirst("playerJoinedQueue", "");
+						inQueue.add(player);
+						lobbyController.addQueue(inQueue);
+					}
+					if (in.startsWith("playerLeftQueue")) {
+						String player = in.replaceFirst("playerLeftQueue", "");
+						inQueue.remove(player);
 						lobbyController.addQueue(inQueue);
 					}
 					if (in.startsWith("lobbyChatMessage")) {
 						lobbyController.addToChat(in.replaceFirst("lobbyChatMessage", ""));
 					}
 				}
+				
 				lobbyController.gameBegin();
 				placeYourBets.play(20);
 //				String hello = input.readLine();
@@ -199,6 +210,7 @@ public class Client implements Runnable {
 				gameController.disableStand();
 				table = new ArrayList<>();
 				table.add(new ArrayList<>());
+				
 				while (!gameFinished && !playerLeft) { // Loops this until it reaches a 'break;'
 					in = input.readLine();
 					System.out.println("Client in: " + in);
@@ -257,20 +269,29 @@ public class Client implements Runnable {
 					if (in.startsWith("gameChatMessage")) {
 						gameController.addToChat(in.replaceFirst("gameChatMessage", ""));
 					}
-					if (in.equals("playerQueue")) {
-						in = input.readLine();
-						inQueue.clear();
-						while (!in.equals("queueUpdated")) {
-							inQueue.add(in.replaceFirst("playerQueue", ""));
-							in = input.readLine();
-						}
+//					if (in.equals("playerQueue")) {
+//						in = input.readLine();
+//						inQueue.clear();
+//						while (!in.equals("queueUpdated")) {
+//							inQueue.add(in.replaceFirst("playerQueue", ""));
+//							in = input.readLine();
+//						}
+//						lobbyController.addQueue(inQueue);
+//					}
+					if (in.startsWith("playerJoinedQueue")) {
+						String player = in.replaceFirst("playerJoinedQueue", "");
+						inQueue.add(player);
+						lobbyController.addQueue(inQueue);
+					}
+					if (in.startsWith("playerLeftQueue")) {
+						String player = in.replaceFirst("playerLeftQueue", "");
+						inQueue.remove(player);
 						lobbyController.addQueue(inQueue);
 					}
 					if (in.equals("playerLeftGame")) {
 						playerLeft = true;
 						gameController.disableHit();
 						gameController.disableStand();
-						// break;
 					}
 					if (in.startsWith("playerCard")) {
 						int playerID = Integer.parseInt(in.replaceFirst("playerCard", ""));
@@ -286,7 +307,6 @@ public class Client implements Runnable {
 								output.println("busted");
 								gameController.disableHit();
 								gameController.disableStand();
-								// break;
 							} else if (Deck.total(table.get(ID)) == 21) {
 								System.out.println("Black Jack!");
 								gameController.setLabel("Black Jack!");
@@ -295,7 +315,6 @@ public class Client implements Runnable {
 								output.println("p");
 								gameController.disableHit();
 								gameController.disableStand();
-								// break;
 							} else {
 								output.println("move");
 								System.out.println(
@@ -317,7 +336,6 @@ public class Client implements Runnable {
 						gameController.setLabel("Your hand: " + Deck.total(table.get(ID)) + "\nWaiting for others");
 						gameController.disableHit();
 						gameController.disableStand();
-						// break;
 					}
 					if (in.startsWith("newPlayer")) {
 						onlinePlayers.add(in.replaceFirst("newPlayer", ""));

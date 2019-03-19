@@ -135,11 +135,11 @@ public class ServerPlayerHandler implements Runnable {
 		// socketConnection.getOutput().println(in);
 		barriers++;
 		synchronized (socketConnection.getOutput()) {
-			socketConnection.getOutput().println("startCards");
-			socketConnection.getOutput().println(table.get(0).get(0));
-			socketConnection.getOutput().println(table.get(0).get(1)); // Sends the dealers hand to the client
-			socketConnection.getOutput().println(card1);
-			socketConnection.getOutput().println(card2); // Draws the clients hand
+			socketConnection.getOutput().println("startCards\n" + table.get(0).get(0) + "\n" + table.get(0).get(1) +"\n"+card1+"\n"+card2);
+			//			socketConnection.getOutput().println(table.get(0).get(0));
+			//			socketConnection.getOutput().println(table.get(0).get(1)); // Sends the dealers hand to the client
+			//			socketConnection.getOutput().println(card1);
+			//			socketConnection.getOutput().println(card2); // Draws the clients hand
 //			for (int i = 0; i < gameQueue.size(); i++) {
 //				socketConnection.getOutput().println(gameQueue.get(i).getUsername());
 //			}
@@ -251,9 +251,9 @@ public class ServerPlayerHandler implements Runnable {
 
 		for (int j = 1; j < table.size(); j++) {
 			if (ID != j) {
-				socketConnection.getOutput().println("playerInitialCard" + j);
-				socketConnection.getOutput().println("playerInitialCard" + table.get(j).get(0));
-				socketConnection.getOutput().println("playerInitialCard" + table.get(j).get(1));
+				socketConnection.getOutput().println("playerInitialCard" + j + "\nplayerInitialCard" + table.get(j).get(0) + "\nplayerInitialCard" + table.get(j).get(1));
+//				socketConnection.getOutput().println("playerInitialCard" + table.get(j).get(0));
+//				socketConnection.getOutput().println("playerInitialCard" + table.get(j).get(1));
 			}
 		}
 		socketConnection.getOutput().println("initialCardsSent");
