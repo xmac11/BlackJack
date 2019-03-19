@@ -152,6 +152,7 @@ public class Client implements Runnable {
 						}
 					}
 					if (in.equals("insufficientFunds")) {
+						lobbyController.joinButton.setDisable(false);
 						lobbyController.showAddFunds();
 					}
 					if (in.startsWith("playerJoinedQueue")) {
