@@ -28,6 +28,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * Part of the application that handles user input.
@@ -115,7 +116,7 @@ public class GameController implements Initializable {
 		if (muteButton.isSelected())
 			client.gameScreenMusic.stop();
 		else
-			client.gameScreenMusic.play(0.1);
+			client.gameScreenMusic.play(0.100);
 
 	}
 
@@ -175,6 +176,7 @@ public class GameController implements Initializable {
 		stage.setTitle(title);
 		stage.setWidth(400);
 		stage.setHeight(150);
+		stage.initStyle(StageStyle.UNDECORATED);
 		Label label = new Label(message);
 
 		// yes button
