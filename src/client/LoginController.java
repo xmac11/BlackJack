@@ -120,6 +120,7 @@ public class LoginController implements Initializable {
 			if (!(portField.getText().trim().length() > 0) || !portField.getText().matches("[0-9]+")) {
 				wobbleField(portField, portFieldX, portFieldY);
 			}
+			errorLabel.setText("Error - Wrong log in credentials");
 			errorLabel.setVisible(true);
 		}
 	}
