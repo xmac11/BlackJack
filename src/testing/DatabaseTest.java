@@ -49,7 +49,7 @@ public class DatabaseTest {
     @Test
     //testing logging in and signing up
 
-    public void test1(){
+    public void test1() {
         //can't log in without signing up first
         assertFalse(Authentication.login(username1, password1));
         //create account
@@ -63,7 +63,7 @@ public class DatabaseTest {
 
     @Test
     //Testing match history table functionality
-    public  void test2(){
+    public  void test2() {
         //Testing default values after setting up new account
         Authentication.newAccount(username3,password3);
         Assert.assertEquals(0, MatchHistory.getGamesWon(username3));
