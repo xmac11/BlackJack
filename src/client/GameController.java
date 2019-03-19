@@ -143,9 +143,9 @@ public class GameController implements Initializable {
 	public void sendChat() {
 		String incomingText = textField.getText();
 		if (incomingText.matches("[a-zA-Z\\s0-9\\s.,!@$%£^&?<>()]*") && incomingText.trim().length() > 0) {
-			output.println("gameChatMessage");
-			output.println("gameChatMessage" + username);
-			output.println("gameChatMessage" + incomingText);
+			output.println("gameChatMessage\ngameChatMessage" + username + "\ngameChatMessage" + incomingText);
+//			output.println("gameChatMessage" + username);
+//			output.println("gameChatMessage" + incomingText);
 		} else {
 			addToChat("Error - Only letters and numbers allowed in chat");
 		}
