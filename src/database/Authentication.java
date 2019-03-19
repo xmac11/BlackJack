@@ -3,7 +3,13 @@ package database;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.*;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Properties;
 
 /**
@@ -22,7 +28,7 @@ public class Authentication {
         String url;
         String user;
         String pass;
-        int passwordHash = password.hashCode();
+       
         try(FileInputStream input = new FileInputStream(new File("db.properties"))){
             Properties props = new Properties();
             props.load(input);
@@ -32,7 +38,7 @@ public class Authentication {
 
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
 
-        String loginQuery = "SELECT password_hash FROM User_Info WHERE username =?";
+        String loginQuery = "SELECT password_hash, salt FROM User_Info WHERE username = ?"; 
 
         PreparedStatement statement = connection.prepareStatement(loginQuery);
         statement.setString(1, username);
@@ -40,8 +46,16 @@ public class Authentication {
         ResultSet rs = statement.executeQuery();
 
         while(rs.next()){
-            int actualHash = rs.getInt(1);
-            if(actualHash == passwordHash){
+        	String actualHash = rs.getString(1); 
+        	String salt = rs.getString(2);
+        	
+        	String passwordHash = null;
+        	try {
+				passwordHash = UserPassword.getEncryptedPassword(password, salt);
+			} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+				e.printStackTrace();
+			}           
+            if(actualHash.equals(passwordHash)){
                 login = true;
             }
         }
@@ -58,7 +72,7 @@ public class Authentication {
     }
 
     /**
-     * Allows the user ot create a new account, which is then recorded in the database
+     * Allows the user to create a new account, which is then recorded in the database
      * @param username new username
      * @param password new password
      * @return true, if the username is unique and account is created, false if such username already exists
@@ -68,25 +82,44 @@ public class Authentication {
         String url;
         String user;
         String pass;
-        int passwordHash = password.hashCode();
+        
         boolean success;
+
+        // generate salt
+        byte[] saltArray = null;
+        try {
+        	saltArray = UserPassword.generateSalt();
+        } catch (NoSuchAlgorithmException e1) {
+        	e1.printStackTrace();
+        }
+        String salt = UserPassword.bytesToHex(saltArray);
+
+        // compute hash of password
+        String passwordHash = null;
+        try {
+        	passwordHash = UserPassword.getEncryptedPassword(password, salt);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e1) {
+        	e1.printStackTrace();
+        }       
+        
         try(FileInputStream input = new FileInputStream(new File("db.properties"))){
             Properties props = new Properties();
             props.load(input);
             user = props.getProperty("username");
             pass = props.getProperty("password");
-            url = props.getProperty("URL");
-
+            url = props.getProperty("URL");  
+            
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
-            String newEntry = "INSERT INTO User_Info (username, password_hash) VALUES (?,?);";
-            String newHistory = "INSERT INTO match_history (username, games_played, games_won, funds) VALUES (?,0,0, 500);";
+        	String newEntry = "INSERT INTO User_Info (username, password_hash, salt) VALUES (?,?,?);"; 
+            String newHistory = "INSERT INTO match_history (username, games_played, games_won, funds) VALUES (?, 0, 0, 500);";
 
             PreparedStatement statement = connection.prepareStatement(newEntry);
             statement.setString(1, username);
-            statement.setInt(2, passwordHash);
+            statement.setString(2, passwordHash); 
+            statement.setString(3, salt); 
             statement.executeUpdate();
             PreparedStatement statement1 = connection.prepareStatement(newHistory);
-            statement1.setString(1,username);
+            statement1.setString(1, username);
             statement1.executeUpdate();
             success = true;
         } catch (SQLException e) {
