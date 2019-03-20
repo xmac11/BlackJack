@@ -264,6 +264,7 @@ public class LobbyController implements Initializable {
 			@Override
 			public void run() {
 				playButton.setDisable(true);
+				leaveButton.setDisable(true);
 				joinButton.setDisable(true);
 				chatView.getItems().add("Game in progress with " + noPlayers + " player"
 						+ ((Integer.parseInt(noPlayers) > 1) ? "s" : ""));
