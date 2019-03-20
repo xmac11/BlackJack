@@ -20,6 +20,7 @@ public class ServerController {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
+				ipField.setDisable(false);
 				ipField.setText(IP);
 			}
 		});
