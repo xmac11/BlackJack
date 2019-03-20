@@ -71,6 +71,7 @@ public class LobbyController implements Initializable {
 	private Label playedLabel;
 
 	private Stage thisStage;
+	private Stage gameStage;
 	private Client client;
 	private Semaphore waitForController;
 	private List<List<String>> table;
@@ -144,6 +145,7 @@ public class LobbyController implements Initializable {
 				gameController.setClient(client);
 				window.setScene(gameScene);
 				window.setHeight(900);
+				gameStage = window;
 				window.setWidth(1600);
 				window.setMinWidth(1366);
 				window.setMinHeight(768);
@@ -165,6 +167,10 @@ public class LobbyController implements Initializable {
 	}
 
 	public void signOut() {
+		if(client.isInGame()) {
+			output.println("thisPlayerLeft");
+			gameStage.close();
+		}
 		client.signOut();
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginScreen.fxml"));
 		Scene loginScene = null;
