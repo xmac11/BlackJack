@@ -1,3 +1,9 @@
+/**
+------------------------------------------------------------------------------------------------------------------------
+                                                    Login Screen
+------------------------------------------------------------------------------------------------------------------------
+ */
+
 #loginScreen{
     -fx-background-image: url("../image/loginBackground.gif");
     -fx-background-repeat: repeat;
@@ -18,13 +24,6 @@
     -fx-text-fill: #000000;
 }
 
-.gameBackground{
-    -fx-background-image: url("../image/background.jpg");
-    -fx-background-repeat: repeat;
-    -fx-background-size: 450.0 450.0;
-    -fx-background-position: center center;
-}
-
 .musicMute{
     -fx-background-image: url("../image/mute.png");
     -fx-background-color: transparent;
@@ -32,6 +31,7 @@
     -fx-background-size: 25.0 25.0;
     -fx-background-position: center center;
 }
+
 .musicMute:selected{
     -fx-background-image: url("../image/muted.png");
     -fx-background-color: transparent;
@@ -63,6 +63,12 @@
     -fx-font-weight: bold;
     -fx-font-size: 30.0px;
 }
+
+/**
+------------------------------------------------------------------------------------------------------------------------
+                                                    Lobby Screen
+------------------------------------------------------------------------------------------------------------------------
+ */
 
 .lobbyListView{
     -fx-background-color: #9aa3a8;
@@ -127,6 +133,20 @@
     -fx-text-fill: white;
 }
 
+/**
+------------------------------------------------------------------------------------------------------------------------
+                                                    Game Screen
+------------------------------------------------------------------------------------------------------------------------
+ */
+
+
+.gameBackground{
+    -fx-background-image: url("../image/background.jpg");
+    -fx-background-repeat: repeat;
+    -fx-background-size: 450.0 450.0;
+    -fx-background-position: center center;
+}
+
 .gameLabel {
     -fx-font-family: "Arial Black";
     -fx-fill: #818181;
@@ -165,6 +185,27 @@
     -fx-background-color:#333333;
     -fx-min-height:400.0px;
     -fx-min-width:200.0px;
+}
+
+.gameListView{
+    -fx-background-color: #a2adb2;
+    -fx-background-radius: 15.0;
+    -fx-border-radius: 15.0;
+
+    -fx-border-color: #030306;
+    -fx-text-fill: #ffffff;
+    -fx-opacity: 85%;
+
+}
+
+.gameChatField{
+    -fx-background-color: #c6cfd4;
+    -fx-background-radius: 15.0;
+    -fx-border-radius: 15.0;
+    -fx-border-color: #000000;
+    -fx-text-fill: #000000;
+    -fx-prompt-text-fill: #a0a0a0;
+    -fx-opacity: 85%;
 }
 
 .joinButton {

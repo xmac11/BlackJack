@@ -61,12 +61,12 @@
 						<Font size="50.0" />
 					</font>
 				</Label>
-				<VBox id="chatBox" maxHeight="400" maxWidth="400" prefHeight="400.0" prefWidth="400.0" style="-fx-border-color:#83bdc0; -fx-border-width: 10; -fx-background-color: #c6cfd4;" GridPane.rowIndex="1">
+				<VBox id="chatBox" maxHeight="400" maxWidth="400" prefHeight="400.0" prefWidth="400.0" styleClass="gameListView" GridPane.rowIndex="1">
 					<children>
-						<ListView fx:id="chatView" maxHeight="252" maxWidth="530" prefHeight="252.0" prefWidth="530.0" style="-fx-background-color: #d7d7d7" />
-						<HBox maxHeight="59" maxWidth="530" prefHeight="59.0" prefWidth="530.0" style="-fx-padding: 1, 10, 12, 12; -fx-background-color: #5b5b5b;">
+						<ListView fx:id="chatView" maxHeight="252" maxWidth="530" prefHeight="252.0" prefWidth="530.0" styleClass="gameListView"/>
+						<HBox maxHeight="59" maxWidth="530" prefHeight="59.0" prefWidth="530.0" style="-fx-padding: 1, 10, 12, 12; -fx-background-color: #5b5b5b;" styleClass="gameChatField">
 							<children>
-								<TextField fx:id="textField" alignment="CENTER" maxHeight="54" maxWidth="458" onAction="#sendChat" prefHeight="54.0" prefWidth="458.0" promptText="chat here">
+								<TextField fx:id="textField" alignment="CENTER" maxHeight="54" maxWidth="458" onAction="#sendChat" prefHeight="54.0" prefWidth="458.0" styleClass="gameChatField" promptText="chat here">
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font></TextField>
