@@ -133,6 +133,7 @@ public class Client implements Runnable {
 						lobbyController.queueLeft();
 					}
 					if (in.equals("Clear queue")) {
+						lobbyController.updateData();
 						lobbyController.clearQueue();
 					}
 					if (in.equals("Game in progress")) {
