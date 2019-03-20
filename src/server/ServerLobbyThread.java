@@ -35,11 +35,9 @@ public class ServerLobbyThread implements Runnable {
 	public void run() {
 		String in = "";
 		synchronized (socketConnection.getOutput()) {
-			socketConnection.getOutput().println("playerQueue");
 			for (int j = 0; j < gameQueue.size(); j++) {
-				socketConnection.getOutput().println("playerQueue" + gameQueue.get(j).getUsername());
+				socketConnection.getOutput().println("playerJoinedQueue" + gameQueue.get(j).getUsername());
 			}
-			socketConnection.getOutput().println("queueUpdated");
 			socketConnection.getOutput().println("activeGame" + gameStart.isGameStart());
 			for (int i = 0; i < joined.size(); i++) {
 				if (!socketConnection.getUsername().equals(joined.get(i).getUsername()))
