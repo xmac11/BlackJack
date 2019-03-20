@@ -32,20 +32,17 @@ public class Server implements Runnable {
 	private GameStart gameStart;
 	private ServerSocket serverSocket;
 	private FinishedPlayers finishedPlayers;
+	private int port;
+	private ServerController serverController;
 
-	public Server() { // server constructor
+	public Server(int port, ServerController serverController) { // server constructor
+		this.serverController = serverController;
+		this.port = port;
 		table = new ArrayList<>();
 		table.add(new ArrayList<>()); // table holds all of the hands at a table, index 0 will always be the dealer's
 										// hand
 		joined = new ArrayList<>(); // stores connected users
 		gameQueue = new ArrayList<>(); // stores users that are in queue for a game
-	}
-
-	public static void main(String[] args) {
-		Server server = new Server();
-		Thread gameSession = new Thread(server);
-		gameSession.start(); // Sends off a thread that represents a game session
-
 	}
 
 	/* Boolean Method to use it in the testing class ServerOnTesting */
@@ -76,7 +73,7 @@ public class Server implements Runnable {
 
 		// PlayerJoin thread is created with a selection of variables that maintain
 		// synchronisation
-		PlayerJoin playerJoin = new PlayerJoin(joined, gameQueue, serverSocket, gameStart);
+		PlayerJoin playerJoin = new PlayerJoin(joined, gameQueue, serverSocket, gameStart, port, serverController);
 		new Thread(playerJoin).start();
 
 		// Sends off a thread which waits on the socket to accept clients

@@ -25,9 +25,13 @@ public class PlayerJoin implements Runnable {
 	Socket socket = null;
 	boolean sessionJoinable;
 	GameStart gameStart;
+	private int port;
+	private ServerController serverController;
 
 	public PlayerJoin(List<SocketConnection> joined, List<SocketConnection> gameQueue, ServerSocket serverSocket,
-			GameStart gameStart) {
+			GameStart gameStart, int port, ServerController serverController) {
+		this.port = port;
+		this.serverController = serverController;
 		this.joined = joined;
 		this.serverSocket = serverSocket;
 		this.gameQueue = gameQueue;
@@ -38,10 +42,12 @@ public class PlayerJoin implements Runnable {
 	@Override
 	public void run() {
 		try {
-			serverSocket = new ServerSocket(9999);
+			serverSocket = new ServerSocket(port);
 			InetAddress inetAddress = InetAddress.getLocalHost();
+			serverController.setIP(InetAddress.getLocalHost().getHostAddress());
 			System.out.println("Connection launched on : " + inetAddress.getHostAddress());
 		} catch (IOException e) {
+			System.exit(0);
 			e.printStackTrace();
 		}
 		// infinite loop while waiting for players to join
@@ -49,15 +55,8 @@ public class PlayerJoin implements Runnable {
 			try {
 				System.out.println("waiting for player...");
 				socket = serverSocket.accept();
-				if (!sessionJoinable) {
-					break;
-				}
 			} catch (IOException e) {
-				if (!sessionJoinable) {
-					System.out.println("Session no longer joinable");
-					break;
-				}
-				return;
+				System.exit(0);
 			}
 			PrintWriter output = null;
 			BufferedReader input = null;
