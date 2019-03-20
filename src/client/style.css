@@ -1,3 +1,9 @@
+/**
+------------------------------------------------------------------------------------------------------------------------
+                                                    Login Screen
+------------------------------------------------------------------------------------------------------------------------
+ */
+
 #loginScreen{
     -fx-background-image: url("../image/loginBackground.gif");
     -fx-background-repeat: repeat;
@@ -64,6 +70,12 @@
     -fx-font-size: 30.0px;
 }
 
+/**
+------------------------------------------------------------------------------------------------------------------------
+                                                    Lobby Screen
+------------------------------------------------------------------------------------------------------------------------
+ */
+
 .lobbyListView{
     -fx-background-color: #9aa3a8;
     -fx-background-radius: 15.0;
@@ -127,6 +139,12 @@
     -fx-text-fill: white;
 }
 
+/**
+------------------------------------------------------------------------------------------------------------------------
+                                                    Game Screen
+------------------------------------------------------------------------------------------------------------------------
+ */
+
 .gameLabel {
     -fx-font-family: "Arial Black";
     -fx-fill: #818181;
@@ -165,6 +183,27 @@
     -fx-background-color:#333333;
     -fx-min-height:400.0px;
     -fx-min-width:200.0px;
+}
+
+.gameListView{
+    -fx-background-color: #a2adb2;
+    -fx-background-radius: 15.0;
+    -fx-border-radius: 15.0;
+
+    -fx-border-color: #030306;
+    -fx-text-fill: #ffffff;
+    -fx-opacity: 85%;
+
+}
+
+.gameChatField{
+    -fx-background-color: #c6cfd4;
+    -fx-background-radius: 15.0;
+    -fx-border-radius: 15.0;
+    -fx-border-color: #000000;
+    -fx-text-fill: #000000;
+    -fx-prompt-text-fill: #a0a0a0;
+    -fx-opacity: 85%;
 }
 
 .joinButton {
