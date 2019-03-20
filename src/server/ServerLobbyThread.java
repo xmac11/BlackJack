@@ -47,11 +47,13 @@ public class ServerLobbyThread implements Runnable {
 				joined.get(i).getOutput().println("newPlayer" + socketConnection.getUsername());
 			}
 		}
-		while (true) { // the thread reads the input from the client and then inspect several conditional statements
+		while (true) { // the thread reads the input from the client and then inspect several
+						// conditional statements
 			System.out.println(socketConnection.getUsername() + " back in lobby");
 			while (socketConnection.isInLobby()) {
 				try {
-					in = socketConnection.getInput().readLine(); // ensuring that loop can break by using readline() as blocking statement
+					in = socketConnection.getInput().readLine(); // ensuring that loop can break by using readline() as
+																	// blocking statement
 					System.out.println("lobby thread in: " + in);
 					if (in.startsWith("lobbyChatMessage")) {
 						String toSend = socketConnection.getInput().readLine().substring(16) + " > "
@@ -65,10 +67,12 @@ public class ServerLobbyThread implements Runnable {
 					}
 					if (in.equals("gameStart")) {
 						gameStart.setGameStart(true);
-						break; // loop ends, this ensures that it does not intercept any messages required for the game sequence
+						break; // loop ends, this ensures that it does not intercept any messages required for
+								// the game sequence
 					}
 					if (in.equals("breakFromLobby")) {
-						break; // loop ends, this ensures that it does not intercept any messages required for the game sequence
+						break; // loop ends, this ensures that it does not intercept any messages required for
+								// the game sequence
 					}
 					if (in.equals("thisPlayerSignedOut")) {
 						joined.remove(socketConnection);
@@ -76,21 +80,22 @@ public class ServerLobbyThread implements Runnable {
 						for (int i = 0; i < joined.size(); i++) {
 							synchronized (joined.get(i).getOutput()) {
 								joined.get(i).getOutput().println("playerSignedOut" + socketConnection.getUsername());
-								joined.get(i).getOutput().println("playerQueue");
-								for (int j = 0; j < gameQueue.size(); j++) {
-									joined.get(i).getOutput().println("playerQueue" + gameQueue.get(j).getUsername());
-								}
-								joined.get(i).getOutput().println("queueUpdated");
+								joined.get(i).getOutput().println("playerLeftQueue" + socketConnection.getUsername());
 							}
 						}
 						return;
 					}
 					if (in.equals("joinQueue")) {
-						/*client requests to join the game, thread accesses the ArrayList using a synchronized statement to ensure multiple threads
-						cannot add their paired client at the same time, ensuring the max player limit is not breached*/
+						/*
+						 * client requests to join the game, thread accesses the ArrayList using a
+						 * synchronized statement to ensure multiple threads cannot add their paired
+						 * client at the same time, ensuring the max player limit is not breached
+						 */
 						synchronized (gameQueue) { //
 							if (gameQueue.size() < 3) {
-								if (MatchHistory.getAmount(socketConnection.getUsername()) >= MINBET) { // check if the funds are enough
+								if (MatchHistory.getAmount(socketConnection.getUsername()) >= MINBET) { // check if the
+																										// funds are
+																										// enough
 									gameQueue.add(socketConnection);
 									System.out.println(gameQueue);
 									socketConnection.getOutput().println("queueJoined");
@@ -105,7 +110,8 @@ public class ServerLobbyThread implements Runnable {
 								}
 								if (gameQueue.size() == 3) {
 									gameStart.setGameStart(true);
-									break; // loop ends, this ensures that it does not intercept any messages required for the game sequence
+									break; // loop ends, this ensures that it does not intercept any messages required
+											// for the game sequence
 								}
 							}
 						}
