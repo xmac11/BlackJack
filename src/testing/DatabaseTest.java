@@ -16,7 +16,7 @@ public class DatabaseTest {
 
     @Before
     public void setUp(){
-     
+        DatabaseReinstate.databaseReinstate();
         username1 = createRandomUsername();
         password1 = "password1";
         

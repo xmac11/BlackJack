@@ -49,7 +49,7 @@ public class Session {
      * Sets whether the user has won or lost the session
      * @param sessionID id of the session
      * @param username username of the user
-     * @param points whether the user has won or lost the game
+     * @param result whether the user has won or lost the game
      */
     public static void setSessionResult(int sessionID, String username, boolean result){
         String url;

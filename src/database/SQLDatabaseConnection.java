@@ -43,11 +43,6 @@ public class SQLDatabaseConnection implements Runnable {
 					" winnings INT NOT NULL," +
 					" PRIMARY KEY(session_id, username));";
 			statement.executeUpdate(query2);
-			String query3 = "CREATE TABLE IF NOT EXISTS friend_list (" +
-					"username VARCHAR(50) references user_info(username)," +
-					" username_friend VARCHAR(50) references user_info(username) ," +
-					"PRIMARY KEY(username, username_friend));";
-			statement.executeUpdate(query3);
 			String query4 = "CREATE TABLE IF NOT EXISTS match_history (" +
 					"username VARCHAR(50) references user_info(username) PRIMARY KEY," +
 					" games_played INTEGER NOT NULL," +
