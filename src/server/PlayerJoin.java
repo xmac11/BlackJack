@@ -38,6 +38,10 @@ public class PlayerJoin implements Runnable {
 		sessionJoinable = true;
 		this.gameStart = gameStart;
 	}
+	
+	public ServerSocket getServerSocket() {
+		return serverSocket;
+	}
 
 	@Override
 	public void run() {

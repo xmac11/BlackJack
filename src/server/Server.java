@@ -61,7 +61,7 @@ public class Server implements Runnable {
 				}
 		}
 	}
-
+	
 	@Override
 	public void run() { // database connection
 		SQLDatabaseConnection sqlDatabaseConnection = new SQLDatabaseConnection();

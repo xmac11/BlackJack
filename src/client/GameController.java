@@ -29,6 +29,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import sun.net.www.content.text.plain;
 
 /**
  * Part of the application that handles user input.
@@ -36,19 +37,19 @@ import javafx.stage.StageStyle;
 public class GameController implements Initializable {
 
 	@FXML
-	private HBox hBoxDealer;
+	protected HBox hBoxDealer;
 
 	@FXML
 	protected ToggleButton muteButton;
 
 	@FXML
-	private HBox hBoxPlayer;
+	protected HBox hBoxPlayer;
 
 	@FXML
-	private HBox hBoxPlayer2;
+	protected HBox hBoxPlayer2;
 
 	@FXML
-	private HBox hBoxPlayer3;
+	protected HBox hBoxPlayer3;
 
 	@FXML
 	private Label label;
