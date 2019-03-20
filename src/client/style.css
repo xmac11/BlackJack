@@ -24,13 +24,6 @@
     -fx-text-fill: #000000;
 }
 
-.gameBackground{
-    -fx-background-image: url("../image/background.jpg");
-    -fx-background-repeat: repeat;
-    -fx-background-size: 450.0 450.0;
-    -fx-background-position: center center;
-}
-
 .musicMute{
     -fx-background-image: url("../image/mute.png");
     -fx-background-color: transparent;
@@ -38,6 +31,7 @@
     -fx-background-size: 25.0 25.0;
     -fx-background-position: center center;
 }
+
 .musicMute:selected{
     -fx-background-image: url("../image/muted.png");
     -fx-background-color: transparent;
@@ -144,6 +138,14 @@
                                                     Game Screen
 ------------------------------------------------------------------------------------------------------------------------
  */
+
+
+.gameBackground{
+    -fx-background-image: url("../image/background.jpg");
+    -fx-background-repeat: repeat;
+    -fx-background-size: 450.0 450.0;
+    -fx-background-position: center center;
+}
 
 .gameLabel {
     -fx-font-family: "Arial Black";
