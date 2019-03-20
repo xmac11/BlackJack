@@ -48,14 +48,12 @@ public class DatabaseTest {
 
     @Test
     //testing logging in and signing up
-
     public void test1() {
         //can't log in without signing up first
         assertFalse(Authentication.login(username1, password1));
         //create account
         Authentication.newAccount(username1, password1);
         assertTrue(Authentication.login(username1, password1));
-
         //can't login in with another password
         Authentication.newAccount(username2, password2);
         assertFalse(Authentication.login(username1, password2));
@@ -69,10 +67,9 @@ public class DatabaseTest {
         Assert.assertEquals(0, MatchHistory.getGamesWon(username3));
         assertEquals(0, MatchHistory.getGamesPlayed(username3));
         assertEquals(500, MatchHistory.getAmount(username3));
-
         //Testing changing values for a user
         MatchHistory.setGamesPlayed(username3, 2);
-        assertEquals(2, MatchHistory.getGamesPlayed(username3));
+        assertEquals(2, MatchHistory.getGamesPlayed(username3));   
         
         MatchHistory.setGamesWon(username3, 2);
         assertEquals(2, MatchHistory.getGamesWon(username3));
