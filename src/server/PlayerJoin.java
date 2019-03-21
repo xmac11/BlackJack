@@ -46,15 +46,15 @@ public class PlayerJoin implements Runnable {
 	@Override
 	public void run() {
 		try {
-			serverSocket = new ServerSocket(port);
-			InetAddress inetAddress = InetAddress.getLocalHost();
+			serverSocket = new ServerSocket(port); // Creates a ServerSocket
+			InetAddress inetAddress = InetAddress.getLocalHost(); // LocalHost IP is added
 			serverController.setIP(InetAddress.getLocalHost().getHostAddress());
 			System.out.println("Connection launched on : " + inetAddress.getHostAddress());
 		} catch (IOException e) {
 			System.exit(0);
 			e.printStackTrace();
 		}
-		// infinite loop while waiting for players to join
+		// Infinite loop while waiting for players to join
 		while (true) {
 			try {
 				System.out.println("waiting for player...");
@@ -69,13 +69,13 @@ public class PlayerJoin implements Runnable {
 			try {
 				output = new PrintWriter(socket.getOutputStream(), true);
 				input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				username = input.readLine();// client is asked for their username
+				username = input.readLine(); // Client is asked for their username
 			} catch (IOException exception) {
 				System.out.println("Error when joining");
 				return;
 			}
 			for (int i = 0; i < joined.size(); i++) {
-				if (joined.get(i).getUsername().equals(username)) { // checks if account is already in use and close the socket
+				if (joined.get(i).getUsername().equals(username)) { // Checks if account is already in use and close the socket
 					output.println("accountAlreadyActive");
 					try {
 						socket.close();
@@ -85,12 +85,12 @@ public class PlayerJoin implements Runnable {
 					sessionJoinable = false;
 				}
 			}
-			// socketConnection is instantiated with the relevant information and added to the ArrayList of connected users
+			// SocketConnection is instantiated with the relevant information and added to the ArrayList of connected users
 			if (sessionJoinable) {
 				SocketConnection socketConnection = new SocketConnection(socket, new Semaphore(0), output, input, true, username);
 				joined.add(socketConnection);
-				Runnable runnable = new ServerLobbyThread(socketConnection, gameQueue, joined, gameStart); // instance of ServerLobbyThread is created
-				Thread thread = new Thread(runnable); // thread starts and loops back to wait for another connection
+				Runnable runnable = new ServerLobbyThread(socketConnection, gameQueue, joined, gameStart); // Instance of ServerLobbyThread is created
+				Thread thread = new Thread(runnable); // Thread starts and loops back to wait for another connection
 				thread.start();
 			}
 			sessionJoinable = true;

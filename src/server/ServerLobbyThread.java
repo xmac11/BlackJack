@@ -45,7 +45,7 @@ public class ServerLobbyThread implements Runnable {
 				joined.get(i).getOutput().println("newPlayer" + socketConnection.getUsername());
 			}
 		}
-		while (true) { // the thread reads the input from the client and then inspect several
+		while (true) { // The thread reads the input from the client and then inspect several
 						// conditional statements
 			System.out.println(socketConnection.getUsername() + " back in lobby");
 			while (socketConnection.isInLobby()) {
