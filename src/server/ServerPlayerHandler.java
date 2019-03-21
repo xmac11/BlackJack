@@ -45,7 +45,7 @@ public class ServerPlayerHandler implements Runnable {
 
 	@Override
 	public void run() {
-		Session.startSession(socketConnection.getUsername(), sessionID);
+		Session.startSession(socketConnection.getUsername(), sessionID); // Sends the session ID to the client
 		String hello = "Welcome player " + ID + " there is " + noPlayers
 				+ " player(s) in the current session, have fun";
 		socketConnection.getOutput().println(hello); // Sends greeting to client
