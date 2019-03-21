@@ -45,23 +45,6 @@ public class Server implements Runnable {
 		gameQueue = new ArrayList<>(); // stores users that are in queue for a game
 	}
 
-	/* Boolean Method to use it in the testing class ServerOnTesting */
-	public static boolean serverListening(String host, int port) {
-		Socket socket = null;
-		try {
-			socket = new Socket(host, port);
-			return true;
-		} catch (Exception e) {
-			return false;
-		} finally {
-			if (socket != null)
-				try {
-					socket.close();
-				} catch (Exception e) {
-				}
-		}
-	}
-	
 	@Override
 	public void run() { // database connection
 		SQLDatabaseConnection sqlDatabaseConnection = new SQLDatabaseConnection();
