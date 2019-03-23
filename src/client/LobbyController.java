@@ -31,6 +31,11 @@ import javafx.stage.Stage;
 
 public class LobbyController implements Initializable {
 
+	/**
+	 * List of FXML id's used to match between the Login Screen objects and the
+	 * specific actions those objects should be utilised in.
+	 */
+
 	@FXML
 	protected Button joinButton;
 
@@ -78,6 +83,11 @@ public class LobbyController implements Initializable {
 	private PrintWriter output;
 	private String username;
 
+	/**
+	 * Method controls the 'mute' button. The muteButton is a toggle button. When selected, the lobbyMusic and
+	 * welcomeVoice audio files are stopped. Otherwise the lobbyMusic plays.
+	 */
+
 	public void muteMusic() {
 		if (muteButton.isSelected())
 			client.lobbyScreenMusic.stop();
@@ -85,10 +95,18 @@ public class LobbyController implements Initializable {
 			client.lobbyScreenMusic.play(0.100);
 	}
 
+	/**
+	 * getClient call allows this class to call methods from within the Client class.
+	 * @return client instance
+	 */
 	public Client getClient() {
 		return client;
 	}
 
+	/**
+	 * Method which controls whether the 'Add funds' button shows. Method uses the runLater call so that the button will
+	 * show after the appropriate point. This ensures the run thread is placed backwards in the thread queue.
+	 */
 	public void showAddFunds() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -99,6 +117,10 @@ public class LobbyController implements Initializable {
 		});
 	}
 
+	/**
+	 * This method sets out when to disable the chat function using the similar method of runLater. This is to
+	 * prevent the chat function in the lobby screen whilst in game.
+	 */
 	public void disableChat() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -107,6 +129,10 @@ public class LobbyController implements Initializable {
 			}
 		});
 	}
+
+	/**
+	 * This method enables the chat function.
+	 */
 
 	public void enableChat() {
 		Platform.runLater(new Runnable() {
@@ -117,12 +143,25 @@ public class LobbyController implements Initializable {
 		});
 	}
 
+	/**
+	 * This method is called when the add funds button is clicked. It adds funds to the user's account through the
+	 * increaseAmount method in the Match History class. It uses the wallet label to display the amount that the user
+	 * has in their account.
+	 */
+
 	public void addFunds() {
 		MatchHistory.increaseAmount(username, 200);
 		addFundsButton.setVisible(false);
 		walletLabel.setText("Wallet: " + MatchHistory.getAmount(username));
 		fundsLabel.setVisible(false);
 	}
+
+	/**
+	 * This method is called when a game starts - either when the user presses the 'play' button or when the
+	 * game queue reaches three users. It loads the game screen fxml file which disables the play and join buttons
+	 * in the lobby. The waitForController semaphore is released and the scene is set. The user can close the window
+	 * despite it not being finished as per the setOnCloseRequest. If the game is finished, the game music is stopped.
+	 */
 
 	public void gameBegin() {
 		Platform.runLater(new Runnable() {
@@ -167,6 +206,11 @@ public class LobbyController implements Initializable {
 		});
 	}
 
+	/**
+	 * Method controls the sign out procedure. If the client is in a game session then the window closes and the
+	 * player leaving causes the print line message to the console. Otherwise, the lobby music stops and the client is
+	 * signed out of the lobby which closes loads the login screen.
+	 */
 	public void signOut() {
 		if(client.isInGame()) {
 			output.println("thisPlayerLeft");
@@ -187,6 +231,11 @@ public class LobbyController implements Initializable {
 		thisStage.show();
 		thisStage.setOnCloseRequest(e -> System.exit(0));
 	}
+
+	/**
+	 * Method controls the scenario where connection is lost. In this instance, the lobby music stops and
+	 * the login screen is reloaded.
+	 */
 
 	public void connectionLost() {
 		Platform.runLater(new Runnable() {
@@ -211,10 +260,19 @@ public class LobbyController implements Initializable {
 		});
 	}
 
+	/**
+	 * Getter for username
+	 * @return the username String
+	 */
 	public String getUsername() {
 		return username;
 	}
 
+	/**
+	 * Method initiates the events which occur when the user joins the game queue: they are unable
+	 * to press the join button again since they have already done so and the play and leave buttons are
+	 * now enabled.
+	 */
 	public void queueJoined() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -226,6 +284,11 @@ public class LobbyController implements Initializable {
 		});
 	}
 
+	/**
+	 * Method initiates the events which occur when the user leaves the game queue: they are able
+	 * to press the join button and the play and leave buttons are
+	 * now disabled.
+	 */
 	public void queueLeft() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -237,6 +300,11 @@ public class LobbyController implements Initializable {
 		});
 	}
 
+	/**
+	 * Once users join the queue, the queue size is added to and updated.
+	 * This is done using a for loop over the queue list elements.
+	 * @param queue List of usernames in String form which are in the queue
+	 */
 	public void addQueue(List<String> queue) {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -249,6 +317,11 @@ public class LobbyController implements Initializable {
 		});
 	}
 
+	/**
+	 * Once users are logged in, this method updates the amount of online players.
+	 * Does this again through a for loop over the List of online players as Strings.
+	 * @param online List of Strings of usernames
+	 */
 	public void addOnline(List<String> online) {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -260,6 +333,12 @@ public class LobbyController implements Initializable {
 			}
 		});
 	}
+
+	/**
+	 * Method takes in a String noPlayers and disables play, leave and join buttons. This is called when
+	 * a game is in progress and displays the number of players as a String in the chat box.
+	 * @param noPlayers number of players as a String
+	 */
 
 	public void gameInProgress(String noPlayers) {
 		Platform.runLater(new Runnable() {
@@ -274,6 +353,9 @@ public class LobbyController implements Initializable {
 		});
 	}
 
+	/**
+	 * This method is used in order too set the join button to being disabled.
+	 */
 	public void joinUnavailable() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -283,6 +365,10 @@ public class LobbyController implements Initializable {
 		});
 	}
 
+	/**
+	 * ClearQueue method is called when a game is finished and the in game queue is then cleared of all
+	 * the players. The leave and play buttons are then disabled and the join button is reenabled.
+	 */
 	public void clearQueue() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -295,6 +381,11 @@ public class LobbyController implements Initializable {
 			}
 		});
 	}
+
+	/**
+	 * This method is used to update the database fields such as the gamesPlayed, gamesWon and amount in
+	 * the user's wallet.
+	 */
 
 	public void updateData() {
 		Platform.runLater(new Runnable() {
@@ -317,6 +408,10 @@ public class LobbyController implements Initializable {
 		});
 	}
 
+	/**
+	 * Method called when player closes lobby screen which outputs a message to the console stating that the
+	 * player signed out.
+	 */
 	public void thisPlayerClosedLobby() {
 		System.out.println("leaving");
 		if (client.isInGame())
@@ -325,6 +420,12 @@ public class LobbyController implements Initializable {
 		System.exit(0);
 	}
 
+	/**
+	 * Method for sending messages via the chat box. The field's text is stored inside the incomingText String and
+	 * the method checks that the strings are of an appropriate type (with only normal GB English keyboard symbols
+	 * numbers and letters allowed - as per the regex). The length has to be above 0 to prevent users spamming the
+	 * chat box with empty messages. If not an error message is printed to the chat box.
+	 */
 	public void sendChat() {
 		String incomingText = chatField.getText();
 		if (incomingText.matches("[a-zA-Z\\s0-9\\-.,!@$%£^&?<>_+=()]*") && incomingText.trim().length() > 0) {
@@ -335,6 +436,11 @@ public class LobbyController implements Initializable {
 		chatField.setText("");
 	}
 
+	/**
+	 * Method takes in a String message and displays it in the chatView. There is automatic scrolling down to the
+	 * lower most message when multiple messages are on screen through .scrollTo the size of the list minus 1.
+	 * @param message
+	 */
 	public void addToChat(String message) {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -346,6 +452,9 @@ public class LobbyController implements Initializable {
 
 	}
 
+	/**
+	 * Method joins the user to the queue on pushing the join queue button.
+	 */
 	public void joinQueue() {
 		System.out.println("join queue pressed");
 		fundsLabel.setVisible(false);
@@ -353,14 +462,29 @@ public class LobbyController implements Initializable {
 		joinButton.setDisable(true);
 	}
 
+	/**
+	 * Method joins the user to the queue on pushing the leave queue button.
+	 */
 	public void leaveQueue() {
 		output.println("leaveQueue");
 	}
 
-	public void startGame() throws IOException {
+	/**
+	 * Method called to show that the game has been started using output String.
+	 */
+	public void startGame() {
 		output.println("gameStart");
+
 	}
 
+	/**
+	 * Method takes in the IP, the username, the port and the stage. These are set as the initial variables for
+	 * the client and the data is updated using these. Then the semaphore is released with this data.
+	 * @param IP number
+	 * @param username name
+	 * @param port number
+	 * @param stage lobbyscreen
+	 */
 	public void initData(String IP, String username, String port, Stage stage) {
 		this.username = username;
 		thisStage = stage;
@@ -369,14 +493,30 @@ public class LobbyController implements Initializable {
 		waitForController.release();
 	}
 
+	/**
+	 * Outputs the text
+	 * @return text from the printwriter is output.
+	 */
 	public PrintWriter getOutput() {
 		return output;
 	}
 
+	/**
+	 * Text from the output of the print writer is taken in and set to the output instance variable.
+	 * @param output text taken in.
+	 */
 	public void setOutput(PrintWriter output) {
 		this.output = output;
 	}
 
+	/**
+	 * Method which starts automatically. Table is created in addition to a client instance with the table and the semaphore.
+	 * Play, leave and join buttons are set to desabled initially and the chatview is sent parameters which outline the cell format
+	 * and positioning.
+	 * The client thread is started.
+	 * @param location
+	 * @param resources
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		waitForController = new Semaphore(0);
@@ -404,6 +544,10 @@ public class LobbyController implements Initializable {
 
 	}
 
+	/**
+	 * THESE METHODS ARE NOT USED
+	 * @return
+	 */
 	public Stage getThisStage() {
 		return thisStage;
 	}
