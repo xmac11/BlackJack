@@ -160,7 +160,8 @@ public class LobbyController implements Initializable {
 					if (!client.isGameFinished()) {
 						e.consume();
 						client.closeGame(window);
-					}
+					}else 
+						client.stopGameMusic();
 				});
 			}
 		});
