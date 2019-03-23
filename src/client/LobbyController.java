@@ -171,6 +171,7 @@ public class LobbyController implements Initializable {
 			output.println("thisPlayerLeft");
 			gameStage.close();
 		}
+		client.lobbyScreenMusic.stop();
 		client.signOut();
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginScreen.fxml"));
 		Scene loginScene = null;
