@@ -3,8 +3,8 @@
 ### A system that allows users to play game of Blackjack against each other
 ##### Basic Objectives:
  - Allow users to login using their account
- - Allo users to wait in a lobby where they can chat or join games
- - Allow users to play a game with up to 3 other players
+ - Allow users to wait in a lobby where they can chat or join games
+ - Allow users to play a game with up to 2 other players
 
 ## Usage
 On Windows, Linux or MacOS:
