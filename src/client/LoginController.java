@@ -35,9 +35,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-/**
- * Class responsible for controlling the actions of the Login Screen.
- */
+
 public class LoginController implements Initializable {
 
     /**
@@ -91,8 +89,10 @@ public class LoginController implements Initializable {
     }
 
     /**
-     *
+     * Method controls the 'mute' button. The muteButton is a toggle button. When selected, the loginMusic and
+     * welcomeVoice audio files are stopped. Otherwise the loginmusic plays.
      */
+
     public void muteMusic() {
         if (muteButton.isSelected()) {
             loginMusic.stop();
@@ -101,6 +101,20 @@ public class LoginController implements Initializable {
             loginMusic.play(0.1);
 
     }
+
+    /**
+     * This method controls the actions undertaken when the join button (denoted with the word "start") is pressed.
+     * The error label visibility is set to false unless an error occurs. The method checks that the ipField, userField,
+     * passField and portFields are all provided with the correct entries. Entries of less than 1 length are classes as
+     * incorrect entries as provided by the if statements. The entries for the portfield must only be of type numeric.
+     * This is set using the regex 0-9.
+     *
+     * In this method the database is checked against the provided userfield and passfield text entries. If it is a perfect
+     * match then the login music stops and the lobbyscreen loads and opens. However if they are not a match then the appropriate
+     * error label vecomes visible and the wobbleField method is called.
+     * @param event start button is pressed
+     * @throws IOException for .load in the case that it cannot load the screen
+     */
 
     public void joinPressed(ActionEvent event) throws IOException {
         errorLabel.setVisible(false);
@@ -145,6 +159,21 @@ public class LoginController implements Initializable {
             errorLabel.setVisible(true);
         }
     }
+
+    /**
+     * The signUp method is called when the user clickes the "Sign up" label at the bottom of the
+     * login screen. It ooens a new stage, which is a very basic small screen housing only a username
+     * text field and two password text fields (so that they ensure they enter the correct password
+     * that they initially desired to enter).
+     *
+     * Once the stage is set, the sign up button's actions are controlled. Upon clicking the button,
+     * the username and password field entries are checked that only alphanumeric are entered = otherwise
+     * an error label appears. Limits for legnth are also set with a minimum of 4 and a maximum of 16 for passwords
+     * and 2-10 for usernames. A
+     * permitted username and password is then stored in the new account table in the database.
+     *
+     * The cancel button, once pressed, closes the sign up window.
+     */
 
     public void signUp() {
         Stage stage = new Stage();
@@ -216,6 +245,13 @@ public class LoginController implements Initializable {
 
     }
 
+    /**
+     * This method initiates the fields 'wobble' movement whenever there is missing/wrong information in one or more of the
+     * fields.
+     * @param field the textfield text entered
+     * @param X the position of the field on the x axis
+     * @param Y the position of the field on the y axis
+     */
     public void wobbleField(TextField field, double X, double Y) {
         Timeline timeline = new Timeline();
         timeline.getKeyFrames().addAll(new KeyFrame(Duration.ZERO, // set start position at 0
@@ -229,6 +265,13 @@ public class LoginController implements Initializable {
         timeline.play();
     }
 
+    /**
+     * THis method runs automatically when the login screen is first opened and starts the thread foor the SQL
+     * database connection. The login music and welcome voice also starts here automsatically. The music is set to run indefinitely
+     * so that it will coninue looping until the screen is closed.
+     * @param location FXML file location
+     * @param resources locale specific resources for the login screen
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         userFieldX = userField.getTranslateX();
@@ -242,9 +285,8 @@ public class LoginController implements Initializable {
         SQLDatabaseConnection sqlDatabaseConnection = new SQLDatabaseConnection();
         Thread thread = new Thread(sqlDatabaseConnection);
         thread.start();
-        int forever = INDEFINITE;
         loginMusic.setVolume(0.1);
-        loginMusic.setCycleCount(forever);
+        loginMusic.setCycleCount(INDEFINITE);
         loginMusic.play();
         welcomeVoice.play();
     }
