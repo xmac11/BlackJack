@@ -1,6 +1,6 @@
 /**
  * Author: Group21 - Final version
- * Class GameController: This is the Controller for the GameScreen
+ * Class GameController: Class responsible for controlling Game GUI
  */
 package client;
 
@@ -113,6 +113,11 @@ public class GameController implements Initializable {
 		output.println("h");
 	}
 
+	/**
+	 * Sets the music On and Off
+	 * When mute button is clicked all the sounds stop
+	 * and when its back on the background music plays again
+	 */
 	public void muteMusic() {
 		if (muteButton.isSelected()) {
 			client.gameScreenMusic.stop();
@@ -129,6 +134,9 @@ public class GameController implements Initializable {
 		this.client = client;
 	}
 
+	/**
+	 * Disables and sets the chat off
+	 */
 	public void endChat() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -143,49 +151,66 @@ public class GameController implements Initializable {
 		this.ID = ID;
 	}
 
+	/**
+	 * Checks if the text the user wants to send into the Chat is in the valid format
+	 * Users are not able to send double quotes in their message
+	 */
 	public void sendChat() {
 		String incomingText = textField.getText();
-		if (incomingText.matches("[a-zA-Z\\s0-9\\-.,!@$%£^&?<>_+=()]*") && incomingText.trim().length() > 0) {
-			output.println("gameChatMessage\ngameChatMessage" + username + "\ngameChatMessage" + incomingText);
+		if (incomingText.matches("[a-zA-Z\\s0-9\\-.,!@$%£^&?<>_+=()]*") && incomingText.trim().length() > 0) { // Checks if the incomingText is valid
+			output.println("gameChatMessage\ngameChatMessage" + username + "\ngameChatMessage" + incomingText); // Outputs the text
 		} else {
-			addToChat("Error - Only letters and numbers allowed in chat");
+			addToChat("Error - Only letters and numbers allowed in chat"); // Sends an appropriate error message
 		}
-		textField.setText("");
+		textField.setText(""); // Message is sent within the system as String
 	}
 
+	/**
+	 * Adds the messages in the chat
+	 * @param message
+	 */
 	public void addToChat(String message) {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				chatView.getItems().add(message);
-				chatView.scrollTo(chatView.getItems().size() - 1);
+				chatView.getItems().add(message); // Adds the message
+				chatView.scrollTo(chatView.getItems().size() - 1); // Scrolls to the next line
 			}
 		});
 	}
 
+	/**
+	 * It closes the window when the connection is closed
+	 */
 	public void connectionLost() {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				stage.close();
+				stage.close(); // Window closes
 			}
 		});
 	}
 
+	/**
+	 * It is activated when the user closes the window
+	 * @param title
+	 * @param message
+	 * @return confirm boolean value
+	 */
 	public static boolean displayConfirmBox(String title, String message) {
 
-		Stage stage = new Stage();
-		stage.initModality(Modality.APPLICATION_MODAL);
+		Stage stage = new Stage(); // Creates new window
+		stage.initModality(Modality.APPLICATION_MODAL); // Blocks events to other windows
 		stage.setTitle(title);
 		stage.setWidth(400);
 		stage.setHeight(150);
 		stage.initStyle(StageStyle.UNDECORATED);
-		Label label = new Label(message);
+		Label label = new Label(message); // Creates a lable with the input message
 
 		// yes button
 		Button yesButton = new Button("Yes");
 		yesButton.setOnAction(e -> {
-			confirm = true;
+			confirm = true; // Boolean value to check the option of the user
 			stage.close();
 
 		});
@@ -197,20 +222,26 @@ public class GameController implements Initializable {
 			stage.close();
 		});
 
-		HBox hBox = new HBox(10);
-		hBox.getChildren().addAll(label, yesButton, noButton);
+		HBox hBox = new HBox(10); // Creates new HBox
+		hBox.getChildren().addAll(label, yesButton, noButton); // Adds the elements in the HBox
 		hBox.setAlignment(Pos.CENTER);
-		Scene scene = new Scene(hBox, 250, 300);
-		stage.setScene(scene);
+		Scene scene = new Scene(hBox, 250, 300); // Creates a new scene and adds the HBox
+		stage.setScene(scene); // Window closes
 		stage.showAndWait();
 
-		return confirm;
+		return confirm; // Returns the boolean value
 	}
 
+	/**
+	 * Prints the name of the player who left
+	 */
 	public void playerLeft() {
 		output.println("playerLeftGame");
 	}
 
+	/**
+	 * It runs when the player click the 'Stand' button, his turn ends
+	 */
 	public void onStandButtonClicked() {
 		disableHit();
 		disableStand();
@@ -226,6 +257,10 @@ public class GameController implements Initializable {
 		this.noPlayers = noPlayers;
 	}
 
+	/**
+	 * Sets the text as a visible label
+	 * @param text
+	 */
 	public void setLabel(String text) {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -236,11 +271,18 @@ public class GameController implements Initializable {
 		});
 	}
 
+	/**
+	 * GameScreen and GameMusic closes
+	 */
 	public void closeGameScreen() {
 		client.stopGameMusic();
 		stage.close();
 	}
 
+	/**
+	 * Sets the Label of dealer visible
+	 * @param text
+	 */
 	public void setDealerLabel(String text) {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -251,6 +293,10 @@ public class GameController implements Initializable {
 		});
 	}
 
+	/**
+	 * Sets the label of the points
+	 * @param text
+	 */
 	public void setPointsLabel(String text) {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -261,15 +307,23 @@ public class GameController implements Initializable {
 		});
 	}
 
+	/**
+	 * Gets the card and creates a String file out of it
+	 * @param card
+	 * @return file
+	 */
 	public static String cardToFile(String card) {
 		String file = card;
-		file = file.replaceAll(" ", "_of_");
-		file = file.toLowerCase();
-		file += ".png";
+		file = file.replaceAll(" ", "_of_"); // Replaces " "
+		file = file.toLowerCase(); // Converts to lowerCase
+		file += ".png"; // Adds the .png extension
 		System.out.println("card file:" + file);
 		return file;
 	}
 
+	/**
+	 * Disables the hit Button
+	 */
 	public void disableHit() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -279,6 +333,9 @@ public class GameController implements Initializable {
 		});
 	}
 
+	/**
+	 * Disables the stand Button
+	 */
 	public void disableStand() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -288,6 +345,9 @@ public class GameController implements Initializable {
 		});
 	}
 
+	/**
+	 * Enables the hit Button
+	 */
 	public void enableHit() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -297,6 +357,9 @@ public class GameController implements Initializable {
 		});
 	}
 
+	/**
+	 * Disables the stand Button
+	 */
 	public void enableStand() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -306,6 +369,9 @@ public class GameController implements Initializable {
 		});
 	}
 
+	/**
+	 * Enables the leave Button
+	 */
 	public void showLeaveButton() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -316,6 +382,11 @@ public class GameController implements Initializable {
 		});
 	}
 
+	/**
+	 * Loads up the image if the card
+	 * @param card
+	 * @return new Image of the card
+	 */
 	public Image getImage(String card) {
 		if (card.contains("facedown")) {
 			return new Image("/image/Playing Cards/" + card);
@@ -324,16 +395,21 @@ public class GameController implements Initializable {
 		}
 	}
 
+	/**
+	 * Adds cards to Player's hand
+	 * @param card
+	 */
 	public void addCardToPlayerHand(String card) {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				ImageView cardImage = new ImageView();
+				ImageView cardImage = new ImageView(); // Creates an ImageView
 				cardImage.setFitHeight(150);
 				cardImage.setFitWidth(100);
 				Image image = getImage(card);
-				cardImage.setImage(image);
-				hBoxPlayer.getChildren().add(cardImage);
+				cardImage.setImage(image); // Inputs the card image inside the ImageView
+				hBoxPlayer.getChildren().add(cardImage); // Adds it inside the HBox
+				// Resize the HBox in case there are > 4 cards (to avoid overlapping)
 				if (hBoxPlayer.getChildren().size() > 4) {
 					List<ImageView> smallerImages = new ArrayList<>();
 					for (int i = 0; i < hBoxPlayer.getChildren().size(); i++) {
@@ -345,6 +421,7 @@ public class GameController implements Initializable {
 					}
 					hBoxPlayer.getChildren().addAll(smallerImages);
 				}
+				// Resize the HBox in case there are > 3 cards (to avoid overlapping)
 				if (hBoxPlayer.getChildren().size() > 3) {
 					switch (noPlayers) {
 					case 3:
@@ -376,17 +453,23 @@ public class GameController implements Initializable {
 		});
 	}
 
+	/**
+	 * Adds card to Opposing Player's hand
+	 * @param player
+	 * @param card
+	 */
 	public void addCardToOpposingPlayerHand(int player, String card) {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				ImageView cardImage = new ImageView();
+				ImageView cardImage = new ImageView(); // Creates an ImageView
 				cardImage.setFitHeight(150);
 				cardImage.setFitWidth(100);
 				javafx.scene.image.Image image = getImage(card);
-				cardImage.setImage(image);
+				cardImage.setImage(image); // Inputs the image of the card inside the ImageView
 				if (player == 2) {
 					hBoxPlayer2.getChildren().add(cardImage);
+					// Resizes to avoid overlapping
 					if (hBoxPlayer2.getChildren().size() > 3 || hBoxPlayer.getChildren().size() > 3) {
 						List<ImageView> smallerImages = new ArrayList<>();
 						for (int i = 0; i < hBoxPlayer2.getChildren().size(); i++) {
@@ -400,6 +483,7 @@ public class GameController implements Initializable {
 					}
 				} else {
 					hBoxPlayer3.getChildren().add(cardImage);
+					// Resizes to avoid overlapping
 					if (hBoxPlayer3.getChildren().size() > 3 || hBoxPlayer.getChildren().size() > 3) {
 						List<ImageView> smallerImages = new ArrayList<>();
 						for (int i = 0; i < hBoxPlayer3.getChildren().size(); i++) {
@@ -416,20 +500,27 @@ public class GameController implements Initializable {
 		});
 	}
 
+	/**
+	 * Adds card to dealer's hand
+	 * @param card
+	 */
 	public void addCardToDealerHand(String card) {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				ImageView cardImage = new ImageView();
+				ImageView cardImage = new ImageView(); // Creates an ImageView
 				cardImage.setFitHeight(150);
 				cardImage.setFitWidth(100);
 				Image image = getImage(card);
-				cardImage.setImage(image);
+				cardImage.setImage(image); // Inputs the image of the card inside the ImageView
 				hBoxDealer.getChildren().add(cardImage);
 			}
 		});
 	}
 
+	/**
+	 * Remove dealer's facedown cards
+	 */
 	public void removeDealerFacedown() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -439,6 +530,10 @@ public class GameController implements Initializable {
 		});
 	}
 
+	/**
+	 * Remove player's facedown cards
+	 * @param player
+	 */
 	public void removeFacedown(int player) {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -452,6 +547,10 @@ public class GameController implements Initializable {
 		});
 	}
 
+	/**
+	 * Sets the playing table based on the amount of players
+	 * @param table
+	 */
 	public void setTable(List<List<String>> table) {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -515,6 +614,9 @@ public class GameController implements Initializable {
 		betAmount.setText(Integer.toString(MINBET));
 	}
 
+	/**
+	 * Sets the betPane visible
+	 */
 	public void showBetPane() {
 		fundsAvailable = MatchHistory.getAmount(username);
 		Platform.runLater(new Runnable() {
@@ -525,6 +627,9 @@ public class GameController implements Initializable {
 		});
 	}
 
+	/**
+	 * Sets the betPane off
+	 */
 	public void hideBetPane() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -543,10 +648,6 @@ public class GameController implements Initializable {
 		this.output = output;
 	}
 
-	public void chatButtonPressed() {
-		sendChat();
-	}
-
 	public Stage getStage() {
 		return stage;
 	}
@@ -555,14 +656,27 @@ public class GameController implements Initializable {
 		this.stage = stage;
 	}
 
+	/**
+	 * Sends the text to the chat field when chat Button is pressed
+	 */
+	public void chatButtonPressed() {
+		sendChat();
+	}
+
+	/**
+	 * Increases the bet of each player
+	 */
 	public void increaseBet() {
 		String betString = betAmount.getText();
-		int bet = Integer.parseInt(betString);
+		int bet = Integer.parseInt(betString); // Parses the String betString into int
 		if (bet < fundsAvailable) {
-			betAmount.setText(Integer.toString(bet + MINBET));
+			betAmount.setText(Integer.toString(bet + MINBET)); // MINBET refers to the minimum betting amount of 5
 		}
 	}
 
+	/**
+	 * Sets the label off
+	 */
 	public void hideLabel() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -572,20 +686,26 @@ public class GameController implements Initializable {
 		});
 	}
 
+	/**
+	 * Decreases the bet of each player
+	 */
 	public void decreaseBet() {
 		String betString = betAmount.getText();
-		int bet = Integer.parseInt(betString);
+		int bet = Integer.parseInt(betString); // Parses the String betString into int
 		if (bet > MINBET) {
-			betAmount.setText(Integer.toString(bet - MINBET));
+			betAmount.setText(Integer.toString(bet - MINBET)); // MINBET refers to the minimum betting amount of 5
 		}
 	}
 
+	/**
+	 * Places the bet of each player
+	 */
 	public void placeBet() {
 		String betString = betAmount.getText();
-		int bet = Integer.parseInt(betString);
-		MatchHistory.reduceAmount(username, bet);
-		output.println("betIs " + bet);
-		hideBetPane();
+		int bet = Integer.parseInt(betString); // Parses the String betString into int
+		MatchHistory.reduceAmount(username, bet); // Reduces the betting amount from player's wallet
+		output.println("betIs " + bet); // Prints the bet amount
+		hideBetPane(); // BetPane closes
 	}
 
 }
