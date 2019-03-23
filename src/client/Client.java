@@ -462,10 +462,10 @@ public class Client implements Runnable {
 	public void declareWinner() {
 		System.out.println("Dealers cards: " + table.get(0) + " total: " + Deck.total(table.get(0)));
 		if (Deck.total(table.get(ID)) > 21) {
-			gameController.setLabel("Bust!! You lose!");
-			Session.setWinnings(sessionID, username, -1 * betAmount);
+			gameController.setLabel("Bust!! You lose!");	//Displays the result
+			Session.setWinnings(sessionID, username, -1 * betAmount); //Updates the winnings for the game
 			if (!gameController.muteButton.isSelected())
-				dealerWins.play(20);
+				dealerWins.play(20); //Announces the result
 		} else if (Deck.total(table.get(0)) > 21) {
 			MatchHistory.setGamesWon(username, 1);
 			MatchHistory.increaseAmount(username, 2 * betAmount); 
@@ -482,8 +482,8 @@ public class Client implements Runnable {
 			MatchHistory.increaseAmount(username, betAmount); // take money back
 		} else if (Deck.total(table.get(ID)) > Deck.total(table.get(0))) {
 			Session.setSessionResult(sessionID, username, true);
-			MatchHistory.setGamesWon(username, 1);
-			MatchHistory.increaseAmount(username, 2 * betAmount); 
+			MatchHistory.setGamesWon(username, 1); //Updates the number of games won
+			MatchHistory.increaseAmount(username, 2 * betAmount); //Give winnings
 			Session.setWinnings(sessionID, username, betAmount);
 			gameController.setLabel("You win!!");
 			if (!gameController.muteButton.isSelected())
@@ -494,7 +494,7 @@ public class Client implements Runnable {
 			if (!gameController.muteButton.isSelected())
 				dealerWins.play(20);
 		}
-		gameController.setPointsLabel("Funds available: " + String.valueOf(MatchHistory.getAmount(username)));
+		gameController.setPointsLabel("Funds available: " + String.valueOf(MatchHistory.getAmount(username))); //Updates the available funds
 	}
 
 	/**
