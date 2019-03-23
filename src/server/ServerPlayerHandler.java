@@ -9,6 +9,12 @@ import java.util.concurrent.Semaphore;
 import database.Session;
 import shareable.FinishedPlayers;
 
+/**
+ * Class to handle in game requests
+ * 
+ * @author Group 21
+ *
+ */
 public class ServerPlayerHandler implements Runnable {
 
 	private SocketConnection socketConnection = null;
@@ -26,6 +32,19 @@ public class ServerPlayerHandler implements Runnable {
 	private List<SocketConnection> gameQueue;
 	private int sessionID;
 
+	/**
+	 * Constructor for class
+	 * @param socketConnection the SocketConnection of the user
+	 * @param ID the users ID for the game
+	 * @param deck the deck to be used
+	 * @param deckWait the semaphore to pass to ServerMoveThread
+	 * @param noPlayers	the number of players in the game
+	 * @param dealersTurn barrier to inform when dealer has finished turn
+	 * @param table the structure to hold all of the hands on the table (index 0 is dealer)
+	 * @param finishedPlayers the shareable object 
+	 * @param gameQueue the list of players in the game
+	 * @param sessionID the ID of the game
+	 */
 	public ServerPlayerHandler(SocketConnection socketConnection, int ID, Deck deck, Semaphore deckWait, int noPlayers,
 			CyclicBarrier dealersTurn, List<List<String>> table, FinishedPlayers finishedPlayers,
 			List<SocketConnection> gameQueue, int sessionID) {
@@ -43,6 +62,9 @@ public class ServerPlayerHandler implements Runnable {
 		this.sessionID = sessionID;
 	}
 
+	/**
+	 * Method to handle game requests
+	 */
 	@Override
 	public void run() {
 		Session.startSession(socketConnection.getUsername(), sessionID); // Sends the session ID to the client
@@ -55,27 +77,31 @@ public class ServerPlayerHandler implements Runnable {
 		String in = ""; // server thread
 		String card1 = "";
 		String card2 = "";
+		
 		synchronized (deck) {
 			card1 = deck.drawCard();
-			card2 = deck.drawCard();
+			card2 = deck.drawCard(); //Draws the players cards
 		}
 		myTurn = false;
 		table.get(ID).add(card1);
-		table.get(ID).add(card2);
+		table.get(ID).add(card2); //Adds the cards to the table
 		/*
 		 * Each connected client will have a thread running in this class, therefore any
 		 * variable access must be synchronised
 		 */
 		try {
 			betPlaced = false;
-			while (!in.startsWith("betIs")) {
+			/*
+			 * Waits in this loop until the client has placed bet
+			 */
+			while (!in.startsWith("betIs")) { 
 				in = socketConnection.getInput().readLine();
 				if (in.startsWith("gameChatMessage")) {
 					String toSend = socketConnection.getInput().readLine().substring(15) + " > "
 							+ socketConnection.getInput().readLine().substring(15);
 					System.out.println("Sending chat message");
 					for (int i = 0; i < gameQueue.size(); i++) {
-						gameQueue.get(i).getOutput().println("gameChatMessage" + toSend);
+						gameQueue.get(i).getOutput().println("gameChatMessage" + toSend); //Forwards chat messages to other players
 					}
 				}
 				if (in.equals("playerLeftGame")) {
@@ -96,6 +122,9 @@ public class ServerPlayerHandler implements Runnable {
 			betPlaced = true;
 			socketConnection.getOutput().println(in);
 			finishedPlayers.playerBet();
+			/*
+			 * Waits in this loop until all clients have placed bet
+			 */
 			while (gameQueue.size() > finishedPlayers.getPlayersBet()) {
 				in = socketConnection.getInput().readLine();
 				if (in.equals("breakFromBetLoop")) {
@@ -134,13 +163,17 @@ public class ServerPlayerHandler implements Runnable {
 		System.out.println("Server passed bet");
 		barriers++;
 		synchronized (socketConnection.getOutput()) {
-			socketConnection.getOutput().println("startCards\n" + table.get(0).get(0) + "\n" + table.get(0).get(1) + "\n" + card1 + "\n" + card2);
+			socketConnection.getOutput().println(
+					"startCards\n" + table.get(0).get(0) + "\n" + table.get(0).get(1) + "\n" + card1 + "\n" + card2);
 		}
 
 		Runnable r = new ServerMoveThread(socketConnection, deckWait);
 		Thread thread = new Thread(r);
 		thread.start();
 
+		/*
+		 * Waits in this loop until the players has finished their turn
+		 */
 		while (active) { // While the player is still active (until they break or pass)
 			try {
 				in = socketConnection.getInput().readLine(); // Reads the message from the client
@@ -202,6 +235,9 @@ public class ServerPlayerHandler implements Runnable {
 		System.out.println("Player " + ID + " finished");
 		finishedPlayers.playerFinished();
 		deckWait.release();
+		/*
+		 * Waits in this loop until all players have finished their turn
+		 */
 		while (finishedPlayers.getFinishedPlayers() < gameQueue.size()) {
 			try {
 				System.out.println(
@@ -221,7 +257,7 @@ public class ServerPlayerHandler implements Runnable {
 					triggerBarrier();
 					return;
 				}
-				if (in.equals("breakFromLoop")) {
+				if (in.equals("breakFromLoop")) { //readLine is blocking meaning the thread wont break even when the while condition is not met, until it reads something
 					break;
 				}
 				if (in.startsWith("gameChatMessage")) {
@@ -243,12 +279,10 @@ public class ServerPlayerHandler implements Runnable {
 
 		for (int j = 1; j < table.size(); j++) {
 			if (ID != j) {
-				socketConnection.getOutput().println("playerInitialCard" + j + "\nplayerInitialCard" + table.get(j).get(0) + "\nplayerInitialCard" + table.get(j).get(1));
-//				socketConnection.getOutput().println("playerInitialCard" + table.get(j).get(0));
-//				socketConnection.getOutput().println("playerInitialCard" + table.get(j).get(1));
+				socketConnection.getOutput().println("playerInitialCard" + j + "\nplayerInitialCard"
+						+ table.get(j).get(0) + "\nplayerInitialCard" + table.get(j).get(1)); //First two cards of other players sent
 			}
 		}
-		socketConnection.getOutput().println("initialCardsSent");
 		System.out.println("players finished");
 		socketConnection.getOutput().println("playersFinished"); // Once all threads have reached playersTurnWait they
 
@@ -274,17 +308,20 @@ public class ServerPlayerHandler implements Runnable {
 		if (finishedPlayers.getBustedPlayers() != noPlayers) {
 			for (int i = 2; i < table.get(0).size(); i++) {
 				socketConnection.getOutput().println("dealerCard" + table.get(0).get(i)); // Sends the clients the
-																							// dealers
+																							// dealers cards, after move
 			}
 		}
 		socketConnection.getOutput().println("dealerDone"); // Tells the client the dealer is finished
 		System.out.println("Dealer done");
 		socketConnection.setInLobby(true);
 		Session.setSessionEnd(socketConnection.getUsername(), sessionID);
-		socketConnection.getSessionWait().release();
+		socketConnection.getSessionWait().release(); //Allows ServerLobbyThread back into lobby
 		System.out.println("player released");
 	}
 
+	/**
+	 * Method to release any sync tools that need to be unlocked
+	 */
 	public void triggerBarrier() {
 		try {
 			System.out.println("entered trigger");

@@ -7,12 +7,19 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-
+/**
+ * Class responsible for starting the server GUI
+ * @author Group 21
+ *
+ */
 public class ServerMain extends Application {
 
 	private static int WIDTH = 300;
 	private static int HEIGHT = 150;
 
+	/**
+	 * Method to start the GUI
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("ServerScreen.fxml")); // login screen loads first

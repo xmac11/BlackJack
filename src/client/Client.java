@@ -137,7 +137,7 @@ public class Client implements Runnable {
 						lobbyController.clearQueue();
 					}
 					if (in.equals("Game in progress")) {
-						lobbyController.gameInProgress(input.readLine());
+						lobbyController.gameInProgress(in.replaceFirst("Game in Progress", ""));
 					}
 					if (in.startsWith("playerSignedOut")) {
 						onlinePlayers.remove(in.replaceFirst("playerSignedOut", ""));

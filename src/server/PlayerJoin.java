@@ -12,15 +12,23 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Semaphore;
 
 import shareable.GameStart;
+
+/**
+ * Class responsible for accepting new client connections
+ * 
+ * @author Group 21
+ *
+ */
 
 public class PlayerJoin implements Runnable {
 
 	int maxPlayers = 3;
 	ServerSocket serverSocket;
-	List<SocketConnection> joined;
+	Map<String, SocketConnection> joined;
 	List<SocketConnection> gameQueue;
 	Socket socket = null;
 	boolean sessionJoinable;
@@ -28,7 +36,20 @@ public class PlayerJoin implements Runnable {
 	private int port;
 	private ServerController serverController;
 
-	public PlayerJoin(List<SocketConnection> joined, List<SocketConnection> gameQueue, ServerSocket serverSocket,
+	/**
+	 * Constructor to create Player Join object
+	 * 
+	 * @param joined           list of active connections
+	 * @param gameQueue        list of connections in the game queue
+	 * @param serverSocket     the server socket to connect to
+	 * @param gameStart        the shareable variable to determine when a game
+	 *                         starts
+	 * @param port             the port to bind to
+	 * @param serverController instance of the server controller to modify GUI
+	 *                         elements from this class
+	 */
+
+	public PlayerJoin(Map<String, SocketConnection> joined, List<SocketConnection> gameQueue, ServerSocket serverSocket,
 			GameStart gameStart, int port, ServerController serverController) {
 		this.port = port;
 		this.serverController = serverController;
@@ -38,11 +59,12 @@ public class PlayerJoin implements Runnable {
 		sessionJoinable = true;
 		this.gameStart = gameStart;
 	}
-	
-	public ServerSocket getServerSocket() {
-		return serverSocket;
-	}
 
+	/**
+	 * Run method to be executed when a new thread of this class is created. The
+	 * method sits in an infinite loop, accepting connections, then creating a
+	 * 'ServerLobbyThread' instance for each connection
+	 */
 	@Override
 	public void run() {
 		try {
@@ -74,22 +96,26 @@ public class PlayerJoin implements Runnable {
 				System.out.println("Error when joining");
 				return;
 			}
-			for (int i = 0; i < joined.size(); i++) {
-				if (joined.get(i).getUsername().equals(username)) { // Checks if account is already in use and close the socket
-					output.println("accountAlreadyActive");
-					try {
-						socket.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					sessionJoinable = false;
+			if (joined.containsKey(username)) { // Checks if account is already in use and close the socket
+				output.println("accountAlreadyActive");
+				try {
+					socket.close();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
+				sessionJoinable = false;
 			}
-			// SocketConnection is instantiated with the relevant information and added to the ArrayList of connected users
+			// SocketConnection is instantiated with the relevant information and added to
+			// the map of connected users
 			if (sessionJoinable) {
-				SocketConnection socketConnection = new SocketConnection(socket, new Semaphore(0), output, input, true, username);
-				joined.add(socketConnection);
-				Runnable runnable = new ServerLobbyThread(socketConnection, gameQueue, joined, gameStart); // Instance of ServerLobbyThread is created
+				SocketConnection socketConnection = new SocketConnection(socket, new Semaphore(0), output, input, true,
+						username);
+				joined.put(username, socketConnection);
+				Runnable runnable = new ServerLobbyThread(socketConnection, gameQueue, joined, gameStart); // Instance
+																											// of
+																											// ServerLobbyThread
+																											// is
+																											// created
 				Thread thread = new Thread(runnable); // Thread starts and loops back to wait for another connection
 				thread.start();
 			}
