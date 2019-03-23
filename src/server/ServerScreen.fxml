@@ -20,7 +20,7 @@
       		<TextField fx:id="ipField" alignment="CENTER" disable="true" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="27.0" prefWidth="266.0" promptText="Displayed on start" styleClass="loginTextField" stylesheets="@../client/style.css" />
       		<Button fx:id="startButton" mnemonicParsing="false" onAction="#startServer" prefHeight="31.0" prefWidth="109.0" styleClass="joinButton" stylesheets="@../client/style.css" text="Start Server">
                <VBox.margin>
-                  <Insets top="5.0" />
+                  <Insets top="6.0" />
                </VBox.margin></Button>
          </children>
       </VBox>
