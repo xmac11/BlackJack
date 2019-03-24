@@ -9,7 +9,7 @@
 ## Usage
 On Windows, Linux or MacOS:
 ```sh
-1. Launch your preferred IDE
+1. Launch your preferred IDE and clone the project
 2. Import Java 8 JDK into your Project Structure
 3. Pick Java 8 as preferred language level
 4. Import Junit and POSTgresql libraries

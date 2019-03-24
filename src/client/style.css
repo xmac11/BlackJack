@@ -132,6 +132,47 @@
 .lobbyLabel{
     -fx-text-fill: white;
 }
+.joinButton {
+    -fx-background-color: linear-gradient(from 75.0% 75.0% to 100.0% 100.0%, #F6F6F6, #AAAAAA);
+    -fx-background-radius: 30.0;
+    -fx-background-insets: 0.0, 1.0, 2.0, 3.0, 0.0;
+    -fx-text-fill: #000000;
+    -fx-font-weight: bold;
+    -fx-font-size: 15.0px;
+}
+
+.joinButton:hover{
+    -fx-background-color: linear-gradient(from 25.0% 25.0% to 100.0% 100.0%, #AAAAAA, #F6F6F6);
+    -fx-background-radius: 30.0;
+    -fx-background-insets: 0.0, 1.0, 2.0, 3.0, 0.0;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 15.0px;
+}
+
+.lobbyButton {
+    -fx-background-color: linear-gradient(from 75.0% 75.0% to 100.0% 100.0%, #F6F6F6, #AAAAAA);
+    -fx-background-insets: 0.0, 1.0, 2.0, 3.0, 0.0;
+    -fx-border-color: #6f9bbc ;
+    -fx-border-width: 1.0 ;
+    -fx-background-radius: 15.0;
+    -fx-border-radius: 15.0;
+    -fx-text-fill: #606060;
+    -fx-font-weight: bold;
+    -fx-font-size: 15.0px;
+}
+
+.lobbyButton:hover{
+    -fx-background-color: linear-gradient(from 25.0% 25.0% to 100.0% 100.0%, #AAAAAA, #F6F6F6);
+    -fx-background-insets: 0.0, 1.0, 2.0, 3.0, 0.0;
+    -fx-border-color: #6f9bbc ;
+    -fx-border-width: 1.0 ;
+    -fx-background-radius: 15.0;
+    -fx-border-radius: 15.0;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 15.0px;
+}
 
 /**
 ------------------------------------------------------------------------------------------------------------------------
@@ -208,45 +249,5 @@
     -fx-opacity: 85%;
 }
 
-.joinButton {
-    -fx-background-color: linear-gradient(from 75.0% 75.0% to 100.0% 100.0%, #F6F6F6, #AAAAAA);
-    -fx-background-radius: 30.0;
-    -fx-background-insets: 0.0, 1.0, 2.0, 3.0, 0.0;
-    -fx-text-fill: #000000;
-    -fx-font-weight: bold;
-    -fx-font-size: 15.0px;
-}
 
-.joinButton:hover{
-    -fx-background-color: linear-gradient(from 25.0% 25.0% to 100.0% 100.0%, #AAAAAA, #F6F6F6);
-    -fx-background-radius: 30.0;
-    -fx-background-insets: 0.0, 1.0, 2.0, 3.0, 0.0;
-    -fx-text-fill: #FFFFFF;
-    -fx-font-weight: bold;
-    -fx-font-size: 15.0px;
-}
-
-.lobbyButton {
-    -fx-background-color: linear-gradient(from 75.0% 75.0% to 100.0% 100.0%, #F6F6F6, #AAAAAA);
-    -fx-background-insets: 0.0, 1.0, 2.0, 3.0, 0.0;
-    -fx-border-color: #6f9bbc ;
-    -fx-border-width: 1.0 ;
-    -fx-background-radius: 15.0;
-    -fx-border-radius: 15.0;
-    -fx-text-fill: #606060;
-    -fx-font-weight: bold;
-    -fx-font-size: 15.0px;
-}
-
-.lobbyButton:hover{
-    -fx-background-color: linear-gradient(from 25.0% 25.0% to 100.0% 100.0%, #AAAAAA, #F6F6F6);
-    -fx-background-insets: 0.0, 1.0, 2.0, 3.0, 0.0;
-    -fx-border-color: #6f9bbc ;
-    -fx-border-width: 1.0 ;
-    -fx-background-radius: 15.0;
-    -fx-border-radius: 15.0;
-    -fx-text-fill: #FFFFFF;
-    -fx-font-weight: bold;
-    -fx-font-size: 15.0px;
-}
 
