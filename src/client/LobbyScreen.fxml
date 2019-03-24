@@ -18,7 +18,10 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<!-- FXML file for Lobby Screen
+ @author Group21 20 March 2019 -->
 
+<!-- Everything separated into different sections of the GridPane - width and height set to larger than login screen to facilitate all the new options for user interaction-->
 <GridPane maxHeight="768" maxWidth="1366" minHeight="768" minWidth="1366" prefHeight="768" prefWidth="1366" styleClass="lobbyScreen" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.LobbyController">
 	<stylesheets>
 		<URL value="@style.css" />
@@ -30,15 +33,18 @@
 		<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 	</rowConstraints>
 	<children>
+		<!-- BorderPane within GridPane used to set out elements at the four opposing sides of the screen - left listviews, right buttons, centre/top chatbox and bottom Las Vegas backdrop image-->
 		<BorderPane maxHeight="1080.0" maxWidth="1920.0" prefHeight="600.0" prefWidth="800.0">
 			<top>
 				<HBox maxHeight="26.4" maxWidth="1920.0" minHeight="-Infinity" prefHeight="26.4" prefWidth="800.0" style="-fx-background-color: #000000;" BorderPane.alignment="CENTER">
 					<children>
+						<!-- Mute button will change image as per the style.css sheet when selected. This will also call the muteMusic method in the controller class-->
 						<ToggleButton fx:id="muteButton" mnemonicParsing="false" onAction="#muteMusic" prefHeight="6.0" prefWidth="25.0" styleClass="musicMute" stylesheets="@style.css">
 							<cursor>
 								<Cursor fx:constant="HAND" />
 							</cursor>
 						</ToggleButton>
+						<!-- Regions used to centre objects appropriately-->
 						<Region minHeight="26.4" prefHeight="26.4" HBox.hgrow="ALWAYS" />
 						<Label alignment="CENTER" contentDisplay="CENTER" minHeight="-Infinity" prefHeight="26.4" text="WELCOME TO GROUP21 LOBBY" textAlignment="JUSTIFY" textFill="WHITE" />
 						<Region minHeight="-Infinity" prefHeight="26.4" HBox.hgrow="ALWAYS" />
@@ -50,6 +56,7 @@
 					</children>
 				</HBox>
 			</top>
+			<!-- Left side houses the listviews for the online players' list and in-queue players' list -->
 			<left>
 				<VBox alignment="TOP_CENTER" minWidth="178.0" prefHeight="400.0" prefWidth="178.0" BorderPane.alignment="TOP_CENTER">
 					<children>
@@ -61,6 +68,7 @@
 				</VBox>
 			</left>
 			<center>
+				<!-- Top side houses the chat functions which need a listView for displaying text and a textField for sending messages (all controlled by the controller) -->
 				<VBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="200.0" prefHeight="294.0" prefWidth="993.0" BorderPane.alignment="TOP_CENTER">
 					<children>
 						<Label alignment="CENTER" maxHeight="-Infinity" minHeight="18" prefHeight="18.0" prefWidth="491.0" text="CHAT" textFill="WHITE" />
@@ -76,6 +84,7 @@
 					</padding>
 				</VBox>
 			</center>
+			<!-- Right side houses the join, leave and play buttons which are enabled and disabled at various parts of the game in order to guide users through to the appropriate points -->
 			<right>
 				<VBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="275.0" minWidth="130" prefHeight="295.0" prefWidth="144.0" BorderPane.alignment="TOP_CENTER">
 					<children>
@@ -104,6 +113,7 @@
 								<Cursor fx:constant="HAND" />
 							</cursor>
 						</Button>
+						<!-- Labels and buttons display user funds which are used for betting purposes. DIsabled and enabled at various points -->
 						<Label fx:id="playedLabel" styleClass="lobbyLabel" text="Games played: " />
 						<Label fx:id="wonLabel" styleClass="lobbyLabel" text="Games won: " />
 						<Label fx:id="walletLabel" styleClass="lobbyLabel" text="Wallet:" />
@@ -116,6 +126,7 @@
 					</children>
 				</VBox>
 			</right>
+			<!-- Bottom side houses the Las Vegas backdrop -->
 			<bottom>
 				<HBox alignment="CENTER" maxHeight="158.0" maxWidth="1920.0" minHeight="33.6" prefHeight="158.0" prefWidth="640.0" BorderPane.alignment="CENTER">
 					<children>
