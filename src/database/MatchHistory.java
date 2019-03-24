@@ -179,6 +179,7 @@ public class MatchHistory {
             }
 
         } catch (SQLException e) {
+        	System.out.println(username);
             System.out.println("Username does not exist");
             return -1;
         }

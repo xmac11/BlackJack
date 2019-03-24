@@ -96,8 +96,6 @@ public class Server implements Runnable {
 			table.add(new ArrayList<>());
 			table.get(0).add(deck.drawCard());
 			table.get(0).add(deck.drawCard()); //Index 0 is always dealer's hand
-			System.out.println("This is Dealers cards: " + table.get(0)); // Prints the dealers hand to the server
-																			// console
 			/*
 			 * Creates a semaphore to allow 1 thread to access a critical section, this is
 			 * used to control access to the deck via moves
@@ -164,7 +162,6 @@ public class Server implements Runnable {
 				System.out.println("No players joined, session ending");
 			}
 			for (SocketConnection socketConnection: joined.values()) {
-				System.out.println("sending clear queue to joined");
 				synchronized (socketConnection.getOutput()) {
 					socketConnection.getOutput().println("Clear queue"); //Tells all connected clients that game has finished
 				}
@@ -177,3 +174,6 @@ public class Server implements Runnable {
 	}
 
 }
+
+
+

@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -108,6 +109,7 @@ public class PlayerJoin implements Runnable {
 			// SocketConnection is instantiated with the relevant information and added to
 			// the map of connected users
 			if (sessionJoinable) {
+				System.out.println(username + " has joined");
 				SocketConnection socketConnection = new SocketConnection(socket, new Semaphore(0), output, input, true,
 						username);
 				joined.put(username, socketConnection);

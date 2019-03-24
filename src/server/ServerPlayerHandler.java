@@ -72,8 +72,6 @@ public class ServerPlayerHandler implements Runnable {
 				+ " player(s) in the current session, have fun";
 		socketConnection.getOutput().println(hello); // Sends greeting to client
 		socketConnection.getOutput().println("sessionID" + sessionID);
-		System.out.println(hello);
-		System.out.println("Number of players in game " + noPlayers); // Prints the number of players in the game to the
 		String in = ""; // server thread
 		String card1 = "";
 		String card2 = "";
@@ -99,7 +97,6 @@ public class ServerPlayerHandler implements Runnable {
 				if (in.startsWith("gameChatMessage")) {
 					String toSend = socketConnection.getInput().readLine().substring(15) + " > "
 							+ socketConnection.getInput().readLine().substring(15);
-					System.out.println("Sending chat message");
 					for (int i = 0; i < gameQueue.size(); i++) {
 						gameQueue.get(i).getOutput().println("gameChatMessage" + toSend); //Forwards chat messages to other players
 					}
@@ -133,7 +130,6 @@ public class ServerPlayerHandler implements Runnable {
 				if (in.startsWith("gameChatMessage")) {
 					String toSend = socketConnection.getInput().readLine().replaceFirst("gameChatMessage", "") + " > "
 							+ socketConnection.getInput().readLine().replaceFirst("gameChatMessage", "");
-					System.out.println("Sending chat message");
 					for (int i = 0; i < gameQueue.size(); i++) {
 						gameQueue.get(i).getOutput().println("gameChatMessage" + toSend);
 					}
@@ -160,7 +156,6 @@ public class ServerPlayerHandler implements Runnable {
 			triggerBarrier();
 			return;
 		}
-		System.out.println("Server passed bet");
 		barriers++;
 		synchronized (socketConnection.getOutput()) {
 			socketConnection.getOutput().println(
@@ -177,11 +172,9 @@ public class ServerPlayerHandler implements Runnable {
 		while (active) { // While the player is still active (until they break or pass)
 			try {
 				in = socketConnection.getInput().readLine(); // Reads the message from the client
-				System.out.println("This is in: " + in);
 				if (in.startsWith("gameChatMessage")) {
 					String toSend = socketConnection.getInput().readLine().substring(15) + " > "
 							+ socketConnection.getInput().readLine().substring(15);
-					System.out.println("Sending chat message");
 					for (int i = 0; i < gameQueue.size(); i++) {
 						gameQueue.get(i).getOutput().println("gameChatMessage" + toSend);
 					}
@@ -240,8 +233,6 @@ public class ServerPlayerHandler implements Runnable {
 		 */
 		while (finishedPlayers.getFinishedPlayers() < gameQueue.size()) {
 			try {
-				System.out.println(
-						"Finished players " + finishedPlayers.getFinishedPlayers() + " out of " + gameQueue.size());
 				in = socketConnection.getInput().readLine();
 				if (in.equals("playerLeftGame")) {
 					socketConnection.getOutput().println("playerLeftGame");
@@ -263,7 +254,6 @@ public class ServerPlayerHandler implements Runnable {
 				if (in.startsWith("gameChatMessage")) {
 					String toSend = socketConnection.getInput().readLine().substring(15) + " > "
 							+ socketConnection.getInput().readLine().substring(15);
-					System.out.println("Sending chat message");
 					for (int i = 0; i < gameQueue.size(); i++) {
 						gameQueue.get(i).getOutput().println("gameChatMessage" + toSend);
 					}
@@ -283,7 +273,6 @@ public class ServerPlayerHandler implements Runnable {
 						+ table.get(j).get(0) + "\nplayerInitialCard" + table.get(j).get(1)); //First two cards of other players sent
 			}
 		}
-		System.out.println("players finished");
 		socketConnection.getOutput().println("playersFinished"); // Once all threads have reached playersTurnWait they
 
 		if (finishedPlayers.getBustedPlayers() < gameQueue.size()) { // will all be allowed to
@@ -293,7 +282,6 @@ public class ServerPlayerHandler implements Runnable {
 		}
 
 		socketConnection.getOutput().println("showPlayerCards");
-		System.out.println("Dealers turn");
 		barriers++;
 		try {
 			dealersTurn.await(); // Player threads get stopped here, main server thread continues in server
@@ -304,7 +292,6 @@ public class ServerPlayerHandler implements Runnable {
 		}
 
 		barriers++;
-		System.out.println("Dealers hand: " + table.get(0));
 		if (finishedPlayers.getBustedPlayers() != noPlayers) {
 			for (int i = 2; i < table.get(0).size(); i++) {
 				socketConnection.getOutput().println("dealerCard" + table.get(0).get(i)); // Sends the clients the
@@ -312,11 +299,9 @@ public class ServerPlayerHandler implements Runnable {
 			}
 		}
 		socketConnection.getOutput().println("dealerDone"); // Tells the client the dealer is finished
-		System.out.println("Dealer done");
 		socketConnection.setInLobby(true);
 		Session.setSessionEnd(socketConnection.getUsername(), sessionID);
 		socketConnection.getSessionWait().release(); //Allows ServerLobbyThread back into lobby
-		System.out.println("player released");
 	}
 
 	/**
@@ -324,7 +309,6 @@ public class ServerPlayerHandler implements Runnable {
 	 */
 	public void triggerBarrier() {
 		try {
-			System.out.println("entered trigger");
 			gameQueue.remove(socketConnection);
 			Session.setSessionEnd(socketConnection.getUsername(), sessionID);
 			switch (barriers) {
@@ -333,7 +317,6 @@ public class ServerPlayerHandler implements Runnable {
 			case 1:
 				if (betPlaced)
 					finishedPlayers.playerBetLeft();
-				System.out.println("releasing");
 				if (myTurn)
 					deckWait.release();
 			case 2:

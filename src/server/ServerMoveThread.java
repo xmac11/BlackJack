@@ -32,7 +32,6 @@ public class ServerMoveThread implements Runnable {
 	 */
 	@Override
 	public void run() {
-		System.out.println("Chat thread started");
 		try {
 			moveWait.acquire();
 		} catch (InterruptedException e) {

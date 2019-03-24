@@ -62,16 +62,13 @@ public class ServerLobbyThread implements Runnable {
 		}
 		while (true) { // The thread reads the input from the client and then inspect several
 						// conditional statements
-			System.out.println(socketConnection.getUsername() + " back in lobby");
 			while (socketConnection.isInLobby()) {
 				try {
 					in = socketConnection.getInput().readLine(); // ensuring that loop can break by using readline() as
 																	// blocking statement
-					System.out.println("lobby thread in: " + in);
 					if (in.startsWith("lobbyChatMessage")) {
 						String toSend = socketConnection.getInput().readLine().substring(16) + " > "
 								+ socketConnection.getInput().readLine().substring(16);
-						System.out.println("Sending chat message");
 						for (SocketConnection sConnection : joined.values()) {
 							synchronized (sConnection.getOutput()) {
 								sConnection.getOutput().println("lobbyChatMessage" + toSend); //Forwards chat messages to all clients
@@ -143,7 +140,7 @@ public class ServerLobbyThread implements Runnable {
 						}
 					}
 				} catch (IOException e) {
-					System.out.println("lobby thread error");
+					System.out.println(socketConnection.getUsername() + "has left");
 					gameQueue.remove(socketConnection);
 					joined.remove(socketConnection.getUsername());
 					for (SocketConnection sConnection : joined.values()) {
@@ -152,13 +149,11 @@ public class ServerLobbyThread implements Runnable {
 					return;
 				}
 			}
-			System.out.println("broken from lobby: " + socketConnection.getUsername());
 			try {
 				socketConnection.getSessionWait().acquire(); //Waits here until player has finished game
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Lobby thread restarting");
 		}
 	}
 }

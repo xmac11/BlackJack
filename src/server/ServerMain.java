@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 public class ServerMain extends Application {
 
 	private static int WIDTH = 300;
-	private static int HEIGHT = 150;
+	private static int HEIGHT = 200;
 
 	/**
 	 * Method to start the GUI
