@@ -543,17 +543,4 @@ public class LobbyController implements Initializable {
 		thread.start();
 
 	}
-
-	/**
-	 * THESE METHODS ARE NOT USED
-	 * @return
-	 */
-	public Stage getThisStage() {
-		return thisStage;
-	}
-
-	public void setThisStage(Stage thisStage) {
-		this.thisStage = thisStage;
-	}
-
 }

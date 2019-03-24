@@ -133,7 +133,6 @@ public class Client implements Runnable {
 			socket = new Socket(IP, port); //creates socket with IP and port
 			output = new PrintWriter(socket.getOutputStream(), true);
 			lobbyController.setOutput(output);
-			lobbyController.joinButton.setDisable(false);
 			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			System.out.println(username + " has joined");
 			output.println(username);
@@ -189,6 +188,8 @@ public class Client implements Runnable {
 					if (in.startsWith("activeGame")) {
 						if (Boolean.parseBoolean(in.substring(10))) {
 							lobbyController.joinUnavailable(); //Determines whether a game is in progress
+						}else {
+							lobbyController.joinButton.setDisable(false);
 						}
 					}
 					if (in.equals("insufficientFunds")) {

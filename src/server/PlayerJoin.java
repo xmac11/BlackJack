@@ -28,7 +28,7 @@ public class PlayerJoin implements Runnable {
 
 	int maxPlayers = 3;
 	ServerSocket serverSocket;
-	List<SocketConnection> joined;
+	Map<String, SocketConnection> joined;
 	List<SocketConnection> gameQueue;
 	Socket socket = null;
 	boolean sessionJoinable;
@@ -49,7 +49,7 @@ public class PlayerJoin implements Runnable {
 	 *                         elements from this class
 	 */
 
-	public PlayerJoin(List<SocketConnection> joined, List<SocketConnection> gameQueue, ServerSocket serverSocket,
+	public PlayerJoin(Map<String, SocketConnection> joined, List<SocketConnection> gameQueue, ServerSocket serverSocket,
 			GameStart gameStart, int port, ServerController serverController) {
 		this.port = port;
 		this.serverController = serverController;
@@ -73,7 +73,6 @@ public class PlayerJoin implements Runnable {
 			serverController.setIP(InetAddress.getLocalHost().getHostAddress());
 			System.out.println("Connection launched on : " + inetAddress.getHostAddress());
 		} catch (IOException e) {
-			System.out.println("port nope");
 			System.exit(0);
 			e.printStackTrace();
 		}
@@ -97,23 +96,21 @@ public class PlayerJoin implements Runnable {
 				System.out.println("Error when joining");
 				return;
 			}
-			for(SocketConnection sConnection: joined) {
-				if(sConnection.getUsername().equals(username)) {
-					output.println("accountAlreadyActive");
-					try {
-						socket.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					sessionJoinable = false;
+			if (joined.containsKey(username)) { // Checks if account is already in use and close the socket
+				output.println("accountAlreadyActive");
+				try {
+					socket.close();
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
+				sessionJoinable = false;
 			}
 			// SocketConnection is instantiated with the relevant information and added to
 			// the map of connected users
 			if (sessionJoinable) {
 				SocketConnection socketConnection = new SocketConnection(socket, new Semaphore(0), output, input, true,
 						username);
-				joined.add(socketConnection);
+				joined.put(username, socketConnection);
 				Runnable runnable = new ServerLobbyThread(socketConnection, gameQueue, joined, gameStart); // Instance
 																											// of
 																											// ServerLobbyThread
