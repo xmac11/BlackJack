@@ -21,7 +21,7 @@
 <!-- FXML file for Lobby Screen
  @author Group21 20 March 2019 -->
 
-<!-- Everything separated into different sections of the GridPane - width and height set to larger than login screen to facilitate all the new options for user interaction-->
+<!-- Everything separated into different sections of the GridPane - width and  height set to larger than login screen to facilitate all the new options for user interaction-->
 <GridPane maxHeight="768" maxWidth="1366" minHeight="768" minWidth="1366" prefHeight="768" prefWidth="1366" styleClass="lobbyScreen" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.LobbyController">
 	<stylesheets>
 		<URL value="@style.css" />
