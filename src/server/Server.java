@@ -29,7 +29,7 @@ public class Server implements Runnable {
 	CyclicBarrier betWait;
 	private List<List<String>> table;
 	Boolean join;
-	private Map<String, SocketConnection> joined;
+	private List<SocketConnection> joined;
 	private List<SocketConnection> gameQueue;
 	private GameStart gameStart;
 	private ServerSocket serverSocket;
@@ -48,7 +48,7 @@ public class Server implements Runnable {
 		table = new ArrayList<>();
 		table.add(new ArrayList<>()); // table holds all of the hands at a table, index 0 will always be the dealer's
 										// hand
-		joined = new HashMap<>(); // stores connected users
+		joined = new ArrayList<>(); // stores connected users
 		gameQueue = new ArrayList<>(); // stores users that are in queue for a game
 	}
 
@@ -80,9 +80,10 @@ public class Server implements Runnable {
 					e1.printStackTrace();
 				}
 			}
+			System.out.println("joined size: "+joined.size());
 			gameStart.setGameStart(true); // sets game start 
 			int sessionID = Session.getMaxSessionID() + 1; //Finds the ID of the session
-			for (SocketConnection socketConnection: joined.values()) {
+			for (SocketConnection socketConnection: joined) {
 				synchronized (socketConnection.getOutput()) {
 					socketConnection.getOutput().println("Game in progress" + gameQueue.size()); //Notifies all clients that a game has begun
 				}
@@ -163,7 +164,7 @@ public class Server implements Runnable {
 			} else {
 				System.out.println("No players joined, session ending");
 			}
-			for (SocketConnection socketConnection: joined.values()) {
+			for (SocketConnection socketConnection: joined) {
 				System.out.println("sending clear queue to joined");
 				synchronized (socketConnection.getOutput()) {
 					socketConnection.getOutput().println("Clear queue"); //Tells all connected clients that game has finished
