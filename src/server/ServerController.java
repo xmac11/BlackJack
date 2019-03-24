@@ -42,7 +42,7 @@ public class ServerController {
 	 */
 	public void startServer() {
 		if (portField.getText().trim().length() > 0 && portField.getText().matches("[0-9]+")
-				&& portField.getText().trim().length() < 5) {
+				&& portField.getText().trim().length() < 7) {
 			startButton.setDisable(true);
 			portField.setDisable(true);
 			Runnable runnable = new Server(Integer.parseInt(portField.getText()), this); // A new server thread is
