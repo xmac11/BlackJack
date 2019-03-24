@@ -40,7 +40,7 @@ public class Main extends Application {
 	 * Main method launches the application's start method
 	 * @param args used to launch the start method
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args)  {
 		launch(args);
 	}
 
