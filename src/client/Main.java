@@ -19,6 +19,11 @@ public class Main extends Application {
 	private static int WIDTH = 800;
 	private static int HEIGHT = 600;
 
+	/**
+	 * Start method opens the Login Screen of the application by loading the appropriate FXML file.
+	 * @param primaryStage login screen is the first stage
+	 * @throws Exception thrown should the stage not load
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		Parent root = FXMLLoader.load(getClass().getResource("LoginScreen.fxml")); // login screen loads first
@@ -31,7 +36,11 @@ public class Main extends Application {
 		primaryStage.setOnCloseRequest(e -> System.exit(0));
 	}
 
-	public static void main(String[] args) {
+	/**
+	 * Main method launches the application's start method
+	 * @param args used to launch the start method
+	 */
+	public static void main(String[] args)  {
 		launch(args);
 	}
 
