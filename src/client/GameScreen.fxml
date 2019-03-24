@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -18,10 +17,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.text.Font?>
+
 <!-- FXML file for Game Screen
  @author Group21 20 March 2019 -->
-
-
 <!-- Begins with StackPane which uses a GridPane to separate sections of the screen appropriately-->
 <!-- Background set to green poker table-->
 <!-- Largest of the three screens at a minimum of 768 x 1366 in order to fit in the most content-->
@@ -194,7 +192,7 @@
                         </Button>
                     </children>
                 </GridPane>
-                <!-- Player1 label siutuated bottom middle of the screen-->
+                <!-- Player1 label situated bottom middle of the screen-->
                 <Label fx:id="player1Label" styleClass="gameLabel" text="Player 1" visible="false"
                        GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2"
                        GridPane.valignment="BOTTOM">

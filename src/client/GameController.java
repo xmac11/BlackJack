@@ -178,7 +178,7 @@ public class GameController implements Initializable {
 			}
 		});
 	}
-
+ 
 	/**
 	 * It closes the window when the connection is closed
 	 */
@@ -666,7 +666,7 @@ public class GameController implements Initializable {
 	/**
 	 * Increases the bet of each player
 	 */
-	public void increaseBet() {
+	public void increaseBet() { 
 		String betString = betAmount.getText();
 		int bet = Integer.parseInt(betString); // Parses the String betString into int
 		if (bet < fundsAvailable) {

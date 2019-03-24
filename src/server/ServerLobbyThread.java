@@ -21,7 +21,7 @@ public class ServerLobbyThread implements Runnable {
 
 	private SocketConnection socketConnection;
 	private List<SocketConnection> gameQueue;
-	private Map<String, SocketConnection> joined;
+	private List<SocketConnection> joined;
 	Semaphore gameBegin;
 	private GameStart gameStart;
 	private static final int MINBET = 5; // minimum allowed bet
@@ -35,7 +35,7 @@ public class ServerLobbyThread implements Runnable {
 	 * @param gameStart shareable object to determine when a game should start
 	 */
 	public ServerLobbyThread(SocketConnection socketConnection, List<SocketConnection> gameQueue,
-			Map<String, SocketConnection> joined, GameStart gameStart) {
+			List<SocketConnection> joined, GameStart gameStart) {
 		this.socketConnection = socketConnection;
 		this.gameQueue = gameQueue;
 		this.joined = joined;
@@ -54,7 +54,7 @@ public class ServerLobbyThread implements Runnable {
 				socketConnection.getOutput().println("playerJoinedQueue" + gameQueue.get(j).getUsername()); //Tells new client who is in queue
 			}
 			socketConnection.getOutput().println("activeGame" + gameStart.isGameStart()); //Tells new client whether a game is in progress
-			for (SocketConnection sConnection : joined.values()) {
+			for (SocketConnection sConnection : joined) {
 				if (!socketConnection.getUsername().equals(sConnection.getUsername())) //Ensures it doesn't send itself its own username
 					socketConnection.getOutput().println("newPlayer" + sConnection.getUsername()); //Sends connected players to new client
 				sConnection.getOutput().println("newPlayer" + socketConnection.getUsername()); //Sends new client to connected players
@@ -72,7 +72,7 @@ public class ServerLobbyThread implements Runnable {
 						String toSend = socketConnection.getInput().readLine().substring(16) + " > "
 								+ socketConnection.getInput().readLine().substring(16);
 						System.out.println("Sending chat message");
-						for (SocketConnection sConnection : joined.values()) {
+						for (SocketConnection sConnection : joined) {
 							synchronized (sConnection.getOutput()) {
 								sConnection.getOutput().println("lobbyChatMessage" + toSend); //Forwards chat messages to all clients
 							}
@@ -88,9 +88,9 @@ public class ServerLobbyThread implements Runnable {
 								// the game sequence
 					}
 					if (in.equals("thisPlayerSignedOut")) {
-						joined.remove(socketConnection.getUsername()); //Removes player from connected map
+						joined.remove(socketConnection); //Removes player from connected map
 						gameQueue.remove(socketConnection);
-						for (SocketConnection sConnection : joined.values()) {
+						for (SocketConnection sConnection : joined) {
 							synchronized (sConnection.getOutput()) {
 								sConnection.getOutput().println("playerSignedOut" + socketConnection.getUsername());
 								sConnection.getOutput().println("playerLeftQueue" + socketConnection.getUsername());
@@ -111,7 +111,7 @@ public class ServerLobbyThread implements Runnable {
 																										// enough
 									gameQueue.add(socketConnection);
 									socketConnection.getOutput().println("queueJoined");
-									for (SocketConnection sConnection : joined.values()) {
+									for (SocketConnection sConnection : joined) {
 										synchronized (sConnection.getOutput()) {
 											sConnection.getOutput()
 													.println("playerJoinedQueue" + socketConnection.getUsername());
@@ -133,7 +133,7 @@ public class ServerLobbyThread implements Runnable {
 							if (gameQueue.size() < 3) {
 								socketConnection.getOutput().println("queueLeft");
 								gameQueue.remove(socketConnection);
-								for (SocketConnection sConnection : joined.values()) {
+								for (SocketConnection sConnection : joined) {
 									synchronized (sConnection.getOutput()) {
 										sConnection.getOutput()
 												.println("playerLeftQueue" + socketConnection.getUsername());
@@ -145,8 +145,8 @@ public class ServerLobbyThread implements Runnable {
 				} catch (IOException e) {
 					System.out.println("lobby thread error");
 					gameQueue.remove(socketConnection);
-					joined.remove(socketConnection.getUsername());
-					for (SocketConnection sConnection : joined.values()) {
+					joined.remove(socketConnection);
+					for (SocketConnection sConnection : joined) {
 						sConnection.getOutput().println("playerSignedOut" + socketConnection.getUsername());
 					}
 					return;

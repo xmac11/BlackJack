@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.Semaphore;
 
-import org.junit.validator.PublicClassValidator;
-
 import database.MatchHistory;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -341,9 +339,11 @@ public class LobbyController implements Initializable {
 	 */
 
 	public void gameInProgress(String noPlayers) {
+		System.out.println("called"+ noPlayers);
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
+				System.out.println("entered");
 				playButton.setDisable(true);
 				leaveButton.setDisable(true);
 				joinButton.setDisable(true);

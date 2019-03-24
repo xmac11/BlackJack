@@ -6,14 +6,11 @@ package client;
 
 import java.net.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.Semaphore;
 
 import database.MatchHistory;
 import database.Session;
-import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import server.Deck;
@@ -155,9 +152,10 @@ public class Client implements Runnable {
 				 * Input is read then response is decided using the conditional statements
 				 * Messages are intended to be human readable to some extent
 				 */
+				lobbyController.muteButton.setDisable(false);
 				while (true) { // Loops this until it reaches a 'break;'
 					in = input.readLine();
-					System.out.println("Client in: " + in);
+					System.out.println("Client in lobby: " + in);
 					if (in.equals("accountAlreadyActive")) {
 						lobbyController.connectionLost();
 						return;
@@ -177,8 +175,8 @@ public class Client implements Runnable {
 						lobbyController.updateData();
 						lobbyController.clearQueue(); //Sets relevant UI elements at the end of a game
 					}
-					if (in.equals("Game in progress")) {
-						lobbyController.gameInProgress(in.replaceFirst("Game in Progress", ""));
+					if (in.startsWith("Game in progress")) {
+						lobbyController.gameInProgress(in.replaceFirst("Game in progress", ""));
 					}
 					if (in.startsWith("playerSignedOut")) {
 						onlinePlayers.remove(in.replaceFirst("playerSignedOut", "")); //Removes the player that signed out
@@ -211,7 +209,7 @@ public class Client implements Runnable {
 						lobbyController.addToChat(in.replaceFirst("lobbyChatMessage", ""));
 					}
 				}
-
+				lobbyController.muteButton.setDisable(true);
 				lobbyController.gameBegin(); //Loads the game screen
 				
 				try {
@@ -247,7 +245,7 @@ public class Client implements Runnable {
 				 */
 				while (!gameFinished && !playerLeft) { // Loops this until it reaches a 'break;'
 					in = input.readLine();
-					System.out.println("Client in: " + in);
+					System.out.println("Client in game: " + in);
 					if (in.startsWith("sessionID")) {
 						sessionID = Integer.parseInt(in.replaceFirst("sessionID", "")); //Saves the session ID
 					}
