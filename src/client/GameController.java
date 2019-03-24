@@ -29,7 +29,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import sun.net.www.content.text.plain;
+
 
 /**
  * Part of the application that handles user input.
