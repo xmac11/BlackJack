@@ -112,7 +112,10 @@ public class DatabaseTest {
 
         assertEquals(1, Session.getMaxSessionID());
     }
-    
+
+    /**
+     * This method drops the database and creates a new one in order to have the test set for the methods related to database work
+     */
     public static void databaseReinstate(){
         String url;
         String username;
