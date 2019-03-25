@@ -1,7 +1,3 @@
-/**
- * Author: Group21 - Final version
- * Class Server: Main server-side class
- */
 package server;
 
 import java.net.*;
@@ -18,8 +14,10 @@ import database.Session;
 import shareable.*;
 
 /**
- * Class Server: server activates by running this class and deactivates by
- * terminating it
+ * Class Server: server activates by running this class and deactivates by terminating it
+ *
+ * @author Group 21
+ *
  */
 public class Server implements Runnable {
 

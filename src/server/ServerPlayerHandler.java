@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Semaphore;
-
 import database.Session;
 import shareable.FinishedPlayers;
 

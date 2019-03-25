@@ -1,7 +1,3 @@
-/**
- * Author: Group21 - Final version
- * Class PlayerJoin: Accepts and handles client connections
- */
 package server;
 
 import java.io.BufferedReader;
@@ -24,10 +20,8 @@ import shareable.GameStart;
  * @author Group 21
  *
  */
-
 public class PlayerJoin implements Runnable {
 
-	int maxPlayers = 3;
 	ServerSocket serverSocket;
 	Map<String, SocketConnection> joined;
 	List<SocketConnection> gameQueue;

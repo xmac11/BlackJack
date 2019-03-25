@@ -1,7 +1,3 @@
-/**
- * Author: Group21 - Final version
- * Class Main: This is the main class of the game. Each can launch this and get in the game.
- */
 package client;
 
 import javafx.application.Application;
@@ -9,10 +5,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 
-import static javafx.scene.media.MediaPlayer.INDEFINITE;
+/**
+ * Main Class it launches the game for each client
+ *
+ * @author Group21
+ *
+ */
 
 public class Main extends Application {
 

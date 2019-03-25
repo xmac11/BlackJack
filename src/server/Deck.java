@@ -1,7 +1,3 @@
-/**
- * Author: Group21 - Final version
- * Class Deck: Creates the game deck to be used
- */
 package server;
 
 import java.util.ArrayList;

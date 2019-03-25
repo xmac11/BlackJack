@@ -1,7 +1,3 @@
-/**
- * Author: Group21 - Final version
- * Class ServerLobbyThread: Handle clients' requests whilst they are in the lobby
- */
 package server;
 
 import java.io.IOException;

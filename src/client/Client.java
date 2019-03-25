@@ -1,7 +1,3 @@
-/**
- * Author: Group21 - Final version
- * Class Client: This class is used by each client
- */
 package client;
 
 import java.net.*;
@@ -21,6 +17,7 @@ import static javafx.scene.media.MediaPlayer.INDEFINITE;
 
 /**
  * Class used to handle requests from the server
+ *
  * @author George
  *
  */

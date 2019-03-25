@@ -1,12 +1,8 @@
-/**
- * Author: Group21 - Final version
- * Class GameStart: A selection class that contains simple instance variables
- */
-
 package shareable;
 
 /**
- * A class to create an object for threads to share. Determines whether a game should begin
+ * Class to create an object for threads to share. Determines whether a game should begin
+ *
  * @author George
  *
  */

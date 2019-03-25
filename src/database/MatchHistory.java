@@ -7,10 +7,14 @@ import java.sql.*;
 import java.util.Properties;
 
 /**
- * This class allows the application to add and retrieve information from the match_history table in the
+ * Class that allows the application to add and retrieve information from the match_history table in the
  * database
+ *
+ * @author Group21
+ *
  */
 public class MatchHistory {
+
     /**
      * Allows the application to set number of games the user has won
      * @param username username of the user

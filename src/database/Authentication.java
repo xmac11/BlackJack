@@ -13,10 +13,13 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 /**
- * This class provides methods to Authenticate the user into the system or create a new account with the use
- * of the database
+ * Class that provides methods to Authenticate the user into the system or create a new account with the use of the database
+ *
+ * @author Group21
+ *
  */
 public class Authentication {
+
     /**
      * Logs in the user using their credentials and matching them against the one in the database
      * @param username username of the user

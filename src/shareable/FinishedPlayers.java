@@ -1,17 +1,12 @@
-/**
- * Author: Group21 - Final version
- * Class FinishedPlayers: A selection class that contains simple instance variables
- */
 package shareable;
 
 /**
- * A class to create objects to be shared among threads. Each new game will have
+ * Class to create objects to be shared among threads. Each new game will have
  * a new instance of this object to hold the relevant values for that game.
- * 
+ *
  * @author George
  *
  */
-
 public class FinishedPlayers {
 
 	private int finishedPlayers; // A finished player is a player who has made their move

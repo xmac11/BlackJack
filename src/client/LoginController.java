@@ -1,7 +1,3 @@
-/**
- * Author: Group21 - Final version
- * Class LoginController: This is the Controller for the LoginScreen
- */
 package client;
 
 import javafx.animation.KeyFrame;
@@ -35,6 +31,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+/**
+ * Class that handles the Controller for the LobbyScreen
+ *
+ * @author Group21
+ *
+ */
 
 public class LoginController implements Initializable {
 

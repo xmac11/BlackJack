@@ -7,9 +7,13 @@ import java.sql.*;
 import java.util.Properties;
 
 /**
- * This class allows the application to manipulate the session table in the database
+ * Class that allows the application to manipulate the session table in the database
+ *
+ * @author Group21
+ *
  */
 public class Session {
+
     /**
      * Creates a new session for the user, which has the same session id, as the other users in the same game
      * @param username username of the user

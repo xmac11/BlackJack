@@ -1,7 +1,3 @@
-/**
- * Author: Group21 - Final version
- * Class LobbyController: This is the Controller for the LobbyScreen
- */
 package client;
 
 import java.io.IOException;
@@ -26,6 +22,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+
+/**
+ * Class that handles the Controller for the LobbyScreen
+ *
+ * @author Group21
+ *
+ */
 
 public class LobbyController implements Initializable {
 

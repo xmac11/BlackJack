@@ -7,12 +7,12 @@ import java.sql.*;
 import java.util.Properties;
 
 /**
- * This class, check whether the database for the application is in play and creates a new one, or adds missing tables
+ * Class that checks whether the database for the application is in play and creates a new one, or adds missing tables
+ *
+ * @author Group21
+ *
  */
 public class SQLDatabaseConnection implements Runnable {
-
-
-
 
 	@Override
 	public void run() {

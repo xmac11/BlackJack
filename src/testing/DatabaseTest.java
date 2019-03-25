@@ -6,11 +6,9 @@ import database.Session;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,6 +18,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
+/**
+ * Class to implement tests for the Database
+ *
+ * @author Group 21
+ *
+ */
 public class DatabaseTest {
     private String username1, password1, username2, password2, username3, password3, username4, password4;
 

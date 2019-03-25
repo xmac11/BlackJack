@@ -9,6 +9,13 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
+/**
+ * Class that encrypts users' passwords
+ *
+ * @author Group21
+ *
+ */
+
 /* Modifications made from: 
  * https://www.javacodegeeks.com/2012/05/secure-password-storage-donts-dos-and.html */
 public class UserPassword {

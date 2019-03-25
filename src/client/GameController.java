@@ -1,7 +1,3 @@
-/**
- * Author: Group21 - Final version
- * Class GameController: Class responsible for controlling Game GUI
- */
 package client;
 
 import java.io.PrintWriter;
@@ -30,10 +26,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-
 /**
- * Part of the application that handles user input.
+ * Class that handles user input
+ *
+ * @author Group21
+ *
  */
+
 public class GameController implements Initializable {
 
 	@FXML
@@ -167,7 +166,7 @@ public class GameController implements Initializable {
 
 	/**
 	 * Adds the messages in the chat
-	 * @param message
+	 * @param message the message the user wants to type
 	 */
 	public void addToChat(String message) {
 		Platform.runLater(new Runnable() {
@@ -193,8 +192,8 @@ public class GameController implements Initializable {
 
 	/**
 	 * It is activated when the user closes the window
-	 * @param title
-	 * @param message
+	 * @param title the title of the window
+	 * @param message the message that is shown
 	 * @return confirm boolean value
 	 */
 	public static boolean displayConfirmBox(String title, String message) {
@@ -205,7 +204,7 @@ public class GameController implements Initializable {
 		stage.setWidth(400);
 		stage.setHeight(150);
 		stage.initStyle(StageStyle.UNDECORATED);
-		Label label = new Label(message); // Creates a lable with the input message
+		Label label = new Label(message); // Creates a label with the input message
 
 		// yes button
 		Button yesButton = new Button("Yes");
@@ -259,7 +258,7 @@ public class GameController implements Initializable {
 
 	/**
 	 * Sets the text as a visible label
-	 * @param text
+	 * @param text the given label
 	 */
 	public void setLabel(String text) {
 		Platform.runLater(new Runnable() {
@@ -281,7 +280,7 @@ public class GameController implements Initializable {
 
 	/**
 	 * Sets the Label of dealer visible
-	 * @param text
+	 * @param text the label of the dealer
 	 */
 	public void setDealerLabel(String text) {
 		Platform.runLater(new Runnable() {
@@ -295,7 +294,7 @@ public class GameController implements Initializable {
 
 	/**
 	 * Sets the label of the points
-	 * @param text
+	 * @param text the label of points
 	 */
 	public void setPointsLabel(String text) {
 		Platform.runLater(new Runnable() {
@@ -309,8 +308,8 @@ public class GameController implements Initializable {
 
 	/**
 	 * Gets the card and creates a String file out of it
-	 * @param card
-	 * @return file
+	 * @param card the card in String format
+	 * @return file returns the edited image
 	 */
 	public static String cardToFile(String card) {
 		String file = card;
@@ -384,8 +383,8 @@ public class GameController implements Initializable {
 
 	/**
 	 * Loads up the image if the card
-	 * @param card
-	 * @return new Image of the card
+	 * @param card the card in String format
+	 * @return the card as Image
 	 */
 	public Image getImage(String card) {
 		if (card.contains("facedown")) {
@@ -397,7 +396,7 @@ public class GameController implements Initializable {
 
 	/**
 	 * Adds cards to Player's hand
-	 * @param card
+	 * @param card the card in String format
 	 */
 	public void addCardToPlayerHand(String card) {
 		Platform.runLater(new Runnable() {
@@ -455,8 +454,8 @@ public class GameController implements Initializable {
 
 	/**
 	 * Adds card to Opposing Player's hand
-	 * @param player
-	 * @param card
+	 * @param player the number of the player
+	 * @param card the card in String format
 	 */
 	public void addCardToOpposingPlayerHand(int player, String card) {
 		Platform.runLater(new Runnable() {
@@ -502,7 +501,7 @@ public class GameController implements Initializable {
 
 	/**
 	 * Adds card to dealer's hand
-	 * @param card
+	 * @param card the card in String format
 	 */
 	public void addCardToDealerHand(String card) {
 		Platform.runLater(new Runnable() {
@@ -532,7 +531,7 @@ public class GameController implements Initializable {
 
 	/**
 	 * Remove player's facedown cards
-	 * @param player
+	 * @param player the number of the player
 	 */
 	public void removeFacedown(int player) {
 		Platform.runLater(new Runnable() {

@@ -1,7 +1,3 @@
-/**
- * Author: Group21 - Final version
- * Class SocketConnection: Class to create objects holding the required information about a client/server pair
- */
 package server;
 
 import java.io.BufferedReader;
